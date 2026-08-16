@@ -5,6 +5,10 @@ Dashboard satu-halaman (HTML statis, tanpa backend) yang merangkum Buku RKAT 202
 - **Halaman login** — dashboard hanya terbuka setelah masuk.
 - **Seksi "Capaian Target"** — input realisasi terkini untuk menghitung berapa persen target 2027
   sudah tercapai, dibandingkan dengan laju tahun berjalan. Data tersimpan di browser (localStorage).
+- **Identitas visual BPJS Ketenagakerjaan** — logo digambar ulang sebagai SVG inline (tanpa file
+  gambar terpisah) dan seluruh tema warna mengikuti palet logo: hijau `#3AAA35`, biru `#29ABE2`,
+  lime `#D7DF23`. Semua warna terpusat di variabel CSS pada blok `:root` di `index.html`, jadi
+  mudah disetel ulang dari satu tempat.
 
 ## Menjalankan
 
