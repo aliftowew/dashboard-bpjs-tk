@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RKAT 2027 — BPJS Ketenagakerjaan · Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#101d17; --ink-2:#25382e; --paper:#f5f2e9; --paper-2:#fbf9f3; --card:#ffffff;
+  --line:#ded8c7; --line-2:#ebe5d6; --mute:#6d7c73;
+  --grn:#00623b; --grn-l:#2f8b62; --gold:#b08424; --clay:#a24232; --sea:#25607d; --plum:#6b4a76;
+  --jkk:#25607d; --jkm:#6b4a76; --jht:#00623b; --jp:#b08424; --jkp:#a24232;
+  --shadow:0 1px 2px rgba(16,29,23,.05),0 8px 24px -14px rgba(16,29,23,.22);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:76px}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:15px;line-height:1.55;
+  -webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:'Fraunces',Georgia,serif;font-weight:600;margin:0;letter-spacing:-.015em}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+a{color:inherit}
+
+/* ---- shell ---- */
+.wrap{max-width:1280px;margin:0 auto;padding:0 24px}
+.topbar{position:sticky;top:0;z-index:60;background:rgba(245,242,233,.93);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;gap:18px;height:60px}
+.brand{font-family:'Fraunces',serif;font-weight:700;font-size:17px;letter-spacing:-.02em;white-space:nowrap}
+.brand span{color:var(--grn)}
+.navscroll{overflow-x:auto;scrollbar-width:none;flex:1}
+.navscroll::-webkit-scrollbar{display:none}
+nav{display:flex;gap:2px;white-space:nowrap}
+nav a{padding:6px 11px;border-radius:999px;text-decoration:none;font-size:12.5px;font-weight:500;
+  color:var(--mute);transition:.15s}
+nav a:hover{background:var(--line-2);color:var(--ink)}
+nav a.on{background:var(--ink);color:var(--paper)}
+
+/* ---- login ---- */
+.login-veil{position:fixed;inset:0;z-index:100;background:var(--paper);display:flex;
+  align-items:center;justify-content:center;padding:24px}
+.login-card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+  box-shadow:var(--shadow);max-width:400px;width:100%;padding:38px 34px}
+.login-card h2{font-size:27px;margin:4px 0 8px}
+.login-card h2 span{color:var(--grn)}
+.login-sub{font-size:13px;color:var(--mute);margin:0 0 22px}
+.login-card label{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--mute);font-weight:700;margin-bottom:14px}
+.login-card input{display:block;width:100%;margin-top:6px;border:1px solid var(--line);
+  border-radius:8px;padding:10px 12px;font-family:inherit;font-size:14px;background:var(--paper-2);
+  color:var(--ink)}
+.login-card input:focus{outline:2px solid var(--grn);border-color:var(--grn)}
+.login-btn{width:100%;border:none;border-radius:999px;padding:11px 0;margin-top:6px;
+  background:var(--grn);color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.login-btn:hover{background:#00522f}
+.login-err{background:#fbeae6;color:#9a3b2b;border-radius:7px;padding:8px 11px;font-size:12.5px;
+  font-weight:600;margin-bottom:14px}
+.login-note{font-size:11.5px;color:var(--mute);margin:18px 0 0;text-align:center}
+
+/* ---- hero ---- */
+.hero{padding:56px 0 40px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--grn);
+  font-weight:700;margin-bottom:14px}
+.hero h1{font-size:clamp(34px,5.4vw,60px);line-height:1.02;max-width:17ch;font-weight:600}
+.hero h1 em{font-style:italic;color:var(--grn);font-weight:400}
+.tema{margin-top:22px;max-width:62ch;color:var(--ink-2);font-size:16.5px}
+.tema b{font-weight:600}
+.pillars{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.pill{border:1px solid var(--line);border-radius:999px;padding:6px 15px;font-size:12.5px;
+  font-weight:600;background:var(--paper-2)}
+.pill i{font-style:normal;color:var(--grn);margin-right:6px}
+
+/* ---- sections ---- */
+section{padding:52px 0;border-bottom:1px solid var(--line)}
+.shead{display:flex;align-items:baseline;gap:16px;margin-bottom:8px;flex-wrap:wrap}
+.bab{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--gold);
+  letter-spacing:.12em;border:1px solid var(--gold);border-radius:4px;padding:2px 7px}
+.shead h2{font-size:clamp(22px,3vw,31px)}
+.sdesc{color:var(--mute);max-width:76ch;margin:0 0 26px;font-size:14.5px}
+
+/* ---- grids & cards ---- */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)} .g5{grid-template-columns:repeat(5,1fr)}
+.card{background:var(--card);border:1px solid var(--line-2);border-radius:12px;padding:18px;
+  box-shadow:var(--shadow)}
+.kpi .lab{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);font-weight:700}
+.kpi .val{font-family:'Fraunces',serif;font-size:29px;font-weight:600;line-height:1.1;margin:7px 0 2px;
+  letter-spacing:-.02em}
+.kpi .val small{font-size:14px;font-weight:500;color:var(--mute);font-family:'Plus Jakarta Sans',sans-serif}
+.kpi .sub{font-size:12px;color:var(--mute)}
+.chg{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;padding:2px 7px;
+  border-radius:5px;display:inline-block}
+.up{background:#e7f2ea;color:#0f6b41} .dn{background:#fbeae6;color:#9a3b2b}
+.flat{background:#f0eee6;color:#6d7c73}
+.chg.warn{background:#f6ecd2;color:#8a6410}
+
+/* ---- tables ---- */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:right;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);
+  font-weight:700;padding:0 0 9px;border-bottom:1px solid var(--line)}
+th:first-child{text-align:left}
+td{padding:9px 0;border-bottom:1px solid var(--line-2);text-align:right}
+td:first-child{text-align:left;font-weight:500}
+tr.tot td{border-bottom:none;border-top:2px solid var(--ink);font-weight:700;padding-top:11px}
+.num{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-size:12.8px}
+caption{caption-side:top;text-align:left;font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--mute);font-weight:700;padding-bottom:12px}
+
+/* ---- bars ---- */
+.barrow{display:grid;grid-template-columns:150px 1fr 96px;gap:12px;align-items:center;margin-bottom:9px}
+.barrow .nm{font-size:13px;font-weight:500}
+.track{height:22px;background:var(--paper);border-radius:4px;overflow:hidden;position:relative;
+  border:1px solid var(--line-2)}
+.fill{height:100%;border-radius:3px 0 0 3px;transition:width .9s cubic-bezier(.2,.8,.25,1)}
+.barrow .vv{text-align:right;font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600}
+.ghost{position:absolute;top:0;height:100%;border-right:2px dashed var(--ink-2);opacity:.45}
+
+/* ---- capaian tracker ---- */
+.trow{display:grid;grid-template-columns:minmax(160px,230px) 112px 1fr 172px;gap:12px;
+  align-items:center;padding:9px 0;border-bottom:1px solid var(--line-2)}
+.trow:last-child{border-bottom:none}
+.trow .nm{font-size:13px;font-weight:600}
+.trow .nm small{display:block;font-weight:400;font-size:10.5px;color:var(--mute)}
+.trow input{width:100%;border:1px solid var(--line);border-radius:7px;padding:7px 9px;
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;text-align:right;background:var(--paper-2);
+  color:var(--ink)}
+.trow input:focus{outline:2px solid var(--grn);border-color:var(--grn)}
+.trow .twrap .track{height:18px}
+.tpct{text-align:right;white-space:nowrap}
+.tpct .p{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;margin-right:6px}
+.capbar{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.caplab{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.caplab input{margin-left:10px;border:1px solid var(--line);border-radius:7px;padding:7px 10px;
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;background:var(--paper-2);color:var(--ink)}
+
+/* ---- flow (signature) ---- */
+.flow{background:var(--card);border:1px solid var(--line-2);border-radius:14px;padding:24px;
+  box-shadow:var(--shadow)}
+.flowhead{display:grid;grid-template-columns:96px 1fr 1fr 118px;gap:10px;align-items:end;
+  font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);font-weight:700;
+  padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:14px}
+.flowhead .l{text-align:right} .flowhead .r{text-align:left}
+.frow{display:grid;grid-template-columns:96px 1fr 1fr 118px;gap:10px;align-items:center;margin-bottom:11px}
+.fname{font-weight:700;font-size:14px}
+.fname small{display:block;font-weight:400;font-size:10.5px;color:var(--mute);letter-spacing:.04em}
+.fl,.fr{position:relative;height:34px;display:flex;align-items:center}
+.fl{justify-content:flex-end} .fr{justify-content:flex-start}
+.fbar{height:26px;border-radius:4px;display:flex;align-items:center;padding:0 8px;
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;color:#fff;
+  transition:width .9s cubic-bezier(.2,.8,.25,1);overflow:hidden;white-space:nowrap}
+.fl .fbar{justify-content:flex-start;border-radius:4px 2px 2px 4px}
+.fr .fbar{justify-content:flex-end;background:var(--clay);border-radius:2px 4px 4px 2px}
+.fnet{text-align:right;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700}
+.fnet small{display:block;font-size:10px;font-weight:500;color:var(--mute);
+  font-family:'Plus Jakarta Sans',sans-serif}
+.axis{border-left:2px solid var(--ink);height:100%;position:absolute;left:0}
+
+/* ---- gauge ---- */
+.gauge{text-align:center;padding:6px 0}
+.gauge svg{display:block;margin:0 auto}
+.gauge .gv{font-family:'Fraunces',serif;font-size:22px;font-weight:600}
+.gauge .gl{font-size:11.5px;color:var(--mute);margin-top:2px;font-weight:500}
+
+/* ---- risk matrix ---- */
+.matrix{display:grid;grid-template-columns:74px repeat(5,1fr);gap:4px}
+.mcell{aspect-ratio:1.35;border-radius:7px;padding:6px;position:relative;display:flex;
+  flex-wrap:wrap;gap:3px;align-content:flex-start;border:1px solid rgba(16,29,23,.08)}
+.mlab{display:flex;align-items:center;justify-content:flex-end;padding-right:9px;font-size:11px;
+  font-weight:700;color:var(--mute);text-align:right;line-height:1.15}
+.mx{font-size:10.5px;color:var(--mute);text-align:center;font-weight:700;padding-top:6px}
+.chip{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;background:rgba(255,255,255,.9);
+  border:1px solid rgba(16,29,23,.16);border-radius:4px;padding:1px 4px;cursor:pointer;line-height:1.5}
+.chip:hover{background:var(--ink);color:var(--paper)}
+.chip.dim{opacity:.2}
+.lv1{background:#e9f1ea}.lv2{background:#f4efd6}.lv3{background:#f7dfc2}.lv4{background:#f3c9b8}
+.risklist{max-height:340px;overflow-y:auto;padding-right:6px}
+.ritem{display:grid;grid-template-columns:44px 1fr auto;gap:10px;padding:9px 0;
+  border-bottom:1px solid var(--line-2);font-size:13px;align-items:start}
+.ritem.hide{display:none}
+.rcode{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11.5px;color:var(--grn)}
+.rkat{font-size:10.5px;color:var(--mute);letter-spacing:.05em;text-transform:uppercase;font-weight:700}
+.rlv{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;white-space:nowrap}
+
+/* ---- misc ---- */
+.chipbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.fbtn{border:1px solid var(--line);background:var(--paper-2);border-radius:999px;padding:5px 13px;
+  font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--ink-2)}
+.fbtn.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.note{font-size:12px;color:var(--mute);margin-top:14px;line-height:1.6}
+.note b{color:var(--ink-2)}
+details{border:1px solid var(--line-2);border-radius:10px;background:var(--card);margin-bottom:8px}
+summary{padding:13px 16px;cursor:pointer;font-weight:600;font-size:14px;display:flex;
+  justify-content:space-between;gap:12px;align-items:center;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary .amt{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--grn)}
+details[open] summary{border-bottom:1px solid var(--line-2)}
+.dbody{padding:6px 16px 14px}
+.sbcard{border-left:3px solid var(--grn);padding:12px 0 12px 15px;margin-bottom:4px}
+.sbcard h4{font-size:14.5px;margin-bottom:6px}
+.sbcard ul{margin:0;padding-left:17px;font-size:13px;color:var(--ink-2)}
+.sbcard li{margin:3px 0}
+.wt{display:flex;height:34px;border-radius:7px;overflow:hidden;margin:10px 0 20px;border:1px solid var(--line)}
+.wt div{display:flex;align-items:center;justify-content:center;color:#fff;font-size:11.5px;font-weight:700;
+  font-family:'JetBrains Mono',monospace}
+footer{padding:40px 0 60px;font-size:12.5px;color:var(--mute);line-height:1.7}
+footer b{color:var(--ink)}
+
+@media(max-width:1000px){.g5,.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:720px){
+  .wrap{padding:0 16px}
+  .g2,.g3,.g4,.g5{grid-template-columns:1fr}
+  .barrow{grid-template-columns:100px 1fr 76px;gap:8px}
+  .frow,.flowhead{grid-template-columns:64px 1fr 1fr 84px;gap:6px}
+  .fname{font-size:12px} .fnet{font-size:11.5px}
+  .matrix{grid-template-columns:44px repeat(5,1fr);gap:3px}
+  .mlab{font-size:9px;padding-right:4px} .chip{font-size:8.5px;padding:1px 2.5px}
+  .hero{padding:36px 0 30px}
+  section{padding:38px 0}
+  .ovf{overflow-x:auto}
+  .trow{grid-template-columns:1fr 96px;row-gap:6px}
+  .trow .twrap{grid-column:1/2}
+  .trow .tpct{grid-column:2/3}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="login-veil" id="loginVeil">
+  <div class="login-card">
+    <div class="eyebrow" style="margin-bottom:6px">BPJS Ketenagakerjaan</div>
+    <h2>Dashboard RKAT <span>2027</span></h2>
+    <p class="login-sub">Masuk untuk membuka dashboard Rencana Kerja Anggaran Tahunan.</p>
+    <form id="loginForm" autocomplete="on">
+      <label>Nama pengguna
+        <input id="loginUser" autocomplete="username" required autofocus></label>
+      <label>Kata sandi
+        <input id="loginPass" type="password" autocomplete="current-password" required></label>
+      <div id="loginErr" class="login-err" style="display:none"></div>
+      <button type="submit" class="login-btn">Masuk</button>
+    </form>
+    <p class="login-note">Akses internal. Sesi berakhir saat tab ditutup.</p>
+  </div>
+</div>
+
+<div id="app" hidden>
+<div class="topbar"><div class="wrap">
+  <div class="brand">RKAT <span>2027</span></div>
+  <div class="navscroll"><nav id="nav">
+    <a href="#capaian">Capaian Target</a>
+    <a href="#ringkasan">Ringkasan</a>
+    <a href="#kepesertaan">Kepesertaan</a>
+    <a href="#arusdana">Arus Dana</a>
+    <a href="#investasi">Investasi</a>
+    <a href="#semester">Kinerja S1-2026</a>
+    <a href="#anggaran">Anggaran</a>
+    <a href="#strategi">Sasaran &amp; Inisiatif</a>
+    <a href="#risiko">Profil Risiko</a>
+    <a href="#kpi">Indikator DJSN</a>
+    <a href="#keuangan">Kesehatan Keuangan</a>
+  </nav></div>
+  <button id="logoutBtn" class="fbtn" style="display:none">Keluar</button>
+</div></div>
+
+<header class="hero"><div class="wrap">
+  <div class="eyebrow">Rencana Kerja Anggaran Tahunan · BPJS Ketenagakerjaan</div>
+  <h1>Tahun pertama Renstra <em>2027–2031</em>, dibaca lewat angkanya.</h1>
+  <p class="tema">Tema RKAT 2027: <b>“Strengthening Institutional Foundations (Care, Credibility, and
+  Coverage) to Drive Sustainable Growth and Protection.”</b> Dashboard ini merangkum seluruh 407 halaman
+  Buku RKAT 2027 — target kepesertaan, arus iuran dan klaim, portofolio investasi, alokasi anggaran
+  hingga level deputi dan kantor wilayah, 37 risiko prioritas, serta indikator kinerja yang ditetapkan DJSN.</p>
+  <div class="pillars">
+    <div class="pill"><i>Care</i>Akselerasi Layanan Terpadu</div>
+    <div class="pill"><i>Credibility</i>Dedikasi Nilai Berkelanjutan</div>
+    <div class="pill"><i>Coverage</i>Akses Perlindungan Menyeluruh</div>
+  </div>
+</div></header>
+
+<section id="capaian"><div class="wrap">
+  <div class="shead"><span class="bab">Monitoring</span><h2>Capaian target: berapa persen sudah tercapai?</h2></div>
+  <p class="sdesc">Masukkan angka realisasi terkini pada kolom input — persentase capaian terhadap target
+  RKAT 2027 dihitung otomatis dan dibandingkan dengan laju tahun berjalan (garis putus-putus pada batang).
+  Data tersimpan di peramban ini (localStorage) dan tidak terkirim ke mana pun.</p>
+  <div class="card capbar">
+    <label class="caplab">Data per tanggal <input type="date" id="capDate"
+      min="2026-01-01" max="2027-12-31"></label>
+    <div id="capPace" class="note" style="margin:0;flex:1;min-width:220px"></div>
+    <button id="capReset" class="fbtn">Reset data</button>
+  </div>
+  <div class="grid g3" id="capSummary" style="margin-bottom:14px"></div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="eyebrow" style="margin-bottom:12px">Sembilan indikator utama · realisasi vs target 2027</div>
+    <div id="capMain"></div>
+  </div>
+  <div class="grid g2">
+    <div class="card">
+      <div class="eyebrow" style="margin-bottom:12px">Pendapatan iuran per program</div>
+      <div id="capIuran"></div>
+    </div>
+    <div class="card">
+      <div class="eyebrow" style="margin-bottom:12px">Kepesertaan per segmen · basis KPJ</div>
+      <div id="capSeg"></div>
+    </div>
+  </div>
+  <p class="note"><b>Cara membaca:</b> batang menunjukkan % capaian terhadap target setahun penuh;
+  garis putus-putus menandai laju wajar sesuai berjalannya tahun 2027. Untuk pos belanja (pembayaran
+  jaminan, beban usaha, belanja modal, SKP), angkanya dibaca sebagai <b>penyerapan</b> — bukan prestasi,
+  melainkan realisasi anggaran. Status "sesuai laju" berarti capaian tidak tertinggal lebih dari 2 poin
+  persentase dari laju tahun berjalan.</p>
+</div></section>
+
+<section id="ringkasan"><div class="wrap">
+  <div class="shead"><span class="bab">Exec. Summary</span><h2>Sembilan angka utama RKAT 2027</h2></div>
+  <p class="sdesc">Semua pertumbuhan dihitung terhadap <b>prognosa 2026</b> (estimasi realisasi akhir tahun),
+  bukan terhadap target 2026 — kecuali Insentif dan Sarana Kesejahteraan Peserta yang dibandingkan
+  terhadap RKAT 2026.</p>
+  <div class="grid g3" id="kpiGrid"></div>
+  <p class="note"><b>Baca cepat:</b> iuran tumbuh 6,77% sementara pembayaran jaminan tumbuh 14,88%.
+  Selisih laju ini yang membuat surplus kas program menyempit dari Rp38,62 triliun (prognosa 2026)
+  menjadi Rp34,73 triliun pada 2027 — masih positif, tapi arahnya menurun. Lihat bagian Arus Dana.</p>
+</div></section>
+
+<section id="kepesertaan"><div class="wrap">
+  <div class="shead"><span class="bab">Bab IV.F.1</span><h2>Kepesertaan: 62,68 juta tenaga kerja aktif</h2></div>
+  <p class="sdesc">Target ditetapkan lewat Keputusan DJSN Nomor 06 Tahun 2026. Diukur dua basis:
+  Kartu Peserta Jamsostek (KPJ) untuk kepesertaan program, dan NIK untuk cakupan orang yang lebih presisi.
+  Selisih 11,43 juta antara keduanya adalah indikasi kepesertaan ganda lintas segmen/program.</p>
+  <div class="grid g2">
+    <div class="card">
+      <table><caption>Basis KPJ — target per segmen</caption>
+        <thead><tr><th>Segmen</th><th>Prognosa 2026</th><th>Target 2027</th><th>Growth</th></tr></thead>
+        <tbody id="tbSegKPJ"></tbody></table>
+      <div style="margin-top:18px" id="barSegKPJ"></div>
+    </div>
+    <div class="card">
+      <table><caption>Basis NIK — cakupan pekerja</caption>
+        <thead><tr><th>Segmen</th><th>Prognosa 2026</th><th>Target 2027</th><th>Growth</th></tr></thead>
+        <tbody id="tbSegNIK"></tbody></table>
+      <div style="margin-top:22px">
+        <div class="eyebrow" style="margin-bottom:10px">Peserta aktif per program · target 2027</div>
+        <div id="barProgPeserta"></div>
+      </div>
+    </div>
+  </div>
+  <p class="note"><b>Titik tekan 2027:</b> pertumbuhan terbesar dibebankan pada segmen yang paling sulit —
+  Pekerja Migran Indonesia (+25,00%) dan Bukan Penerima Upah (+24,72%). Padahal pada Semester I 2026 segmen
+  BPU justru yang capaiannya paling rendah (57,45% dari target). JHT segmen BPU ditargetkan naik 104,28%
+  dan JHT PMI naik 1.461% dari basis yang sangat kecil (5.831 peserta).</p>
+</div></section>
+
+<section id="arusdana"><div class="wrap">
+  <div class="shead"><span class="bab">Bab IV.F.2–3</span><h2>Arus dana program: iuran masuk, jaminan keluar</h2></div>
+  <p class="sdesc">Iuran yang diterima dibandingkan manfaat yang dibayarkan, per program, tahun 2027.
+  Batang kiri iuran, batang kanan pembayaran jaminan; kolom kanan adalah selisih kas program
+  (belum memperhitungkan hasil investasi).</p>
+  <div class="flow">
+    <div class="flowhead"><div>Program</div><div class="l">Iuran diterima →</div>
+      <div class="r">← Jaminan dibayar</div><div class="l">Selisih kas</div></div>
+    <div id="flowRows"></div>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card"><table><caption>Pendapatan iuran · miliar rupiah</caption>
+      <thead><tr><th>Program</th><th>Target 2026</th><th>Prognosa 2026</th><th>Target 2027</th><th>Growth</th></tr></thead>
+      <tbody id="tbIuran"></tbody></table></div>
+    <div class="card"><table><caption>Estimasi pembayaran jaminan · miliar rupiah</caption>
+      <thead><tr><th>Program</th><th>Estimasi 2026</th><th>Prognosa 2026</th><th>Estimasi 2027</th><th>Growth</th></tr></thead>
+      <tbody id="tbKlaim"></tbody></table></div>
+  </div>
+  <p class="note"><b>Yang perlu diawasi:</b> JKM adalah satu-satunya program dengan pembayaran jaminan
+  melampaui iuran sepanjang 2026 (prognosa: iuran Rp5,22 T vs klaim Rp5,81 T). Pada 2027 iuran JKM
+  ditargetkan melonjak 44,35% sehingga kembali surplus tipis Rp0,95 T — target pertumbuhan iuran tertinggi
+  di antara semua program, dan menjadi asumsi paling sensitif dalam RKAT ini. Program JP juga melonjak:
+  estimasi klaim naik 92,93% seiring makin banyak peserta memenuhi syarat manfaat pensiun berkala.</p>
+</div></section>
+
+<section id="investasi"><div class="wrap">
+  <div class="shead"><span class="bab">Bab IV.F.4</span><h2>Investasi: Rp1.123 triliun dana kelolaan</h2></div>
+  <p class="sdesc">Dana investasi ditargetkan tumbuh 13,37% dan hasil investasi 14,98%. Yield implisit
+  di bawah adalah hasil investasi dibagi dana kelolaan target — angka indikatif, berbeda dari definisi
+  resmi DJSN yang memakai rata-rata investasi neto (t-1 dan t berjalan).</p>
+  <div class="grid g2">
+    <div class="card"><table><caption>Dana investasi · miliar rupiah</caption>
+      <thead><tr><th>Program</th><th>Prognosa 2026</th><th>Target 2027</th><th>Growth</th></tr></thead>
+      <tbody id="tbDana"></tbody></table></div>
+    <div class="card"><table><caption>Hasil investasi · miliar rupiah</caption>
+      <thead><tr><th>Program</th><th>Prognosa 2026</th><th>Target 2027</th><th>Growth</th></tr></thead>
+      <tbody id="tbHasil"></tbody></table></div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <div class="eyebrow" style="margin-bottom:14px">Yield implisit 2027 vs target imbal hasil DJSN</div>
+    <div class="grid g5" id="yieldGrid"></div>
+  </div>
+  <p class="note">Target tingkat hasil pengembangan DJS menurut Kep DJSN 06/2026: JKK 6,75%, JKM 6,75%,
+  JHT 7,00%, JP 7,00%, JKP 6,75%. Dana JHT sendiri menyerap 58% total dana kelolaan.</p>
+</div></section>
+<section id="semester"><div class="wrap">
+  <div class="shead"><span class="bab">Bab II.D</span><h2>Kinerja Semester I 2026: titik berangkat</h2></div>
+  <p class="sdesc">Realisasi sampai Juni 2026 terhadap target RKAT 2026. Garis acuan wajar untuk paruh
+  tahun adalah 50%. Angka di bawahnya berarti Semester II harus mengejar lebih dari separuh target.</p>
+  <div class="grid g4" id="gaugeGrid"></div>
+  <div class="grid g2" style="margin-top:18px">
+    <div class="card"><table><caption>Kepesertaan per segmen · s.d. Juni 2026</caption>
+      <thead><tr><th>Segmen</th><th>Realisasi 2025</th><th>Target 2026</th><th>Jun 2026</th><th>Capaian</th></tr></thead>
+      <tbody id="tbS1Peserta"></tbody></table></div>
+    <div class="card"><table><caption>Iuran &amp; jaminan per program · miliar rupiah</caption>
+      <thead><tr><th>Program</th><th>Iuran Jun-26</th><th>%</th><th>Jaminan Jun-26</th><th>%</th></tr></thead>
+      <tbody id="tbS1Prog"></tbody></table></div>
+  </div>
+  <p class="note"><b>Catatan:</b> penyerapan Sarana Kesejahteraan Peserta hanya 7,06% dan belanja modal
+  38,21% pada paruh pertama — namun untuk 2027 keduanya justru dinaikkan tajam (SKP +471%, belanja modal
+  +95%). Kapasitas eksekusi adalah asumsi diam-diam di balik kedua angka itu.</p>
+</div></section>
+
+<section id="anggaran"><div class="wrap">
+  <div class="shead"><span class="bab">Bab V &amp; Lampiran</span><h2>Anggaran: ke mana Rp6,25 triliun mengalir</h2></div>
+  <p class="sdesc">Hasil penelusuran seluruh lampiran program kerja RKAT 2027 — <b id="nAkt">—</b> baris
+  kegiatan, tersebar di 8 direktorat kantor pusat dan 11 kantor wilayah. Klik direktorat untuk melihat
+  rincian per deputi.</p>
+  <div class="grid g2" style="margin-bottom:18px">
+    <div class="card">
+      <div class="eyebrow" style="margin-bottom:14px">Kantor Pusat · per direktorat</div>
+      <div id="dirList"></div>
+    </div>
+    <div class="card">
+      <div class="eyebrow" style="margin-bottom:14px">Kantor Wilayah · 11 wilayah</div>
+      <div id="wilBars"></div>
+      <div class="note" style="margin-top:16px">Total kantor wilayah <b id="wilTot">—</b>,
+      atau <b id="wilPct">—</b> dari seluruh anggaran program kerja.</div>
+    </div>
+  </div>
+  <div class="grid g2">
+    <div class="card">
+      <table><caption>Beban usaha · miliar rupiah</caption>
+        <thead><tr><th>Komponen</th><th>Prognosa 2026</th><th>Target 2027</th><th>Growth</th></tr></thead>
+        <tbody id="tbBeban"></tbody></table>
+    </div>
+    <div class="card">
+      <table><caption>Belanja modal · miliar rupiah</caption>
+        <thead><tr><th>Komponen</th><th>Prognosa 2026</th><th>Target 2027</th><th>Growth</th></tr></thead>
+        <tbody id="tbModal"></tbody></table>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <div class="eyebrow" style="margin-bottom:12px">22 kegiatan dengan alokasi terbesar</div>
+    <div class="ovf"><table>
+      <thead><tr><th>Kegiatan</th><th>Unit</th><th>Anggaran</th></tr></thead>
+      <tbody id="tbTop"></tbody></table></div>
+  </div>
+  <p class="note"><b>Struktur biaya:</b> Deputi Human Capital sendiri memegang Rp4,38 triliun — 70,4% dari
+  seluruh anggaran, karena di dalamnya termasuk gaji, tunjangan, THR, imbalan pascakerja, dan penghargaan
+  purnajasa seluruh pegawai. Itu sebabnya 20 dari 22 kegiatan terbesar di tabel atas adalah pos personil.
+  Di luar personil, konsentrasi terbesar ada di Infrastruktur &amp; Operasional TI (Rp336,6 miliar) dan
+  Aset &amp; Sarana Prasarana (Rp146,2 miliar). Perangkat teknologi informasi naik 160% dan aset
+  takberwujud naik 645% — 2027 adalah tahun belanja teknologi.
+  <br><br><b>Metode dan validasi:</b> angka pada bagian ini direkonstruksi dari tabel lampiran RKAT
+  halaman 231–407. Ketiga puluh tujuh baris TOTAL unit kerja di dokumen cocok persis dengan hasil
+  penjumlahan per unit, dan grand total Rp6.215.696.938.501 selisih hanya Rp61.499 dari pos Beban Usaha
+  2027 (Rp6.215.697 juta) — semata efek pembulatan penyajian dokumen ke satuan jutaan rupiah.</p>
+</div></section>
+
+<section id="strategi"><div class="wrap">
+  <div class="shead"><span class="bab">Bab IV.D</span><h2>8 Sasaran Badan, 26 Inisiatif Strategis</h2></div>
+  <p class="sdesc">Penerjemahan lima arah strategis Renstra 2027–2031 — Seamless Protection, Iuran Adaptif
+  dan Inklusif, Value Beyond Protection, Standar Bisnis dan Investasi Sosial, Instrumen Kemakmuran
+  Nasional — ke dalam sasaran tahunan dan inisiatif yang dianggarkan.</p>
+  <div class="grid g2" id="sbGrid"></div>
+</div></section>
+
+<section id="risiko"><div class="wrap">
+  <div class="shead"><span class="bab">Bab III.C</span><h2>Profil risiko: 37 risiko prioritas</h2></div>
+  <p class="sdesc">Setiap risiko dinilai pada matriks dampak (A–E) × probabilitas (1–5). Matriks di bawah
+  memetakan <b>nilai risiko inheren</b> — sebelum mitigasi. Klik kategori untuk menyaring, klik kode
+  risiko untuk menyorot.</p>
+  <div class="chipbar" id="riskFilter"></div>
+  <div class="grid g2">
+    <div class="card">
+      <div class="eyebrow" style="margin-bottom:14px">Matriks risiko inheren</div>
+      <div class="matrix" id="matrix"></div>
+      <div class="chipbar" style="margin-top:14px;gap:12px;font-size:11px;color:var(--mute)">
+        <span><span style="display:inline-block;width:11px;height:11px;background:#e9f1ea;border-radius:2px;vertical-align:-1px"></span> Rendah</span>
+        <span><span style="display:inline-block;width:11px;height:11px;background:#f4efd6;border-radius:2px;vertical-align:-1px"></span> Sedang</span>
+        <span><span style="display:inline-block;width:11px;height:11px;background:#f7dfc2;border-radius:2px;vertical-align:-1px"></span> Tinggi</span>
+        <span><span style="display:inline-block;width:11px;height:11px;background:#f3c9b8;border-radius:2px;vertical-align:-1px"></span> Sangat Tinggi</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="eyebrow" style="margin-bottom:10px">Daftar risiko · inheren → target residual</div>
+      <div class="risklist" id="riskList"></div>
+    </div>
+  </div>
+  <p class="note"><b>Konsentrasi risiko:</b> Sasaran Badan 2 (Keberlanjutan dana, manfaat, dan kepercayaan)
+  memuat 13 dari 37 risiko prioritas — separuhnya risiko pasar, likuiditas, dan solvabilitas yang langsung
+  terkait pengelolaan dana Rp1.123 triliun. Sasaran Badan 7 (Tata kelola, risiko, kepatuhan) memuat 7 risiko,
+  empat di antaranya risiko fraud dengan risk appetite paling ketat (A1 — nyaris nol toleransi).</p>
+</div></section>
+<section id="kpi"><div class="wrap">
+  <div class="shead"><span class="bab">Bab IV.E</span><h2>Indikator capaian kinerja yang ditetapkan DJSN</h2></div>
+  <p class="sdesc">Empat perspektif dengan bobot penilaian sebagai berikut. Kepesertaan dan Pelayanan
+  bersama-sama menentukan 67% nilai kinerja Badan.</p>
+  <div class="wt" id="wtBar"></div>
+  <div class="grid g4" id="kpiPersp"></div>
+  <p class="note">Sumber: Keputusan Dewan Jaminan Sosial Nasional tentang Penetapan Target Kinerja BPJS
+  Ketenagakerjaan Tahun 2027. SLA klaim diukur bulanan; kepuasan dan pemahaman peserta diukur tahunan
+  lewat survei.</p>
+</div></section>
+
+<section id="keuangan"><div class="wrap">
+  <div class="shead"><span class="bab">Bab VII</span><h2>Prognosa kesehatan keuangan 2027</h2></div>
+  <p class="sdesc">Rasio kesehatan setiap dana jaminan sosial terhadap batas minimal PP 55/2015, dan
+  rasio keuangan BPJS terhadap PMK 242/2016. Seluruhnya diproyeksikan memenuhi ketentuan.</p>
+  <div class="grid g3" id="healthGrid"></div>
+  <div class="grid g2" style="margin-top:18px">
+    <div class="card"><table><caption>Posisi keuangan BPJS · triliun rupiah</caption>
+      <thead><tr><th>Pos</th><th>Audited 2025</th><th>Prognosa 2026</th><th>Prognosa 2027</th></tr></thead>
+      <tbody id="tbNeraca"></tbody></table>
+      <p class="note">Liabilitas imbalan pascakerja naik dari Rp3,82 T (2025) ke Rp4,79 T (2027) —
+      pendorong utama kenaikan total liabilitas, sejalan dengan lonjakan anggaran penghargaan purnajasa
+      sebesar 180,97%.</p>
+    </div>
+    <div class="card">
+      <div class="eyebrow" style="margin-bottom:14px">Asumsi makro RKAT 2027 · KEM PPKF 2027</div>
+      <div id="asumsi"></div>
+      <p class="note">Sakernas Februari 2026: angkatan kerja 154,91 juta, bekerja 147,67 juta, TPT 4,68%.
+      Struktur ketenagakerjaan masih didominasi pekerja informal 87,74 juta berbanding pekerja formal
+      59,93 juta — inilah ruang perluasan sekaligus tantangan terbesar target kepesertaan BPU.</p>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <b>Sumber tunggal:</b> Buku Rencana Kerja Anggaran Tahunan BPJS Ketenagakerjaan Tahun 2027,
+  407 halaman, ditetapkan Jakarta 31 Juli 2026.<br>
+  Seluruh angka pada dashboard ini diambil langsung dari dokumen tersebut. Angka anggaran per direktorat
+  dan kantor wilayah direkonstruksi dari lampiran program kerja dan telah dicocokkan dengan baris TOTAL
+  di dokumen asli. Yield implisit investasi adalah perhitungan turunan, bukan angka resmi dokumen.<br>
+  Prognosa 2026 adalah estimasi realisasi akhir tahun yang dipakai sebagai basis pembanding pertumbuhan.
+</div></footer>
+</div><!-- /#app -->
+<script>
+const D = {
+seg:[
+ {n:'Penerima Upah',k:'PU',t26:32714000,p26:27568124,t27:29960843,g:8.68},
+ {n:'Bukan Penerima Upah',k:'BPU',t26:22333789,p26:18656412,t27:23268538,g:24.72},
+ {n:'Jasa Konstruksi',k:'JK',t26:8264000,p26:6854943,t27:7951259,g:15.99},
+ {n:'Pekerja Migran Indonesia',k:'PMI',t26:null,p26:1200000,t27:1500000,g:25.00}],
+segTot:{p26:54279480,t27:62680640,g:15.48},
+nik:[
+ {n:'Penerima Upah',p26:25432161,t27:27413221,g:7.79},
+ {n:'Bukan Penerima Upah',p26:15840265,t27:19832809,g:25.21},
+ {n:'Jasa Konstruksi',p26:3600250,t27:4000000,g:11.10}],
+nikTot:{p26:44872676,t27:51246030,g:14.20},
+progPeserta:[{n:'JKK',v:62680640},{n:'JKM',v:62680640},{n:'JHT',v:25703591},
+ {n:'JP',v:20285570},{n:'JKP',v:23516386}],
+iuran:[
+ {n:'JKK',t26:12666940,p26:8712221,t27:10775782,g:23.69},
+ {n:'JKM',t26:6119576,p26:5217981,t27:7532349,g:44.35},
+ {n:'JHT',t26:69792354,p26:74346094,t27:75536718,g:1.60},
+ {n:'JP',t26:25792707,p26:27628841,t27:29533053,g:6.89},
+ {n:'JKP',t26:3641848,p26:2934382,t27:3506506,g:19.50}],
+iuranTot:{t26:118013425,p26:118839519,t27:126884408,g:6.77},
+klaim:[
+ {n:'JKK',t26:5468784,p26:5350855,t27:6578527,g:22.94},
+ {n:'JKM',t26:6093085,p26:5810354,t27:6581944,g:13.28},
+ {n:'JHT',t26:60318610,p26:64548571,t27:71781062,g:11.20},
+ {n:'JP',t26:4663708,p26:2672814,t27:5156776,g:92.93},
+ {n:'JKP',t26:1832970,p26:1832970,t27:2055389,g:12.13}],
+klaimTot:{t26:78377157,p26:80215563,t27:92153698,g:14.88},
+dana:[
+ {n:'JKK',p26:86951365,t27:99319062,g:14.22},{n:'JKM',p26:20018138,t27:20900270,g:4.41},
+ {n:'JHT',p26:584938369,t27:651488409,g:11.38},{n:'JP',p26:264839019,t27:313400635,g:18.34},
+ {n:'JKP',p26:19472048,t27:22548082,g:15.80}],
+danaDJS:{p26:976218938,t27:1107656457,g:13.46}, danaBPJS:{p26:14377904,t27:15356082,g:6.80},
+danaTot:{p26:990596842,t27:1123012539,g:13.37},
+hasil:[
+ {n:'JKK',p26:5288111,t27:6138710,g:16.09},{n:'JKM',p26:1284996,t27:1363143,g:6.08},
+ {n:'JHT',p26:37475550,t27:42269282,g:12.79},{n:'JP',p26:16378255,t27:19763575,g:20.67},
+ {n:'JKP',p26:1183735,t27:1380042,g:16.58}],
+hasilDJS:{p26:61610647,t27:70914753,g:15.10}, hasilBPJS:{p26:919428,t27:980909,g:6.69},
+hasilTot:{p26:62530076,t27:71895662,g:14.98},
+yieldTarget:{JKK:6.75,JKM:6.75,JHT:7.00,JP:7.00,JKP:6.75},
+beban:[
+ {n:'Beban Personil',p26:3317373,t27:3514168,g:5.93},
+ {n:'Umum / Administrasi',p26:895131,t27:1124861,g:25.66},
+ {n:'Penyuluhan & Pembinaan',p26:557050,t27:608742,g:9.28},
+ {n:'Penghargaan Purnajasa',p26:231463,t27:650350,g:180.97},
+ {n:'Perencanaan & Pengembangan',p26:77981,t27:140163,g:79.74},
+ {n:'Pengembangan SDM',p26:30601,t27:42360,g:38.43},
+ {n:'Beban Manajemen',p26:125172,t27:124851,g:-0.26},
+ {n:'Penyelesaian Masalah Hukum',p26:7919,t27:10201,g:28.81}],
+bebanTot:{p26:5242690,t27:6215697,g:18.56},
+modal:[
+ {n:'Perangkat Teknologi Informasi',p26:86034,t27:224045,g:160.42},
+ {n:'Tanah',p26:0,t27:132000,g:null},
+ {n:'Kendaraan',p26:108181,t27:69074,g:-36.15},
+ {n:'Aset Takberwujud',p26:3904,t27:29083,g:644.96},
+ {n:'Bangunan',p26:36472,t27:28593,g:-21.60},
+ {n:'Peralatan Lain',p26:20779,t27:20300,g:-2.31},
+ {n:'Peralatan Kantor',p26:4451,t27:3735,g:-16.07}],
+modalTot:{p26:259820,t27:506830,g:95.07},
+s1:{
+ peserta:[{n:'Penerima Upah',r25:27406731,t26:32714000,j26:28244076,p:86.34},
+  {n:'Bukan Penerima Upah',r25:14195182,t26:22333789,j26:12830430,p:57.45},
+  {n:'Jasa Konstruksi',r25:7047512,t26:8264000,j26:6108414,p:73.92}],
+ pesertaTot:{r25:48649425,t26:63311789,j26:47182920,p:74.52},
+ prog:[{n:'JKK',i:4647222,ip:36.69,k:2315853,kp:42.35},{n:'JKM',i:2728640,ip:44.59,k:2283829,kp:37.48},
+  {n:'JHT',i:37987923,ip:54.43,k:30132410,kp:49.96},{n:'JP',i:14132440,ip:54.79,k:958415,kp:20.55},
+  {n:'JKP',i:1455253,ip:39.96,k:606581,kp:33.09}],
+ progTot:{i:60951477,ip:51.65,k:36297088,kp:46.31},
+ gauge:[{n:'Kepesertaan aktif',v:74.52,d:'47,18 dari 63,31 juta'},
+  {n:'Pendapatan iuran',v:51.65,d:'Rp60,95 dari 118,01 T'},
+  {n:'Pembayaran jaminan',v:46.31,d:'Rp36,30 dari 78,38 T'},
+  {n:'Dana investasi',v:91.28,d:'Rp913,88 dari 1.001,18 T'},
+  {n:'Hasil investasi',v:45.11,d:'Rp31,74 dari 70,36 T'},
+  {n:'Beban usaha',v:48.19,d:'Rp2,58 dari 5,35 T'},
+  {n:'Belanja modal',v:38.21,d:'Rp112,75 dari 295,09 M'},
+  {n:'Sarana Kesejahteraan',v:7.06,d:'Rp1,41 dari 19,97 M'}]},
+sb:[
+ {no:1,n:'Layanan peserta yang seamless dan bernilai tambah',is:['A.1 Standardisasi Service Excellence & Customer Journey','A.2 Platform Layanan Digital Terpadu','A.3 Perluasan Value-Beyond Protection']},
+ {no:2,n:'Keberlanjutan dana, manfaat dan kepercayaan',is:['B.3 Penguatan Diversifikasi Portofolio','B.4 Perluasan Instrumen dan Pasar Investasi']},
+ {no:3,n:'Perluasan kepesertaan yang inklusif dan berkelanjutan',is:['C.1 Integrated Customer Relationship Management Transformation','C.2 Pengembangan Skema Adaptif & Product Customization','C.3 Integrated Compliance Ecosystem']},
+ {no:4,n:'Operasional dan keuangan yang scalable dan sustainable',is:['D.1 Business Process Reengineering','D.2 Intelligent Process Excellence','D.3 Penguatan Strategic Procurement','D.4 Integrated Comprehensive Finance & Accounting','H.1 Pengembangan Strategi dan Dampak ESG']},
+ {no:5,n:'Organisasi adaptif dan berorientasi dampak',is:['E.1 Penguatan Desain Organisasi & Strategic Workforce Planning','E.2 Peningkatan Kapabilitas Keteladanan Pimpinan','E.3 Transformasi Budaya dan Ways of Working Organisasi']},
+ {no:6,n:'Data dan teknologi sebagai fondasi transformasi',is:['F.1 Penguatan Tata Kelola dan Ekosistem Data','F.2 Transformasi Sistem Operasional Terintegrasi','F.3 Pusat Interoperabilitas Ketenagakerjaan Nasional']},
+ {no:7,n:'Tata kelola, risiko, dan kepatuhan yang proaktif',is:['B.2 Integrated Governance, Risk, Compliance and Control','G.1 Regulatory Intelligence & Advocacy','G.2 Penguatan Hubungan Kelembagaan & Kemitraan','G.3 Value Driven Communication','G.4 Penguatan Pengendalian, Pengawasan dan Pengelolaan Klaim','G.5 Penguatan Transformation Management Office']},
+ {no:8,n:'Workforce intelligence untuk insight dan early warning',is:['B.1 Indonesia Workforce Intelligence']}],
+persp:[
+ {n:'Kepesertaan',w:37,c:'var(--grn)',items:[['Peserta aktif basis KPJ','62.680.640'],['Peserta aktif basis NIK','51.246.030'],['Peserta aktif PPU (JKK/JKM)','29.960.843'],['Peserta aktif PBPU (JKK/JKM)','23.268.538'],['Peserta sektor konstruksi','7.951.259'],['Pekerja Migran Indonesia','1.500.000'],['Rasio reaktivasi kepesertaan','70%']]},
+ {n:'Pelayanan',w:30,c:'var(--sea)',items:[['Tingkat kepuasan pelayanan','Skor 5 — Puas'],['SLA klaim JKK','7 hari'],['SLA klaim JKM','3 hari'],['SLA klaim JHT','5 hari'],['SLA klaim JP','15 hari'],['SLA klaim JKP','3 hari'],['Pemahaman peserta','60–<80% tahu'],['Otomasi proses bisnis','100%'],['Penyaluran MLT','30% dana tersedia']]},
+ {n:'Keuangan',w:23,c:'var(--gold)',items:[['BOPO BPJS','≤95%'],['Aset lancar / liabilitas lancar','≥200%'],['Ekuitas / liabilitas','≥150%'],['Imbal hasil investasi BPJS','7%'],['Imbal hasil DJS JHT & JP','7%'],['Imbal hasil DJS JKK/JKM/JKP','6,75%'],['Kolektibilitas iuran','98,5%'],['Likuiditas tiap DJS','100%'],['Opini akuntan publik','WTM']]},
+ {n:'Organisasi',w:10,c:'var(--plum)',items:[['Interoperabilitas sistem informasi','100%'],['Inovasi yang diterapkan','100%'],['Tindak lanjut rekomendasi DJSN','100%'],['Pemenuhan permintaan data pengawas','100%'],['Tindak lanjut SNP Dewas','100%'],['Penilaian tata kelola','Sangat Baik'],['Data Terpadu Jaminan Sosial','100%']]}],
+health:[
+ {p:'JHT',r:'Solvabilitas',v:'100,00%',t:'min 100%',ok:1,d:'Total aset ÷ total kewajiban · PP 55/2015'},
+ {p:'JKK',r:'Aset neto',v:'174,57 bln',t:'min 1 bulan',ok:1,d:'Aset neto ÷ rata-rata beban klaim bulanan'},
+ {p:'JKM',r:'Aset neto',v:'19,09 bln',t:'min 1 bulan',ok:1,d:'Aset neto ÷ rata-rata beban klaim bulanan'},
+ {p:'JKP',r:'Aset neto',v:'140,31 bln',t:'min 1 bulan',ok:1,d:'Aset neto ÷ rata-rata beban klaim bulanan'},
+ {p:'JP',r:'Solvabilitas',v:'∞',t:'min 5 tahun',ok:1,d:'Kewajiban aktuaria nihil — PV iuran 3 tahun melampaui PV manfaat 5 tahun'},
+ {p:'BPJS',r:'BOPO',v:'91,28%',t:'maks 95%',ok:1,d:'Beban usaha ÷ pendapatan operasional + investasi · PMK 242/2016'},
+ {p:'BPJS',r:'Likuiditas',v:'541,20%',t:'min 200%',ok:1,d:'Aset lancar ÷ liabilitas lancar'},
+ {p:'BPJS',r:'Ekuitas / liabilitas',v:'197,44%',t:'min 150%',ok:1,d:'Total ekuitas ÷ total liabilitas'}],
+neraca:[
+ {n:'Total aset',a:17135.04,b:17983.95,c:19104.65},
+ {n:'Total liabilitas',a:4797.76,b:5355.86,c:6423.11},
+ {n:'— Imbalan pascakerja',a:3823.22,b:4311.28,c:4786.62},
+ {n:'Total ekuitas',a:12337.28,b:12628.09,c:12681.54}],
+asumsi:[
+ {n:'Pertumbuhan ekonomi',v:'5,8% – 6,5%',d:'Naik dari asumsi APBN 2026 sebesar 5,4%'},
+ {n:'Inflasi',v:'1,5% – 3,5%',d:'Menjaga daya beli dan kesinambungan pembayaran iuran'},
+ {n:'Nilai tukar rupiah',v:'Rp16.800 – Rp17.500',d:'Per dolar AS; menekan pengelolaan investasi'},
+ {n:'Suku bunga SBN 10 tahun',v:'6,5% – 7,3%',d:'Acuan imbal hasil instrumen pendapatan tetap'},
+ {n:'Tingkat pengangguran terbuka',v:'4,30% – 4,87%',d:'Turun dari 4,68% per Februari 2026'}]
+};
+D.anggaran = {"pusat":[{"n":"Direktorat Utama","v":155251669735,"ch":[{"n":"Satuan Pengawas Internal","v":14724262375},{"n":"Deputi Sekretariat Badan","v":68544127423},{"n":"Deputi Komunikasi","v":59416355312},{"n":"Deputi Kepatuhan & Hukum","v":12566924625}]},{"n":"Direktorat Kepesertaan","v":131030779000,"ch":[{"n":"Deputi Kepesertaan Korporasi & Institusi","v":30071621000},{"n":"Deputi Kepesertaan Program Khusus dan Keagenan","v":92440309000},{"n":"Deputi Pengawasan & Pemeriksaan","v":8518849000}]},{"n":"Direktorat Pelayanan","v":63835445592,"ch":[{"n":"Deputi Operasional dan Kanal Layanan","v":36584455872},{"n":"Deputi Kebijakan Pelayanan Program","v":6742615000},{"n":"Deputi Layanan Digital dan Customer Care","v":20508374720}]},{"n":"Direktorat Pengembangan Investasi","v":18596341595,"ch":[{"n":"Deputi Analisis Portofolio","v":9190815595},{"n":"Deputi Pendapatan Tetap dan Pasar Modal","v":5068761000},{"n":"Deputi Investasi Langsung","v":4336765000}]},{"n":"Direktorat Keuangan & Manajemen Risiko","v":16462216335,"ch":[{"n":"Deputi Keuangan","v":6134336000},{"n":"Deputi Akuntansi","v":3759301580},{"n":"Deputi Manajemen Risiko","v":6568578755}]},{"n":"Direktorat Perencanaan Strategis & TI","v":401008959630,"ch":[{"n":"Deputi Perencanaan Strategis dan Transformasi","v":9295303500},{"n":"Deputi Manajemen Data dan Analitik","v":12994912484},{"n":"Deputi Arsitektur dan Pengembangan TI","v":32670693592},{"n":"Deputi Infrastruktur dan Operasional TI","v":336577285154},{"n":"Deputi Aktuaria dan Riset","v":9470764900}]},{"n":"Direktorat Umum & SDM","v":4569864134277,"ch":[{"n":"Deputi Human Capital","v":4377470994578},{"n":"Deputi Learning & Development","v":40963250492},{"n":"Deputi Pengadaan","v":5229839300},{"n":"Deputi Aset dan Sarana Prasarana","v":146200049907}]},{"n":"Sekretariat Dewan Pengawas","v":23210035500,"ch":[]}],"wilayah":[{"n":"DKI Jakarta","v":107111429117},{"n":"Jawa Timur","v":101076655440},{"n":"Sulawesi–Maluku","v":96472011947},{"n":"Jawa Barat","v":77068255858},{"n":"Kalimantan","v":75899903046},{"n":"Bali–Nusra–Papua","v":71869665363},{"n":"Jateng & DIY","v":67351862307},{"n":"Sumbar–Riau","v":65238997081},{"n":"Sumatera Bagian Selatan","v":64149509477},{"n":"Sumatera Bagian Utara","v":60998371349},{"n":"Banten","v":49200695857}],"top":[{"k":"Pembayaran Gaji Dan Tunjangan Tetap Karyawan","s":"Umum & SDM","n":1657683427680},{"k":"Pembayaran PPh Pasal 21 Beban Perusahaan","s":"Umum & SDM","n":586434623664},{"k":"Pembayaran Tunjangan Prestasi Karyawan","s":"Umum & SDM","n":285879311120},{"k":"Pembayaran THR Keagamaan","s":"Umum & SDM","n":277637133048},{"k":"Pembayaran Otifa Program Kesehatan Pensiun","s":"Umum & SDM","n":205189207153},{"k":"Pembayaran Program JPK Tambahan","s":"Umum & SDM","n":194333511312},{"k":"Pembayaran Tunjangan Cuti Tahunan Karyawan","s":"Umum & SDM","n":160236846750},{"k":"Pembayaran Imbalan Kerja Karyawan","s":"Umum & SDM","n":120397027379},{"k":"Pembayaran Uang Makan Karyawan","s":"Umum & SDM","n":106085700000},{"k":"Pembayaran Program BPJS Ketenagakerjaan","s":"Umum & SDM","n":90796312692},{"k":"Pembayaran Tunjangan Cuti Besar Karyawan","s":"Umum & SDM","n":84479322373},{"k":"Pembayaran Program Kesehatan Pensiun","s":"Umum & SDM","n":82884171384},{"k":"Pemberian Insentif/Fee Untuk Wadah Dan Perisai","s":"Kepesertaan","n":70575450000},{"k":"Pembayaran Program THT","s":"Umum & SDM","n":66307337112},{"k":"Renewal ATS Database Oracle","s":"Perencanaan Strategis & TI","n":49301070338},{"k":"Pembayaran PSL Pensiun","s":"Umum & SDM","n":47673850000},{"k":"Biaya Sewa Plaza BPJAMSOSTEK","s":"Umum & SDM","n":45360000000},{"k":"Pembayaran Program Pensiun Manfaat Pasti","s":"Umum & SDM","n":42245931768},{"k":"Pembayaran Penghargaan Pengabdian","s":"Umum & SDM","n":34670812678},{"k":"Pembayaran Program BPJS Kesehatan","s":"Umum & SDM","n":33344640000},{"k":"Kelengkapan Kerja Karyawan","s":"Umum & SDM","n":31182766324},{"k":"Pembayaran Biaya Mutasi Karyawan","s":"Umum & SDM","n":29212191695}],"risks":[{"c":"R01","sb":1,"kat":"Operasional","i":"B4","a":"B2","t":"B3/C2","r":"B2","n":"Risiko Kualitas — Layanan – Kegagalan Adopsi Standar Layanan"},{"c":"R02","sb":1,"kat":"Operasional","i":"C4","a":"C3","t":"C4/D3","r":"C3","n":"Layanan Program — JKK - Tingginya outstanding klaim KK/PAK"},{"c":"R03","sb":2,"kat":"Hukum","i":"C3","a":"A3","t":"A4/B3","r":"C3","n":"Risiko Hukum - — Hambatan Regulasi terhadap Inovasi Investasi"},{"c":"R04","sb":2,"kat":"Kredit","i":"D3","a":"A3","t":"A4/B3","r":"B3","n":"Credit Risk – Asset Default"},{"c":"R05","sb":2,"kat":"Likuiditas","i":"C4","a":"A3","t":"A4/B3","r":"B3","n":"Liquidity Risk – — Aset Investasi tidak dapat dijual"},{"c":"R06","sb":2,"kat":"Likuiditas","i":"C4","a":"A3","t":"A4/B3","r":"C2","n":"Risiko Tren — Kesehatan Menurun – Peningkatan Klaim"},{"c":"R07","sb":2,"kat":"Pasar","i":"D4","a":"B3","t":"B4/C3","r":"D3","n":"Risiko Volatilitas — Pasar – Penekanan Hasil Investasi terhadap Perubahan Kondisi"},{"c":"R08","sb":2,"kat":"Pasar","i":"B5","a":"B3","t":"B4/C3","r":"A4","n":"Risiko — Meningkatnya Selisih Penilaian Investasi (SPI) Negatif"},{"c":"R09","sb":2,"kat":"Pasar","i":"B3","a":"B2","t":"B3/C2","r":"B2","n":"Tekanan — Pelemahan Rupiah terhadap Hasil Investasi dan"},{"c":"R10","sb":2,"kat":"Reputasi","i":"D3","a":"B4","t":"B5/C4","r":"B1","n":"Layanan Program JKM – Pemberitaan"},{"c":"R11","sb":2,"kat":"Solvabilitas","i":"D4","a":"A1","t":"A2/B1","r":"D3","n":"Risiko Kesehatan Dana Program – Risiko Solvabilitas Program JKM"},{"c":"R12","sb":2,"kat":"Solvabilitas","i":"C3","a":"A1","t":"A2/B1","r":"C2","n":"Risiko — Ketidakcukupan Dana Program JP"},{"c":"R13","sb":2,"kat":"Solvabilitas","i":"A4","a":"A1","t":"A2/B1","r":"A2","n":"Risiko Ketahanan Dana JKP – Turunnya Ketahanan Dana"},{"c":"R14","sb":2,"kat":"Strategis","i":"C5","a":"C3","t":"C4/D3","r":"B3","n":"Yield on — Investment - Tidak Tercapainya Yield On Investment"},{"c":"R15","sb":2,"kat":"Strategis","i":"A4","a":"A1","t":"A2/B1","r":"A2","n":"Risiko Ketahanan — Dana JKK – Turunnya Ketahanan Dana"},{"c":"R16","sb":3,"kat":"Operasional","i":"C3","a":"C3","t":"C4/D3","r":"B3","n":"Brand Awareness — – Rendahnya engagement masyarakat terhadap BPJS"},{"c":"R17","sb":3,"kat":"Strategis","i":"D4","a":"C3","t":"C4/D3","r":"C3","n":"Risiko Lonjakan — PHK"},{"c":"R18","sb":3,"kat":"Strategis","i":"E5","a":"C3","t":"C4/D3","r":"C3","n":"Risiko Kinerja — Kepesertaan - a. Rendahnya Pe Pertumbuhan TK (P Aktif"},{"c":"R19","sb":4,"kat":"Strategis","i":"C5","a":"C3","t":"C4/D3","r":"C4","n":"Risiko Kinerja — Kepesertaan – Tidak Optimalnya"},{"c":"R20","sb":5,"kat":"Operasional","i":"C4","a":"C3","t":"C4/D3","r":"C3","n":"Risiko — SDM/Organisasi – Kegagalan Transformasi Budaya &"},{"c":"R21","sb":5,"kat":"Operasional","i":"C5","a":"C3","t":"C4/D3","r":"C4","n":"Capacity – — Kekosongan key position akibat"},{"c":"R22","sb":5,"kat":"Operasional","i":"C3/D2","a":"C3","t":"C2","r":"C2","n":"Capability - — Kesenjangan kompetensi akibat"},{"c":"R23","sb":6,"kat":"IT","i":"E3","a":"C3/D2","t":"C2","r":"C2","n":"Risiko Keamanan — Data – Kebocoran/Penyal ahgunaan Data Pribadi Peserta"},{"c":"R24","sb":6,"kat":"IT","i":"E5","a":"C2","t":"C3","r":"C3","n":"Keamanan – — Kerentanan pada Aplikasi JMO dan Lapak Asik"},{"c":"R25","sb":6,"kat":"Operasional","i":"B4","a":"B3","t":"B4/C3","r":"B3","n":"Risiko Duplikasi — Data Kepesertaan - Mismatch Data Kartu Peserta"},{"c":"R26","sb":6,"kat":"Operasional","i":"C4","a":"C3","t":"C4/D3","r":"B3","n":"Data – Rendahnya — Kualitas atau Data Governance"},{"c":"R27","sb":6,"kat":"Operasional","i":"C5","a":"C3","t":"C4/D3","r":"C4","n":"Layanan Program JHT – Ketidakvalidan"},{"c":"R28","sb":7,"kat":"Fraud","i":"D3","a":"A1","t":"A2/B1","r":"B2","n":"Risiko Fraud - — Fraud pada Klaim dan Pembayaran Manfaat"},{"c":"R29","sb":7,"kat":"Fraud","i":"C3","a":"A1","t":"A2/B1","r":"B2","n":"Fraud Internal - — Terjadinya praktik penyelewengan"},{"c":"R30","sb":7,"kat":"Fraud","i":"D3","a":"A1","t":"A2/B1","r":"A1","n":"Fraud Internal - — Terjadinya praktek jual beli data peserta dengan memberikan data"},{"c":"R31","sb":7,"kat":"Fraud","i":"B2","a":"A1","t":"A2/B1","r":"B1","n":"Layanan Program JKK - Manipulasi jenis obat, harga, tindakan, istirahat/ STMB, durasi"},{"c":"R32","sb":7,"kat":"Hukum","i":"D4","a":"A3","t":"A4/B3","r":"B3","n":"Layanan Program — JKM - Timbulnya tuntutan hukum"},{"c":"R33","sb":7,"kat":"Kepatuhan","i":"C2","a":"A1","t":"A2/B1","r":"A1","n":"Layanan Program — JKM - Pembayaran klaim JKM peserta Jakon tidak sesuai ketentuan"},{"c":"R34","sb":7,"kat":"Operasional","i":"D4","a":"C3","t":"C4/D3","r":"C3","n":"Layanan Program — JHT - JHT Salah bayar"},{"c":"R35","sb":7,"kat":"Strategis","i":"D3","a":"C3","t":"C4/D3","r":"C3","n":"Pergantian — Arah/Fokus Pemerintah"},{"c":"R36","sb":7,"kat":"Strategis","i":"D3","a":"C3","t":"C4/D3","r":"C3","n":"Penurunan Angka — PBI (Penerima Bantuan Iuran) oleh Pemerintah untuk Segmen"},{"c":"R37","sb":8,"kat":"Strategis","i":"D3","a":"B3","t":"B4/C3","r":"C3","n":"Ketidakefektifan — Outlook Ketenagakerjaan"}],"nAkt":2092,"totAnggaran":6215696938501};
+/* ---------- helpers ---------- */
+const $=id=>document.getElementById(id);
+const nf=new Intl.NumberFormat('id-ID');
+const jt=n=>nf.format(Math.round(n/1e6));            // juta -> orang? no
+const num=n=>nf.format(Math.round(n));
+const d1=n=>nf.format(Math.round(n*10)/10);
+const d2=n=>n.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2});
+// nilai dalam JUTA rupiah -> triliun / miliar
+const tri=n=>d2(n/1e6);
+const mil=n=>d2(n/1e3);
+// nilai rupiah penuh
+const rpT=n=>d2(n/1e12), rpM=n=>d2(n/1e9);
+const juta=n=>d2(n/1e6);
+const chg=g=>g===null?'<span class="chg flat">baru</span>':
+  `<span class="chg ${g>0.5?'up':g<-0.5?'dn':'flat'}">${g>0?'+':''}${d2(g)}%</span>`;
+const PC={JKK:'var(--jkk)',JKM:'var(--jkm)',JHT:'var(--jht)',JP:'var(--jp)',JKP:'var(--jkp)'};
+
+/* ---------- 1. KPI ---------- */
+const kpis=[
+ {l:'Tenaga kerja aktif (KPJ)',v:juta(D.segTot.t27)+' <small>juta peserta</small>',g:D.segTot.g,s:'dari 54,28 juta prognosa 2026'},
+ {l:'Tenaga kerja aktif (NIK)',v:juta(D.nikTot.t27)+' <small>juta pekerja</small>',g:D.nikTot.g,s:'basis identitas kependudukan'},
+ {l:'Pendapatan iuran',v:'Rp'+tri(D.iuranTot.t27)+' <small>triliun</small>',g:D.iuranTot.g,s:'JHT menyumbang 59,5%'},
+ {l:'Pembayaran jaminan',v:'Rp'+tri(D.klaimTot.t27)+' <small>triliun</small>',g:D.klaimTot.g,s:'JHT menyumbang 77,9%'},
+ {l:'Dana investasi',v:'Rp'+tri(D.danaTot.t27)+' <small>triliun</small>',g:D.danaTot.g,s:'DJS Rp1.107,66 T + BPJS Rp15,36 T'},
+ {l:'Hasil investasi',v:'Rp'+tri(D.hasilTot.t27)+' <small>triliun</small>',g:D.hasilTot.g,s:'yield implisit 6,40% atas dana target'},
+ {l:'Beban usaha',v:'Rp'+tri(D.bebanTot.t27)+' <small>triliun</small>',g:D.bebanTot.g,s:'56,5% adalah beban personil'},
+ {l:'Belanja modal',v:'Rp'+mil(D.modalTot.t27)+' <small>miliar</small>',g:D.modalTot.g,s:'44,2% untuk perangkat TI'},
+ {l:'Sarana Kesejahteraan Peserta',v:'Rp105,62 <small>miliar</small>',g:471.52,s:'terhadap RKAT 2026 Rp19,97 miliar'}];
+$('kpiGrid').innerHTML=kpis.map(k=>`<div class="card kpi"><div class="lab">${k.l}</div>
+ <div class="val">${k.v}</div><div style="margin:6px 0 5px">${chg(k.g)}</div>
+ <div class="sub">${k.s}</div></div>`).join('');
+
+/* ---------- 2. Kepesertaan ---------- */
+$('tbSegKPJ').innerHTML=D.seg.map(s=>`<tr><td>${s.n}</td>
+ <td class="num">${num(s.p26)}</td><td class="num">${num(s.t27)}</td><td>${chg(s.g)}</td></tr>`).join('')
+ +`<tr class="tot"><td>Total</td><td class="num">${num(D.segTot.p26)}</td>
+   <td class="num">${num(D.segTot.t27)}</td><td>${chg(D.segTot.g)}</td></tr>`;
+$('tbSegNIK').innerHTML=D.nik.map(s=>`<tr><td>${s.n}</td>
+ <td class="num">${num(s.p26)}</td><td class="num">${num(s.t27)}</td><td>${chg(s.g)}</td></tr>`).join('')
+ +`<tr class="tot"><td>Total</td><td class="num">${num(D.nikTot.p26)}</td>
+   <td class="num">${num(D.nikTot.t27)}</td><td>${chg(D.nikTot.g)}</td></tr>`;
+
+function bars(el,rows,max,fmt,colors){
+  el.innerHTML=rows.map((r,i)=>`<div class="barrow"><div class="nm">${r.n}</div>
+   <div class="track"><div class="fill" style="width:0;background:${colors?colors[i]:'var(--grn)'}"
+    data-w="${(r.v/max*100).toFixed(1)}%"></div>${r.ghost!=null?
+    `<div class="ghost" style="left:${(r.ghost/max*100).toFixed(1)}%"></div>`:''}</div>
+   <div class="vv">${fmt(r.v)}</div></div>`).join('');
+}
+const segMax=Math.max(...D.seg.map(s=>s.t27));
+bars($('barSegKPJ'),D.seg.map(s=>({n:s.k+' · target 2027',v:s.t27,ghost:s.p26})),segMax,
+  v=>juta(v)+' jt',['var(--grn)','var(--gold)','var(--sea)','var(--plum)']);
+$('barSegKPJ').insertAdjacentHTML('beforeend',
+ '<div class="note" style="margin-top:4px">Garis putus-putus menandai posisi prognosa 2026.</div>');
+bars($('barProgPeserta'),D.progPeserta.map(p=>({n:p.n,v:p.v})),62680640,v=>juta(v)+' jt',
+  D.progPeserta.map(p=>PC[p.n]));
+
+/* ---------- 3. Arus dana ---------- */
+const fMax=Math.max(...D.iuran.map(i=>i.t27),...D.klaim.map(k=>k.t27));
+$('flowRows').innerHTML=D.iuran.map((it,i)=>{
+  const kl=D.klaim[i], net=it.t27-kl.t27;
+  return `<div class="frow">
+   <div class="fname">${it.n}<small>${d2(it.g)}% iuran</small></div>
+   <div class="fl"><div class="fbar" style="width:0;background:${PC[it.n]}"
+     data-w="${(it.t27/fMax*100).toFixed(1)}%">${tri(it.t27)} T</div></div>
+   <div class="fr"><div class="fbar" style="width:0"
+     data-w="${(kl.t27/fMax*100).toFixed(1)}%">${tri(kl.t27)} T</div></div>
+   <div class="fnet" style="color:${net>=0?'var(--grn)':'var(--clay)'}">
+     ${net>=0?'+':'−'}${tri(Math.abs(net))} T<small>${net>=0?'surplus':'defisit'}</small></div></div>`;
+}).join('')+`<div class="frow" style="border-top:2px solid var(--ink);padding-top:12px;margin-top:6px">
+   <div class="fname">Total<small>seluruh program</small></div>
+   <div class="fl"><div class="fbar" style="width:100%;background:var(--ink)">${tri(D.iuranTot.t27)} T</div></div>
+   <div class="fr"><div class="fbar" style="width:${(D.klaimTot.t27/D.iuranTot.t27*100).toFixed(1)}%">${tri(D.klaimTot.t27)} T</div></div>
+   <div class="fnet" style="color:var(--grn)">+${tri(D.iuranTot.t27-D.klaimTot.t27)} T<small>surplus kas</small></div></div>`;
+
+const trow=(a,rows,tot,keys)=>rows.map(r=>`<tr><td>${r.n}</td>`+
+  keys.map(k=>`<td class="num">${mil(r[k])}</td>`).join('')+`<td>${chg(r.g)}</td></tr>`).join('')
+  +`<tr class="tot"><td>Total</td>`+keys.map(k=>`<td class="num">${mil(tot[k])}</td>`).join('')
+  +`<td>${chg(tot.g)}</td></tr>`;
+$('tbIuran').innerHTML=trow(0,D.iuran,D.iuranTot,['t26','p26','t27']);
+$('tbKlaim').innerHTML=trow(0,D.klaim,D.klaimTot,['t26','p26','t27']);
+
+/* ---------- 4. Investasi ---------- */
+$('tbDana').innerHTML=D.dana.map(r=>`<tr><td>${r.n}</td><td class="num">${mil(r.p26)}</td>
+  <td class="num">${mil(r.t27)}</td><td>${chg(r.g)}</td></tr>`).join('')
+  +`<tr><td>Jumlah DJS</td><td class="num">${mil(D.danaDJS.p26)}</td>
+    <td class="num">${mil(D.danaDJS.t27)}</td><td>${chg(D.danaDJS.g)}</td></tr>`
+  +`<tr><td>BPJS</td><td class="num">${mil(D.danaBPJS.p26)}</td>
+    <td class="num">${mil(D.danaBPJS.t27)}</td><td>${chg(D.danaBPJS.g)}</td></tr>`
+  +`<tr class="tot"><td>Total dana</td><td class="num">${mil(D.danaTot.p26)}</td>
+    <td class="num">${mil(D.danaTot.t27)}</td><td>${chg(D.danaTot.g)}</td></tr>`;
+$('tbHasil').innerHTML=D.hasil.map(r=>`<tr><td>${r.n}</td><td class="num">${mil(r.p26)}</td>
+  <td class="num">${mil(r.t27)}</td><td>${chg(r.g)}</td></tr>`).join('')
+  +`<tr><td>Jumlah DJS</td><td class="num">${mil(D.hasilDJS.p26)}</td>
+    <td class="num">${mil(D.hasilDJS.t27)}</td><td>${chg(D.hasilDJS.g)}</td></tr>`
+  +`<tr><td>BPJS</td><td class="num">${mil(D.hasilBPJS.p26)}</td>
+    <td class="num">${mil(D.hasilBPJS.t27)}</td><td>${chg(D.hasilBPJS.g)}</td></tr>`
+  +`<tr class="tot"><td>Total hasil</td><td class="num">${mil(D.hasilTot.p26)}</td>
+    <td class="num">${mil(D.hasilTot.t27)}</td><td>${chg(D.hasilTot.g)}</td></tr>`;
+
+$('yieldGrid').innerHTML=D.dana.map((d,i)=>{
+  const y=D.hasil[i].t27/d.t27*100, t=D.yieldTarget[d.n], gap=y-t;
+  return `<div class="gauge">${arc(y,10,PC[d.n])}
+   <div class="gv">${d2(y)}%</div>
+   <div class="gl">${d.n} · target ${d2(t)}%<br>
+   <span style="color:${gap>=0?'var(--grn)':'var(--clay)'};font-weight:700">
+   ${gap>=0?'+':'−'}${d2(Math.abs(gap))} pp</span></div></div>`;
+}).join('');
+
+function arc(v,max,color,label){
+  const p=Math.max(0,Math.min(1,v/max)), R=34, C=Math.PI*R;
+  return `<svg width="94" height="56" viewBox="0 0 94 56" aria-hidden="true">
+   <path d="M13 47 A34 34 0 0 1 81 47" fill="none" stroke="var(--line-2)" stroke-width="9" stroke-linecap="round"/>
+   <path d="M13 47 A34 34 0 0 1 81 47" fill="none" stroke="${color}" stroke-width="9" stroke-linecap="round"
+     stroke-dasharray="${C}" stroke-dashoffset="${C}" class="arc" data-off="${C*(1-p)}"/>
+   ${label?`<text x="47" y="44" text-anchor="middle" font-family="JetBrains Mono" font-size="15"
+     font-weight="700" fill="var(--ink)">${label}</text>`:''}</svg>`;
+}
+
+/* ---------- 5. Semester I ---------- */
+$('gaugeGrid').innerHTML=D.s1.gauge.map(g=>`<div class="card gauge">
+  ${arc(g.v,100,g.v>=50?'var(--grn)':g.v>=40?'var(--gold)':'var(--clay)',d2(g.v)+'%')}
+  <div class="gv" style="font-size:15px;margin-top:4px">${g.n}</div>
+  <div class="gl">${g.d}</div></div>`).join('');
+$('tbS1Peserta').innerHTML=D.s1.peserta.map(r=>`<tr><td>${r.n}</td>
+ <td class="num">${num(r.r25)}</td><td class="num">${num(r.t26)}</td>
+ <td class="num">${num(r.j26)}</td><td><span class="chg ${r.p>=50?'up':'dn'}">${d2(r.p)}%</span></td></tr>`).join('')
+ +`<tr class="tot"><td>Total</td><td class="num">${num(D.s1.pesertaTot.r25)}</td>
+   <td class="num">${num(D.s1.pesertaTot.t26)}</td><td class="num">${num(D.s1.pesertaTot.j26)}</td>
+   <td><span class="chg up">${d2(D.s1.pesertaTot.p)}%</span></td></tr>`;
+$('tbS1Prog').innerHTML=D.s1.prog.map(r=>`<tr><td>${r.n}</td>
+ <td class="num">${mil(r.i)}</td><td><span class="chg ${r.ip>=50?'up':'dn'}">${d2(r.ip)}%</span></td>
+ <td class="num">${mil(r.k)}</td><td><span class="chg flat">${d2(r.kp)}%</span></td></tr>`).join('')
+ +`<tr class="tot"><td>Total</td><td class="num">${mil(D.s1.progTot.i)}</td>
+   <td><span class="chg up">${d2(D.s1.progTot.ip)}%</span></td>
+   <td class="num">${mil(D.s1.progTot.k)}</td><td><span class="chg flat">${d2(D.s1.progTot.kp)}%</span></td></tr>`;
+/* ---------- 6. Anggaran ---------- */
+const A=D.anggaran;
+const rp=v=>v>=1e12?'Rp'+rpT(v)+' T':'Rp'+rpM(v)+' M';
+$('nAkt').textContent=nf.format(A.nAkt);
+const pusatSorted=[...A.pusat].sort((a,b)=>b.v-a.v);
+const pMax=pusatSorted[0].v;
+$('dirList').innerHTML=pusatSorted.map(d=>`<details>
+  <summary><span>${d.n}</span><span class="amt">${rp(d.v)}</span></summary>
+  <div class="dbody">${d.ch.length?d.ch.sort((a,b)=>b.v-a.v).map(c=>`
+    <div class="barrow" style="grid-template-columns:1fr 84px;gap:10px">
+      <div class="nm" style="font-size:12.5px">${c.n}</div>
+      <div class="vv">${rp(c.v)}</div></div>
+    <div class="track" style="height:6px;margin:-4px 0 10px"><div class="fill"
+      style="width:${(c.v/d.v*100).toFixed(1)}%;background:var(--grn)"></div></div>`).join('')
+    :'<div class="note" style="margin:0">Unit tunggal — tidak dirinci lebih lanjut dalam lampiran.</div>'}
+  </div></details>`).join('');
+const wMax=A.wilayah[0].v, wTot=A.wilayah.reduce((s,w)=>s+w.v,0);
+bars($('wilBars'),A.wilayah.map(w=>({n:w.n,v:w.v})),wMax,v=>rp(v),
+  A.wilayah.map(()=>'var(--sea)'));
+$('wilTot').textContent='Rp'+rpM(wTot)+' miliar';
+$('wilPct').textContent=d2(wTot/A.totAnggaran*100)+'%';
+
+$('tbBeban').innerHTML=D.beban.map(r=>`<tr><td>${r.n}</td><td class="num">${mil(r.p26)}</td>
+ <td class="num">${mil(r.t27)}</td><td>${chg(r.g)}</td></tr>`).join('')
+ +`<tr class="tot"><td>Total beban usaha</td><td class="num">${mil(D.bebanTot.p26)}</td>
+   <td class="num">${mil(D.bebanTot.t27)}</td><td>${chg(D.bebanTot.g)}</td></tr>`;
+$('tbModal').innerHTML=D.modal.map(r=>`<tr><td>${r.n}</td><td class="num">${mil(r.p26)}</td>
+ <td class="num">${mil(r.t27)}</td><td>${chg(r.g)}</td></tr>`).join('')
+ +`<tr class="tot"><td>Total belanja modal</td><td class="num">${mil(D.modalTot.p26)}</td>
+   <td class="num">${mil(D.modalTot.t27)}</td><td>${chg(D.modalTot.g)}</td></tr>`;
+$('tbTop').innerHTML=A.top.map(t=>`<tr>
+ <td style="max-width:440px;font-weight:500">${t.k}</td>
+ <td style="text-align:left;font-size:11.5px;color:var(--mute)">${t.s}</td>
+ <td class="num">${rp(t.n)}</td></tr>`).join('');
+
+/* ---------- 7. Sasaran Badan ---------- */
+$('sbGrid').innerHTML=D.sb.map(s=>`<div class="card"><div class="sbcard">
+  <h4><span class="mono" style="color:var(--gold);font-size:12px">SB${s.no}</span> &nbsp;${s.n}</h4>
+  <ul>${s.is.map(i=>`<li>${i}</li>`).join('')}</ul></div></div>`).join('');
+
+/* ---------- 8. Risiko ---------- */
+const DMP=['A','B','C','D','E'], PRB=[1,2,3,4,5];
+const LVL={ // [dampak][prob] -> 1..4
+ A:[1,1,1,2,2], B:[1,2,2,2,3], C:[1,2,2,3,3], D:[2,2,3,4,4], E:[2,3,3,4,4]};
+const R=A.risks;
+const cats=[...new Set(R.map(r=>r.kat))].sort();
+let activeCat='ALL', activeCode=null;
+$('riskFilter').innerHTML=`<button class="fbtn on" data-c="ALL">Semua · ${R.length}</button>`+
+  cats.map(c=>`<button class="fbtn" data-c="${c}">${c} · ${R.filter(r=>r.kat===c).length}</button>`).join('');
+function parseLv(s){const m=/^([A-E])(\d)/.exec(s||'');return m?[m[1],+m[2]]:null;}
+function drawMatrix(){
+  let h='';
+  for(const d of [...DMP].reverse()){
+    h+=`<div class="mlab">${d}</div>`;
+    for(const p of PRB){
+      const inCell=R.filter(r=>{const l=parseLv(r.i);return l&&l[0]===d&&l[1]===p;});
+      h+=`<div class="mcell lv${LVL[d][p-1]}">`+inCell.map(r=>
+        `<span class="chip${(activeCat!=='ALL'&&r.kat!==activeCat)?' dim':''}" data-code="${r.c}"
+          title="${r.n.replace(/"/g,'')}">${r.c}</span>`).join('')+'</div>';
+    }
+  }
+  h+='<div></div>'+PRB.map(p=>`<div class="mx">${p}</div>`).join('');
+  $('matrix').innerHTML=h;
+}
+function drawList(){
+  $('riskList').innerHTML=R.map(r=>`<div class="ritem${
+    (activeCat!=='ALL'&&r.kat!==activeCat)||(activeCode&&r.c!==activeCode)?' hide':''}"
+    ${activeCode===r.c?'style="background:#fbf7e8"':''}>
+    <div><div class="rcode">${r.c}</div><div class="rkat" style="font-size:9px">SB${r.sb}</div></div>
+    <div>${r.n}<div class="rkat">${r.kat}</div></div>
+    <div class="rlv"><span style="color:var(--clay)">${r.i}</span> →
+      <span style="color:var(--grn)">${r.r}</span>
+      <div class="rkat" style="text-align:right;font-size:9px">appetite ${r.a}</div></div>
+  </div>`).join('');
+}
+$('riskFilter').onclick=e=>{const b=e.target.closest('.fbtn'); if(!b)return;
+  activeCat=b.dataset.c; activeCode=null;
+  [...$('riskFilter').children].forEach(x=>x.classList.toggle('on',x===b));
+  drawMatrix(); drawList();};
+$('matrix').onclick=e=>{const c=e.target.closest('.chip'); if(!c)return;
+  activeCode=activeCode===c.dataset.code?null:c.dataset.code; drawList();
+  if(activeCode)$('riskList').scrollTop=0;};
+drawMatrix(); drawList();
+
+/* ---------- 9. KPI DJSN ---------- */
+$('wtBar').innerHTML=D.persp.map(p=>
+ `<div style="width:${p.w}%;background:${p.c}">${p.n} ${p.w}%</div>`).join('');
+$('kpiPersp').innerHTML=D.persp.map(p=>`<div class="card">
+  <div class="lab" style="font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+    color:${p.c};font-weight:700">${p.n} · bobot ${p.w}%</div>
+  <table style="margin-top:10px"><tbody>${p.items.map(i=>
+    `<tr><td style="font-weight:400;font-size:12.5px">${i[0]}</td>
+     <td class="num" style="font-weight:600">${i[1]}</td></tr>`).join('')}</tbody></table></div>`).join('');
+
+/* ---------- 10. Kesehatan keuangan ---------- */
+$('healthGrid').innerHTML=D.health.map(h=>`<div class="card">
+  <div class="lab" style="font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--mute);font-weight:700">${h.p} · ${h.r}</div>
+  <div class="val" style="font-family:'Fraunces',serif;font-size:27px;font-weight:600;margin:6px 0 4px">${h.v}</div>
+  <span class="chg up">memenuhi · ${h.t}</span>
+  <div class="sub" style="font-size:11.5px;color:var(--mute);margin-top:8px">${h.d}</div></div>`).join('');
+$('tbNeraca').innerHTML=D.neraca.map(r=>`<tr${r.n.startsWith('—')?' style="color:var(--mute)"':''}>
+  <td>${r.n}</td><td class="num">${d2(r.a)}</td><td class="num">${d2(r.b)}</td>
+  <td class="num">${d2(r.c)}</td></tr>`).join('');
+$('asumsi').innerHTML=D.asumsi.map(a=>`
+  <div style="display:flex;justify-content:space-between;gap:14px;align-items:baseline;
+    padding:11px 0;border-bottom:1px solid var(--line-2)">
+    <div><div style="font-weight:600;font-size:13.5px">${a.n}</div>
+      <div style="font-size:11.5px;color:var(--mute)">${a.d}</div></div>
+    <div class="mono" style="font-weight:700;font-size:13px;white-space:nowrap;color:var(--grn)">${a.v}</div>
+  </div>`).join('');
+
+/* ---------- 11. Capaian target (tracker) ---------- */
+const TR={
+ utama:[
+  {id:'kpj',   n:'Tenaga kerja aktif (KPJ)', u:'juta TK',    t:62680640,   s:1e6, kind:'t'},
+  {id:'nik',   n:'Tenaga kerja aktif (NIK)', u:'juta pekerja',t:51246030,  s:1e6, kind:'t'},
+  {id:'iuran', n:'Pendapatan iuran',         u:'Rp triliun', t:126884408,  s:1e6, kind:'t'},
+  {id:'dana',  n:'Dana investasi',           u:'Rp triliun', t:1123012539, s:1e6, kind:'t'},
+  {id:'hasil', n:'Hasil investasi',          u:'Rp triliun', t:71895662,   s:1e6, kind:'t'},
+  {id:'klaim', n:'Pembayaran jaminan',       u:'Rp triliun', t:92153698,   s:1e6, kind:'r'},
+  {id:'beban', n:'Beban usaha',              u:'Rp triliun', t:6215697,    s:1e6, kind:'r'},
+  {id:'modal', n:'Belanja modal',            u:'Rp miliar',  t:506830,     s:1e3, kind:'r'},
+  {id:'skp',   n:'Sarana Kesejahteraan Peserta', u:'Rp miliar', t:105620,  s:1e3, kind:'r'}],
+ iuranProg:D.iuran.map(p=>({id:'iu_'+p.n, n:'Iuran '+p.n, u:'Rp triliun', t:p.t27, s:1e6, kind:'t', c:PC[p.n]})),
+ seg:D.seg.map(g=>({id:'seg_'+g.k, n:g.n, u:'juta TK', t:g.t27, s:1e6, kind:'t'}))
+};
+const ALLTR=[...TR.utama,...TR.iuranProg,...TR.seg];
+const CKEY='rkat27_capaian';
+let cap; try{cap=JSON.parse(localStorage.getItem(CKEY)||'{}')}catch(_){cap={}}
+cap.v=cap.v||{};
+if(!cap.d)cap.d=new Date().toISOString().slice(0,10);
+const capSave=()=>localStorage.setItem(CKEY,JSON.stringify(cap));
+
+function capPace(){
+  const d=new Date(cap.d+'T00:00:00');
+  const start=new Date('2027-01-01T00:00:00'), end=new Date('2027-12-31T00:00:00');
+  if(isNaN(d)||d<start)return 0;
+  if(d>=end)return 100;
+  return (((d-start)/864e5)+1)/365*100;
+}
+const capPct=c=>(+cap.v[c.id]||0)*c.s/c.t*100;
+function capStatus(pct,pace,kind){
+  if(kind==='r')return ['flat','penyerapan'];
+  if(pct>=100)return ['up','tercapai'];
+  if(pace<=0)return ['flat','belum mulai'];
+  if(pct>=pace-2)return ['up','sesuai laju'];
+  if(pct>=pace*0.85)return ['warn','sedikit tertinggal'];
+  return ['dn','tertinggal'];
+}
+function capBarColor(c,pct,pace){
+  if(c.kind==='r')return 'var(--sea)';
+  const s=capStatus(pct,pace,c.kind)[0];
+  return s==='up'?'var(--grn)':s==='warn'?'var(--gold)':s==='dn'?'var(--clay)':'var(--grn)';
+}
+function capRowHTML(c){
+  const v=cap.v[c.id];
+  return `<div class="trow">
+   <div class="nm">${c.n}<small>${c.u} · target ${d2(c.t/c.s)}</small></div>
+   <input type="number" min="0" step="any" inputmode="decimal" data-tid="${c.id}"
+     placeholder="0" value="${v!=null&&v!==''?v:''}" aria-label="Realisasi ${c.n} (${c.u})">
+   <div class="twrap"><div class="track"><div class="fill" id="tf_${c.id}" style="width:0"></div>
+     <div class="ghost" id="tg_${c.id}" style="left:0"></div></div></div>
+   <div class="tpct"><span class="p" id="tp_${c.id}">0,00%</span><span id="ts_${c.id}"></span></div>
+  </div>`;
+}
+function capUpdateRow(c,pace){
+  const pct=capPct(c), [cls,lab]=capStatus(pct,pace,c.kind);
+  $('tf_'+c.id).style.width=Math.min(100,pct).toFixed(1)+'%';
+  $('tf_'+c.id).style.background=capBarColor(c,pct,pace);
+  $('tg_'+c.id).style.left=Math.min(100,pace).toFixed(1)+'%';
+  $('tp_'+c.id).textContent=d2(pct)+'%';
+  $('ts_'+c.id).innerHTML=`<span class="chg ${cls}">${lab}</span>`;
+}
+function capUpdateSummary(){
+  const pace=capPace();
+  const avg=a=>a.length?a.reduce((s,c)=>s+capPct(c),0)/a.length:0;
+  const tg=TR.utama.filter(c=>c.kind==='t'), rg=TR.utama.filter(c=>c.kind==='r');
+  const avgT=avg(tg), avgR=avg(rg);
+  const onTrack=tg.filter(c=>{const s=capStatus(capPct(c),pace,'t')[0];return s==='up'||s==='flat';}).length;
+  $('capSummary').innerHTML=
+   `<div class="card gauge">${arc(avgT,100,avgT>=Math.max(1,pace-2)?'var(--grn)':avgT>=pace*0.85?'var(--gold)':'var(--clay)',d2(avgT)+'%')}
+     <div class="gv" style="font-size:15px;margin-top:4px">Rata-rata capaian target</div>
+     <div class="gl">${tg.length} indikator penerimaan &amp; kepesertaan</div></div>
+   <div class="card gauge">${arc(avgR,100,'var(--sea)',d2(avgR)+'%')}
+     <div class="gv" style="font-size:15px;margin-top:4px">Rata-rata penyerapan anggaran</div>
+     <div class="gl">${rg.length} pos belanja &amp; pembayaran jaminan</div></div>
+   <div class="card gauge">${arc(pace,100,'var(--gold)',d2(pace)+'%')}
+     <div class="gv" style="font-size:15px;margin-top:4px">Tahun 2027 berjalan</div>
+     <div class="gl">${onTrack} dari ${tg.length} indikator utama sesuai laju</div></div>`;
+  $('capSummary').querySelectorAll('.arc[data-off]').forEach(el=>{
+    el.style.transition='none'; el.style.strokeDashoffset=el.dataset.off;});
+  $('capPace').innerHTML=pace<=0
+   ?'<b>Tahun anggaran 2027 belum berjalan</b> — laju acuan masih 0%. Isi realisasi begitu data 2027 tersedia.'
+   :`Tahun berjalan <b>${d2(pace)}%</b> — batang capaian dibandingkan garis laju putus-putus pada posisi ini.`;
+}
+function capUpdateAll(){const pace=capPace(); ALLTR.forEach(c=>capUpdateRow(c,pace)); capUpdateSummary();}
+
+$('capMain').innerHTML=TR.utama.map(capRowHTML).join('');
+$('capIuran').innerHTML=TR.iuranProg.map(capRowHTML).join('');
+$('capSeg').innerHTML=TR.seg.map(capRowHTML).join('');
+$('capDate').value=cap.d;
+$('capDate').onchange=e=>{if(!e.target.value)return; cap.d=e.target.value; capSave(); capUpdateAll();};
+document.querySelectorAll('#capaian input[data-tid]').forEach(inp=>{
+  inp.addEventListener('input',()=>{
+    const id=inp.dataset.tid, c=ALLTR.find(x=>x.id===id);
+    cap.v[id]=inp.value===''?'':Math.max(0,parseFloat(inp.value)||0);
+    capSave(); capUpdateRow(c,capPace()); capUpdateSummary();
+  });
+});
+$('capReset').onclick=()=>{
+  if(!confirm('Hapus seluruh data realisasi yang tersimpan di peramban ini?'))return;
+  cap={v:{},d:new Date().toISOString().slice(0,10)}; capSave();
+  document.querySelectorAll('#capaian input[data-tid]').forEach(i=>i.value='');
+  $('capDate').value=cap.d; capUpdateAll();
+};
+capUpdateAll();
+
+/* ---------- animasi & nav ---------- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  e.target.querySelectorAll('.fill[data-w],.fbar[data-w]').forEach(el=>el.style.width=el.dataset.w);
+  e.target.querySelectorAll('.arc[data-off]').forEach(el=>el.style.strokeDashoffset=el.dataset.off);
+  io.unobserve(e.target);
+}),{threshold:.12});
+document.querySelectorAll('section,.card,.flow').forEach(s=>io.observe(s));
+document.querySelectorAll('.arc').forEach(a=>{if(!a.style.transition)a.style.transition='stroke-dashoffset 1s cubic-bezier(.2,.8,.25,1)'});
+
+const links=[...document.querySelectorAll('#nav a')];
+const nio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){links.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id));}
+}),{rootMargin:'-72px 0px -70% 0px'});
+document.querySelectorAll('section[id]').forEach(s=>nio.observe(s));
+
+/* ---------- 12. Login ---------- */
+/* Kata sandi tidak disimpan sebagai teks biasa — hanya hash SHA-256-nya.
+   Pengguna bawaan: admin. Cara mengganti/menambah ada di README.md. */
+const USERS={
+  'admin':'b0f2c4ceee7989fe4c01646b64afb500160dc78408a7455af7908298a942c234'
+};
+async function sha256hex(t){
+  const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));
+  return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+function showApp(u){
+  $('loginVeil').style.display='none';
+  $('app').hidden=false;
+  const lb=$('logoutBtn'); lb.style.display=''; lb.title='Masuk sebagai '+u;
+}
+const savedUser=sessionStorage.getItem('rkat_auth');
+if(savedUser&&USERS[savedUser])showApp(savedUser);
+$('loginForm').onsubmit=async e=>{
+  e.preventDefault();
+  const u=$('loginUser').value.trim(), p=$('loginPass').value, err=$('loginErr');
+  try{
+    const h=await sha256hex(p);
+    if(USERS[u]&&USERS[u]===h){
+      sessionStorage.setItem('rkat_auth',u); showApp(u);
+    }else{
+      err.textContent='Nama pengguna atau kata sandi salah.'; err.style.display='block';
+      $('loginPass').value=''; $('loginPass').focus();
+    }
+  }catch(_){
+    err.textContent='Peramban tidak mendukung Web Crypto — buka lewat https:// atau file lokal.';
+    err.style.display='block';
+  }
+};
+$('logoutBtn').onclick=()=>{sessionStorage.removeItem('rkat_auth'); location.reload();};
+</script>
+</body>
+</html>
