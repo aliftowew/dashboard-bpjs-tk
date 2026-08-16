@@ -22,7 +22,7 @@
 html{scroll-behavior:smooth; scroll-padding-top:76px}
 body{margin:0;background:var(--paper);color:var(--ink);
   font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:15px;line-height:1.55;
-  -webkit-font-smoothing:antialiased}
+  -webkit-font-smoothing:antialiased;overflow-x:clip}
 h1,h2,h3,h4{font-family:'Fraunces',Georgia,serif;font-weight:600;margin:0;letter-spacing:-.015em}
 .mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
 a{color:inherit}
@@ -96,10 +96,11 @@ section{padding:52px 0;border-bottom:1px solid var(--line)}
 
 /* ---- grids & cards ---- */
 .grid{display:grid;gap:14px}
+.grid>*{min-width:0}
 .g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)}
 .g4{grid-template-columns:repeat(4,1fr)} .g5{grid-template-columns:repeat(5,1fr)}
 .card{background:var(--card);border:1px solid var(--line-2);border-radius:12px;padding:18px;
-  box-shadow:var(--shadow)}
+  box-shadow:var(--shadow);overflow-x:auto}
 .kpi .lab{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);font-weight:700}
 .kpi .val{font-family:'Fraunces',serif;font-size:29px;font-weight:600;line-height:1.1;margin:7px 0 2px;
   letter-spacing:-.02em}
@@ -118,8 +119,10 @@ th{text-align:right;font-size:10.5px;letter-spacing:.09em;text-transform:upperca
 th:first-child{text-align:left}
 td{padding:9px 0;border-bottom:1px solid var(--line-2);text-align:right}
 td:first-child{text-align:left;font-weight:500}
+th+th,td+td{padding-left:12px}
 tr.tot td{border-bottom:none;border-top:2px solid var(--ink);font-weight:700;padding-top:11px}
-.num{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-size:12.8px}
+.num{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-size:12.8px;
+  white-space:nowrap}
 caption{caption-side:top;text-align:left;font-size:11px;letter-spacing:.09em;text-transform:uppercase;
   color:var(--mute);font-weight:700;padding-bottom:12px}
 
@@ -170,6 +173,8 @@ caption{caption-side:top;text-align:left;font-size:11px;letter-spacing:.09em;tex
 .fnet{text-align:right;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700}
 .fnet small{display:block;font-size:10px;font-weight:500;color:var(--mute);
   font-family:'Plus Jakarta Sans',sans-serif}
+.flab{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--ink-2);
+  padding:0 7px;white-space:nowrap}
 .axis{border-left:2px solid var(--ink);height:100%;position:absolute;left:0}
 
 /* ---- gauge ---- */
@@ -180,8 +185,8 @@ caption{caption-side:top;text-align:left;font-size:11px;letter-spacing:.09em;tex
 
 /* ---- risk matrix ---- */
 .matrix{display:grid;grid-template-columns:74px repeat(5,1fr);gap:4px}
-.mcell{aspect-ratio:1.35;border-radius:7px;padding:6px;position:relative;display:flex;
-  flex-wrap:wrap;gap:3px;align-content:flex-start;border:1px solid rgba(16,29,23,.08)}
+.mcell{aspect-ratio:1.35;min-width:0;min-height:0;border-radius:7px;padding:6px;position:relative;
+  display:flex;flex-wrap:wrap;gap:3px;align-content:flex-start;border:1px solid rgba(16,29,23,.08)}
 .mlab{display:flex;align-items:center;justify-content:flex-end;padding-right:9px;font-size:11px;
   font-weight:700;color:var(--mute);text-align:right;line-height:1.15}
 .mx{font-size:10.5px;color:var(--mute);text-align:center;font-weight:700;padding-top:6px}
@@ -222,7 +227,13 @@ details[open] summary{border-bottom:1px solid var(--line-2)}
 footer{padding:40px 0 60px;font-size:12.5px;color:var(--mute);line-height:1.7}
 footer b{color:var(--ink)}
 
-@media(max-width:1000px){.g5,.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1000px){
+  .g5,.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}
+  .g2 .trow{grid-template-columns:1fr 142px;row-gap:6px}
+  .g2 .trow input{max-width:112px;justify-self:end}
+  .g2 .trow .twrap{grid-column:1/2}
+  .g2 .trow .tpct{grid-column:2/3;white-space:normal}
+}
 @media(max-width:720px){
   .wrap{padding:0 16px}
   .g2,.g3,.g4,.g5{grid-template-columns:1fr}
@@ -234,9 +245,11 @@ footer b{color:var(--ink)}
   .hero{padding:36px 0 30px}
   section{padding:38px 0}
   .ovf{overflow-x:auto}
-  .trow{grid-template-columns:1fr 96px;row-gap:6px}
+  .trow{grid-template-columns:1fr 142px;row-gap:6px}
+  .trow input{max-width:112px;justify-self:end}
   .trow .twrap{grid-column:1/2}
-  .trow .tpct{grid-column:2/3}
+  .trow .tpct{grid-column:2/3;white-space:normal}
+  .mcell{aspect-ratio:auto;min-height:46px}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -746,14 +759,21 @@ bars($('barProgPeserta'),D.progPeserta.map(p=>({n:p.n,v:p.v})),62680640,v=>juta(
 
 /* ---------- 3. Arus dana ---------- */
 const fMax=Math.max(...D.iuran.map(i=>i.t27),...D.klaim.map(k=>k.t27));
+// label ditulis di dalam batang hanya jika batangnya cukup lebar (>=45% sumbu);
+// batang pendek memakai label di luar agar angka tidak terpotong
+function fbarCell(side,wPct,txt,bg){
+  const inside=wPct>=45;
+  const bar=`<div class="fbar" style="width:0${bg?`;background:${bg}`:''}"
+    data-w="${wPct.toFixed(1)}%">${inside?txt:''}</div>`;
+  const lab=inside?'':`<span class="flab">${txt}</span>`;
+  return side==='fl'?`<div class="fl">${lab}${bar}</div>`:`<div class="fr">${bar}${lab}</div>`;
+}
 $('flowRows').innerHTML=D.iuran.map((it,i)=>{
   const kl=D.klaim[i], net=it.t27-kl.t27;
   return `<div class="frow">
    <div class="fname">${it.n}<small>${d2(it.g)}% iuran</small></div>
-   <div class="fl"><div class="fbar" style="width:0;background:${PC[it.n]}"
-     data-w="${(it.t27/fMax*100).toFixed(1)}%">${tri(it.t27)} T</div></div>
-   <div class="fr"><div class="fbar" style="width:0"
-     data-w="${(kl.t27/fMax*100).toFixed(1)}%">${tri(kl.t27)} T</div></div>
+   ${fbarCell('fl',it.t27/fMax*100,tri(it.t27)+' T',PC[it.n])}
+   ${fbarCell('fr',kl.t27/fMax*100,tri(kl.t27)+' T')}
    <div class="fnet" style="color:${net>=0?'var(--grn)':'var(--clay)'}">
      ${net>=0?'+':'−'}${tri(Math.abs(net))} T<small>${net>=0?'surplus':'defisit'}</small></div></div>`;
 }).join('')+`<div class="frow" style="border-top:2px solid var(--ink);padding-top:12px;margin-top:6px">
