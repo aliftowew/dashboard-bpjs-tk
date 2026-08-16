@@ -9,6 +9,12 @@ Dashboard satu-halaman (HTML statis, tanpa backend) yang merangkum Buku RKAT 202
   gambar terpisah) dan seluruh tema warna mengikuti palet logo: hijau `#3AAA35`, biru `#29ABE2`,
   lime `#D7DF23`. Semua warna terpusat di variabel CSS pada blok `:root` di `index.html`, jadi
   mudah disetel ulang dari satu tempat.
+- **Penjelajah anggaran** — pencarian, filter unit, urutkan, dan muat bertahap atas baris kegiatan
+  lampiran RKAT (saat ini memuat 482 kegiatan teratas; data lengkap 2.092 baris menyusul).
+- **Seksi LK S1-2026** — uji silang laporan keuangan resmi Semester I 2026 terhadap prognosa RKAT
+  (solvabilitas JHT, unrealized loss, kontraksi kepesertaan, verifikasi silang indikator).
+- **Catatan Pengawasan** — 21 temuan tiga tingkat (Substansi / Risiko & Indikator / Editorial)
+  dengan centang pilihan (tersimpan di localStorage) dan penyusun draft SNP siap salin.
 
 ## Menjalankan
 

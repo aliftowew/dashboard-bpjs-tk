@@ -227,6 +227,49 @@ details[open] summary{border-bottom:1px solid var(--line-2)}
 footer{padding:40px 0 60px;font-size:12.5px;color:var(--mute);line-height:1.7}
 footer b{color:var(--ink)}
 
+/* ---- explorer ---- */
+.expbar{display:grid;grid-template-columns:1fr 220px 150px;gap:10px;margin-bottom:12px}
+.expbar input,.expbar select{font-family:inherit;font-size:13.5px;padding:9px 13px;
+  border:1px solid var(--line);border-radius:8px;background:var(--paper-2);color:var(--ink);min-width:0}
+.expbar input:focus,.expbar select:focus{outline:2px solid var(--grn);outline-offset:1px}
+.expsum{font-size:12.5px;color:var(--mute);margin-bottom:10px}
+.expsum b{color:var(--ink);font-family:'JetBrains Mono',monospace}
+/* ---- catatan pengawasan ---- */
+.finding{background:var(--card);border:1px solid var(--line-2);border-radius:12px;padding:16px 18px;
+  margin-bottom:10px;display:grid;grid-template-columns:26px 1fr;gap:14px;box-shadow:var(--shadow)}
+.finding.hide{display:none}
+.finding input[type=checkbox]{width:19px;height:19px;margin-top:3px;accent-color:var(--grn);cursor:pointer}
+.fhead{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.fno{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:12px;color:var(--gold)}
+.ftitle{font-weight:700;font-size:14.5px}
+.sev{font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;
+  padding:2px 9px;border-radius:999px}
+.sev1{background:#fbeae6;color:#9a3b2b}.sev2{background:#f7efd4;color:#8a6414}.sev3{background:#e9eef4;color:#3d5a72}
+.fbody{font-size:13.5px;color:var(--ink-2);line-height:1.6}
+.fref{font-size:11.5px;color:var(--mute);margin-top:7px;font-family:'JetBrains Mono',monospace}
+.frec{font-size:13px;margin-top:8px;padding:9px 12px;background:var(--paper);border-radius:8px;
+  border-left:3px solid var(--grn)}
+.frec b{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--grn);display:block;margin-bottom:3px}
+/* ---- FAB & modal ---- */
+.fab{position:fixed;right:22px;bottom:22px;z-index:80;background:var(--ink);color:var(--paper);
+  border-radius:999px;padding:10px 12px 10px 20px;display:flex;gap:14px;align-items:center;
+  box-shadow:0 8px 30px -8px rgba(13,43,54,.45);font-size:13px;font-weight:600}
+.fab button{background:var(--grn);color:#fff;border:none;border-radius:999px;padding:9px 18px;
+  font-family:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.fab button:hover{background:var(--grn-l)}
+.modal{position:fixed;inset:0;z-index:90;background:rgba(13,43,54,.5);display:flex;
+  align-items:center;justify-content:center;padding:20px}
+.fab[hidden],.modal[hidden]{display:none}
+.mbox{background:var(--paper-2);border-radius:14px;width:min(860px,100%);max-height:90vh;
+  display:flex;flex-direction:column;box-shadow:0 20px 60px -10px rgba(0,0,0,.4)}
+.mhead{display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:16px 20px;border-bottom:1px solid var(--line)}
+.mhead h3{font-size:18px}
+.mbox textarea{flex:1;min-height:52vh;margin:14px 20px 0;padding:16px;border:1px solid var(--line);
+  border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.65;
+  background:var(--card);color:var(--ink);resize:vertical;white-space:pre-wrap}
+.mfoot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 20px}
+
 @media(max-width:1000px){
   .g5,.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}
   .g2 .trow{grid-template-columns:1fr 142px;row-gap:6px}
@@ -250,6 +293,8 @@ footer b{color:var(--ink)}
   .trow .twrap{grid-column:1/2}
   .trow .tpct{grid-column:2/3;white-space:normal}
   .mcell{aspect-ratio:auto;min-height:46px}
+  .expbar{grid-template-columns:1fr}
+  .fab{right:12px;bottom:12px;left:12px;justify-content:space-between}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -300,6 +345,8 @@ footer b{color:var(--ink)}
     <a href="#risiko">Profil Risiko</a>
     <a href="#kpi">Indikator DJSN</a>
     <a href="#keuangan">Kesehatan Keuangan</a>
+    <a href="#lapkeu">LK S1-2026</a>
+    <a href="#catatan">Catatan Pengawasan</a>
   </nav></div>
   <button id="logoutBtn" class="fbtn" style="display:none">Keluar</button>
 </div></div>
@@ -312,8 +359,9 @@ footer b{color:var(--ink)}
   <div class="eyebrow">Rencana Kerja Anggaran Tahunan · BPJS Ketenagakerjaan</div>
   <h1>Tahun pertama Renstra <em>2027–2031</em>, dibaca lewat angkanya.</h1>
   <p class="tema">Tema RKAT 2027: <b>“Strengthening Institutional Foundations (Care, Credibility, and
-  Coverage) to Drive Sustainable Growth and Protection.”</b> Dashboard ini merangkum seluruh 407 halaman
-  Buku RKAT 2027 — target kepesertaan, arus iuran dan klaim, portofolio investasi, alokasi anggaran
+  Coverage) to Drive Sustainable Growth and Protection.”</b> Dashboard ini merangkum 407 halaman Buku
+  RKAT 2027 — diuji silang dengan laporan keuangan resmi Semester I 2026 (597 halaman) — target
+  kepesertaan, arus iuran dan klaim, portofolio investasi, alokasi anggaran
   hingga level deputi dan kantor wilayah, 37 risiko prioritas, serta indikator kinerja yang ditetapkan DJSN.</p>
   <div class="pillars">
     <div class="pill"><i>Care</i>Akselerasi Layanan Terpadu</div>
@@ -487,14 +535,26 @@ footer b{color:var(--ink)}
     </div>
   </div>
   <div class="card" style="margin-top:14px">
-    <div class="eyebrow" style="margin-bottom:12px">22 kegiatan dengan alokasi terbesar</div>
+    <div class="eyebrow" style="margin-bottom:12px">Penjelajah anggaran · <span id="expTotal">—</span>
+      kegiatan teratas (dari 2.092 baris lampiran)</div>
+    <div class="expbar">
+      <input type="search" id="expSearch" placeholder="Cari kegiatan… (mis. konsultan, sewa, riset, listrik)" aria-label="Cari kegiatan">
+      <select id="expSec" aria-label="Filter unit"><option value="">Semua unit</option></select>
+      <select id="expSort" aria-label="Urutkan">
+        <option value="nd">Anggaran ↓</option><option value="na">Anggaran ↑</option>
+        <option value="az">Nama A–Z</option></select>
+    </div>
+    <div class="expsum" id="expSum"></div>
     <div class="ovf"><table>
-      <thead><tr><th>Kegiatan</th><th>Unit</th><th>Anggaran</th></tr></thead>
-      <tbody id="tbTop"></tbody></table></div>
+      <thead><tr><th>Kegiatan</th><th>Unit</th><th>Hal.</th><th>Anggaran</th></tr></thead>
+      <tbody id="expBody"></tbody></table></div>
+    <div style="text-align:center;margin-top:14px">
+      <button class="fbtn" id="expMore" style="padding:8px 22px">Muat 150 berikutnya</button>
+    </div>
   </div>
   <p class="note"><b>Struktur biaya:</b> Deputi Human Capital sendiri memegang Rp4,38 triliun — 70,4% dari
   seluruh anggaran, karena di dalamnya termasuk gaji, tunjangan, THR, imbalan pascakerja, dan penghargaan
-  purnajasa seluruh pegawai. Itu sebabnya 20 dari 22 kegiatan terbesar di tabel atas adalah pos personil.
+  purnajasa seluruh pegawai. Itu sebabnya hampir seluruh kegiatan teratas di penjelajah adalah pos personil.
   Di luar personil, konsentrasi terbesar ada di Infrastruktur &amp; Operasional TI (Rp336,6 miliar) dan
   Aset &amp; Sarana Prasarana (Rp146,2 miliar). Perangkat teknologi informasi naik 160% dan aset
   takberwujud naik 645% — 2027 adalah tahun belanja teknologi.
@@ -573,13 +633,103 @@ footer b{color:var(--ink)}
   </div>
 </div></section>
 
+<section id="lapkeu"><div class="wrap">
+  <div class="shead"><span class="bab">LK S1-2026</span><h2>Realisasi resmi vs prognosa RKAT</h2></div>
+  <p class="sdesc">Bagian ini bersumber dari dokumen kedua: <b>Surat Direktur Utama B/4849/072026</b>
+  (31 Juli 2026) — Pertanggungjawaban Laporan Keuangan dan Laporan Pengelolaan Program Semester I
+  Tahun Buku 2026 kepada Presiden RI, 597 halaman. Angka realisasi resmi di sini menjadi alat uji
+  atas prognosa dan target yang dipakai RKAT 2027.</p>
+
+  <div class="grid g3">
+    <div class="card kpi" style="border-left:4px solid var(--clay)">
+      <div class="lab">Solvabilitas JHT · aktual Juni 2026</div>
+      <div class="val" style="color:var(--clay)">97,64%</div>
+      <div style="margin:6px 0 5px"><span class="chg dn">di bawah batas 100% PP 55/2015</span></div>
+      <div class="sub">Aset Rp556,63 T vs liabilitas kepada peserta Rp570,07 T — kekurangan Rp13,43 T.
+      Prognosa RKAT untuk 2026 dan 2027 menuliskan 100,00% "Memenuhi Ketentuan".</div>
+    </div>
+    <div class="card kpi" style="border-left:4px solid var(--clay)">
+      <div class="lab">Unrealized loss agregat · Juni 2026</div>
+      <div class="val" style="color:var(--clay)">Rp33,07 <small>triliun</small></div>
+      <div style="margin:6px 0 5px"><span class="chg dn">≈ hasil realized Rp31,74 T</span></div>
+      <div class="sub">Penurunan nilai investasi belum terealisasi: JHT Rp22,08 T · JP Rp8,26 T ·
+      JKK Rp2,00 T · JKM Rp0,34 T · JKP Rp0,32 T · BPJS Rp0,07 T. RKAT tidak membahas strategi pemulihannya.</div>
+    </div>
+    <div class="card kpi" style="border-left:4px solid var(--gold)">
+      <div class="lab">Kepesertaan aktif · vs akhir 2025</div>
+      <div class="val" style="color:var(--gold)">−1,47 <small>juta peserta</small></div>
+      <div style="margin:6px 0 5px"><span class="chg dn">48,65 jt → 47,18 jt (−3,01%)</span></div>
+      <div class="sub">Prognosa RKAT 54,28 juta berarti Semester II harus menambah bersih 7,10 juta
+      peserta — padahal Semester I justru terkontraksi. Seluruh angka growth 2027 berdiri di atas
+      prognosa ini.</div>
+    </div>
+  </div>
+
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card">
+      <div class="eyebrow" style="margin-bottom:14px">Penurunan nilai belum terealisasi per entitas · Juni 2026</div>
+      <div id="alokasi"></div>
+      <p class="note"><b>Dua entitas meleset dari target imbal hasil</b> (realized annualized netto):
+      JKP <b>5,11%</b> vs target 6,75% (portofolio 44,4% deposito) dan Dana BPJS <b>6,18%</b> vs 7,00%.
+      Aset neto JKM (Rp10,82 T) hanya separuh total asetnya karena liabilitas cadangan teknis Rp9,26 T —
+      program dengan bantalan tertipis.</p>
+    </div>
+    <div class="card">
+      <div class="eyebrow" style="margin-bottom:12px">Verifikasi silang: RKAT Bab II vs laporan resmi</div>
+      <table><thead><tr><th>Indikator S1-2026</th><th>Nilai</th><th>Status</th></tr></thead>
+        <tbody id="tbSilang"></tbody></table>
+      <p class="note">Enam angka utama identik — Bab II RKAT bersumber dari laporan yang sama.
+      Dua angka kepesertaan berbeda 4 peserta tanpa penjelasan cut-off, indikasi tarikan data
+      pada waktu berbeda.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="eyebrow" style="margin-bottom:14px">Kinerja layanan &amp; kelembagaan · Semester I 2026</div>
+    <div class="grid g4" id="svcGrid"></div>
+    <p class="note">SLA seluruh program jauh di bawah batas — kapasitas layanan bukan isu; isunya ada
+    di sisi dana. Tindak lanjut rekomendasi SPI: 1.716 rekomendasi, 73,07% tuntas, 24,37% proses,
+    2,56% belum (LHA terbit di S1). Kepuasan 99,06% masih memakai survei 2025 — survei 2026 belum tersedia.</p>
+  </div>
+</div></section>
+
+<section id="catatan"><div class="wrap">
+  <div class="shead"><span class="bab">Pengawasan</span><h2>Catatan Pengawasan: 21 temuan atas RKAT 2027</h2></div>
+  <p class="sdesc">Temuan hasil telaah atas dokumen RKAT 2027 (belum final), diperkuat pengujian silang terhadap laporan keuangan resmi Semester I 2026, disusun tiga tingkat:
+  <b>Substansi</b> menyangkut asumsi dan konsistensi target, <b>Tata Kelola Risiko &amp; Indikator</b>,
+  dan <b>Konsistensi Editorial</b>. Centang temuan yang akan dimasukkan, lalu susun draft Saran, Nasihat,
+  dan Pertimbangan (SNP) lewat tombol mengambang di kanan bawah.</p>
+  <div class="chipbar" id="catFilter"></div>
+  <div id="catList"></div>
+</div></section>
+
+<div class="fab" id="fab" hidden>
+  <span id="fabCount">0 temuan</span>
+  <button id="fabBtn">Susun draft SNP</button>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="mbox">
+    <div class="mhead">
+      <h3>Draft Saran, Nasihat, dan Pertimbangan</h3>
+      <button class="fbtn" id="mClose">Tutup</button>
+    </div>
+    <textarea id="mText" spellcheck="false"></textarea>
+    <div class="mfoot">
+      <span id="mInfo" class="note" style="margin:0"></span>
+      <button class="fbtn on" id="mCopy">Salin ke clipboard</button>
+    </div>
+  </div>
+</div>
+
 <footer><div class="wrap">
   <div class="logo" style="font-size:19px;margin-bottom:16px">
     <svg class="mark" width="32" height="27"><use href="#bpjsMark"/></svg>
     <div class="logotype"><b>BPJS</b><span>Ketenagakerjaan</span></div>
   </div>
-  <b>Sumber tunggal:</b> Buku Rencana Kerja Anggaran Tahunan BPJS Ketenagakerjaan Tahun 2027,
-  407 halaman, ditetapkan Jakarta 31 Juli 2026.<br>
+  <b>Sumber:</b> (1) Buku Rencana Kerja Anggaran Tahunan BPJS Ketenagakerjaan Tahun 2027, 407 halaman,
+  31 Juli 2026; (2) Surat Direktur Utama B/4849/072026 — Pertanggungjawaban Laporan Keuangan dan
+  Laporan Pengelolaan Program Semester I Tahun Buku 2026 kepada Presiden RI, 597 halaman.<br>
   Seluruh angka pada dashboard ini diambil langsung dari dokumen tersebut. Angka anggaran per direktorat
   dan kantor wilayah direkonstruksi dari lampiran program kerja dan telah dicocokkan dengan baris TOTAL
   di dokumen asli. Yield implisit investasi adalah perhitungan turunan, bukan angka resmi dokumen.<br>
@@ -700,6 +850,7 @@ asumsi:[
  {n:'Tingkat pengangguran terbuka',v:'4,30% – 4,87%',d:'Turun dari 4,68% per Februari 2026'}]
 };
 D.anggaran = {"pusat":[{"n":"Direktorat Utama","v":155251669735,"ch":[{"n":"Satuan Pengawas Internal","v":14724262375},{"n":"Deputi Sekretariat Badan","v":68544127423},{"n":"Deputi Komunikasi","v":59416355312},{"n":"Deputi Kepatuhan & Hukum","v":12566924625}]},{"n":"Direktorat Kepesertaan","v":131030779000,"ch":[{"n":"Deputi Kepesertaan Korporasi & Institusi","v":30071621000},{"n":"Deputi Kepesertaan Program Khusus dan Keagenan","v":92440309000},{"n":"Deputi Pengawasan & Pemeriksaan","v":8518849000}]},{"n":"Direktorat Pelayanan","v":63835445592,"ch":[{"n":"Deputi Operasional dan Kanal Layanan","v":36584455872},{"n":"Deputi Kebijakan Pelayanan Program","v":6742615000},{"n":"Deputi Layanan Digital dan Customer Care","v":20508374720}]},{"n":"Direktorat Pengembangan Investasi","v":18596341595,"ch":[{"n":"Deputi Analisis Portofolio","v":9190815595},{"n":"Deputi Pendapatan Tetap dan Pasar Modal","v":5068761000},{"n":"Deputi Investasi Langsung","v":4336765000}]},{"n":"Direktorat Keuangan & Manajemen Risiko","v":16462216335,"ch":[{"n":"Deputi Keuangan","v":6134336000},{"n":"Deputi Akuntansi","v":3759301580},{"n":"Deputi Manajemen Risiko","v":6568578755}]},{"n":"Direktorat Perencanaan Strategis & TI","v":401008959630,"ch":[{"n":"Deputi Perencanaan Strategis dan Transformasi","v":9295303500},{"n":"Deputi Manajemen Data dan Analitik","v":12994912484},{"n":"Deputi Arsitektur dan Pengembangan TI","v":32670693592},{"n":"Deputi Infrastruktur dan Operasional TI","v":336577285154},{"n":"Deputi Aktuaria dan Riset","v":9470764900}]},{"n":"Direktorat Umum & SDM","v":4569864134277,"ch":[{"n":"Deputi Human Capital","v":4377470994578},{"n":"Deputi Learning & Development","v":40963250492},{"n":"Deputi Pengadaan","v":5229839300},{"n":"Deputi Aset dan Sarana Prasarana","v":146200049907}]},{"n":"Sekretariat Dewan Pengawas","v":23210035500,"ch":[]}],"wilayah":[{"n":"DKI Jakarta","v":107111429117},{"n":"Jawa Timur","v":101076655440},{"n":"Sulawesi–Maluku","v":96472011947},{"n":"Jawa Barat","v":77068255858},{"n":"Kalimantan","v":75899903046},{"n":"Bali–Nusra–Papua","v":71869665363},{"n":"Jateng & DIY","v":67351862307},{"n":"Sumbar–Riau","v":65238997081},{"n":"Sumatera Bagian Selatan","v":64149509477},{"n":"Sumatera Bagian Utara","v":60998371349},{"n":"Banten","v":49200695857}],"top":[{"k":"Pembayaran Gaji Dan Tunjangan Tetap Karyawan","s":"Umum & SDM","n":1657683427680},{"k":"Pembayaran PPh Pasal 21 Beban Perusahaan","s":"Umum & SDM","n":586434623664},{"k":"Pembayaran Tunjangan Prestasi Karyawan","s":"Umum & SDM","n":285879311120},{"k":"Pembayaran THR Keagamaan","s":"Umum & SDM","n":277637133048},{"k":"Pembayaran Otifa Program Kesehatan Pensiun","s":"Umum & SDM","n":205189207153},{"k":"Pembayaran Program JPK Tambahan","s":"Umum & SDM","n":194333511312},{"k":"Pembayaran Tunjangan Cuti Tahunan Karyawan","s":"Umum & SDM","n":160236846750},{"k":"Pembayaran Imbalan Kerja Karyawan","s":"Umum & SDM","n":120397027379},{"k":"Pembayaran Uang Makan Karyawan","s":"Umum & SDM","n":106085700000},{"k":"Pembayaran Program BPJS Ketenagakerjaan","s":"Umum & SDM","n":90796312692},{"k":"Pembayaran Tunjangan Cuti Besar Karyawan","s":"Umum & SDM","n":84479322373},{"k":"Pembayaran Program Kesehatan Pensiun","s":"Umum & SDM","n":82884171384},{"k":"Pemberian Insentif/Fee Untuk Wadah Dan Perisai","s":"Kepesertaan","n":70575450000},{"k":"Pembayaran Program THT","s":"Umum & SDM","n":66307337112},{"k":"Renewal ATS Database Oracle","s":"Perencanaan Strategis & TI","n":49301070338},{"k":"Pembayaran PSL Pensiun","s":"Umum & SDM","n":47673850000},{"k":"Biaya Sewa Plaza BPJAMSOSTEK","s":"Umum & SDM","n":45360000000},{"k":"Pembayaran Program Pensiun Manfaat Pasti","s":"Umum & SDM","n":42245931768},{"k":"Pembayaran Penghargaan Pengabdian","s":"Umum & SDM","n":34670812678},{"k":"Pembayaran Program BPJS Kesehatan","s":"Umum & SDM","n":33344640000},{"k":"Kelengkapan Kerja Karyawan","s":"Umum & SDM","n":31182766324},{"k":"Pembayaran Biaya Mutasi Karyawan","s":"Umum & SDM","n":29212191695}],"risks":[{"c":"R01","sb":1,"kat":"Operasional","i":"B4","a":"B2","t":"B3/C2","r":"B2","n":"Risiko Kualitas — Layanan – Kegagalan Adopsi Standar Layanan"},{"c":"R02","sb":1,"kat":"Operasional","i":"C4","a":"C3","t":"C4/D3","r":"C3","n":"Layanan Program — JKK - Tingginya outstanding klaim KK/PAK"},{"c":"R03","sb":2,"kat":"Hukum","i":"C3","a":"A3","t":"A4/B3","r":"C3","n":"Risiko Hukum - — Hambatan Regulasi terhadap Inovasi Investasi"},{"c":"R04","sb":2,"kat":"Kredit","i":"D3","a":"A3","t":"A4/B3","r":"B3","n":"Credit Risk – Asset Default"},{"c":"R05","sb":2,"kat":"Likuiditas","i":"C4","a":"A3","t":"A4/B3","r":"B3","n":"Liquidity Risk – — Aset Investasi tidak dapat dijual"},{"c":"R06","sb":2,"kat":"Likuiditas","i":"C4","a":"A3","t":"A4/B3","r":"C2","n":"Risiko Tren — Kesehatan Menurun – Peningkatan Klaim"},{"c":"R07","sb":2,"kat":"Pasar","i":"D4","a":"B3","t":"B4/C3","r":"D3","n":"Risiko Volatilitas — Pasar – Penekanan Hasil Investasi terhadap Perubahan Kondisi"},{"c":"R08","sb":2,"kat":"Pasar","i":"B5","a":"B3","t":"B4/C3","r":"A4","n":"Risiko — Meningkatnya Selisih Penilaian Investasi (SPI) Negatif"},{"c":"R09","sb":2,"kat":"Pasar","i":"B3","a":"B2","t":"B3/C2","r":"B2","n":"Tekanan — Pelemahan Rupiah terhadap Hasil Investasi dan"},{"c":"R10","sb":2,"kat":"Reputasi","i":"D3","a":"B4","t":"B5/C4","r":"B1","n":"Layanan Program JKM – Pemberitaan"},{"c":"R11","sb":2,"kat":"Solvabilitas","i":"D4","a":"A1","t":"A2/B1","r":"D3","n":"Risiko Kesehatan Dana Program – Risiko Solvabilitas Program JKM"},{"c":"R12","sb":2,"kat":"Solvabilitas","i":"C3","a":"A1","t":"A2/B1","r":"C2","n":"Risiko — Ketidakcukupan Dana Program JP"},{"c":"R13","sb":2,"kat":"Solvabilitas","i":"A4","a":"A1","t":"A2/B1","r":"A2","n":"Risiko Ketahanan Dana JKP – Turunnya Ketahanan Dana"},{"c":"R14","sb":2,"kat":"Strategis","i":"C5","a":"C3","t":"C4/D3","r":"B3","n":"Yield on — Investment - Tidak Tercapainya Yield On Investment"},{"c":"R15","sb":2,"kat":"Strategis","i":"A4","a":"A1","t":"A2/B1","r":"A2","n":"Risiko Ketahanan — Dana JKK – Turunnya Ketahanan Dana"},{"c":"R16","sb":3,"kat":"Operasional","i":"C3","a":"C3","t":"C4/D3","r":"B3","n":"Brand Awareness — – Rendahnya engagement masyarakat terhadap BPJS"},{"c":"R17","sb":3,"kat":"Strategis","i":"D4","a":"C3","t":"C4/D3","r":"C3","n":"Risiko Lonjakan — PHK"},{"c":"R18","sb":3,"kat":"Strategis","i":"E5","a":"C3","t":"C4/D3","r":"C3","n":"Risiko Kinerja — Kepesertaan - a. Rendahnya Pe Pertumbuhan TK (P Aktif"},{"c":"R19","sb":4,"kat":"Strategis","i":"C5","a":"C3","t":"C4/D3","r":"C4","n":"Risiko Kinerja — Kepesertaan – Tidak Optimalnya"},{"c":"R20","sb":5,"kat":"Operasional","i":"C4","a":"C3","t":"C4/D3","r":"C3","n":"Risiko — SDM/Organisasi – Kegagalan Transformasi Budaya &"},{"c":"R21","sb":5,"kat":"Operasional","i":"C5","a":"C3","t":"C4/D3","r":"C4","n":"Capacity – — Kekosongan key position akibat"},{"c":"R22","sb":5,"kat":"Operasional","i":"C3/D2","a":"C3","t":"C2","r":"C2","n":"Capability - — Kesenjangan kompetensi akibat"},{"c":"R23","sb":6,"kat":"IT","i":"E3","a":"C3/D2","t":"C2","r":"C2","n":"Risiko Keamanan — Data – Kebocoran/Penyal ahgunaan Data Pribadi Peserta"},{"c":"R24","sb":6,"kat":"IT","i":"E5","a":"C2","t":"C3","r":"C3","n":"Keamanan – — Kerentanan pada Aplikasi JMO dan Lapak Asik"},{"c":"R25","sb":6,"kat":"Operasional","i":"B4","a":"B3","t":"B4/C3","r":"B3","n":"Risiko Duplikasi — Data Kepesertaan - Mismatch Data Kartu Peserta"},{"c":"R26","sb":6,"kat":"Operasional","i":"C4","a":"C3","t":"C4/D3","r":"B3","n":"Data – Rendahnya — Kualitas atau Data Governance"},{"c":"R27","sb":6,"kat":"Operasional","i":"C5","a":"C3","t":"C4/D3","r":"C4","n":"Layanan Program JHT – Ketidakvalidan"},{"c":"R28","sb":7,"kat":"Fraud","i":"D3","a":"A1","t":"A2/B1","r":"B2","n":"Risiko Fraud - — Fraud pada Klaim dan Pembayaran Manfaat"},{"c":"R29","sb":7,"kat":"Fraud","i":"C3","a":"A1","t":"A2/B1","r":"B2","n":"Fraud Internal - — Terjadinya praktik penyelewengan"},{"c":"R30","sb":7,"kat":"Fraud","i":"D3","a":"A1","t":"A2/B1","r":"A1","n":"Fraud Internal - — Terjadinya praktek jual beli data peserta dengan memberikan data"},{"c":"R31","sb":7,"kat":"Fraud","i":"B2","a":"A1","t":"A2/B1","r":"B1","n":"Layanan Program JKK - Manipulasi jenis obat, harga, tindakan, istirahat/ STMB, durasi"},{"c":"R32","sb":7,"kat":"Hukum","i":"D4","a":"A3","t":"A4/B3","r":"B3","n":"Layanan Program — JKM - Timbulnya tuntutan hukum"},{"c":"R33","sb":7,"kat":"Kepatuhan","i":"C2","a":"A1","t":"A2/B1","r":"A1","n":"Layanan Program — JKM - Pembayaran klaim JKM peserta Jakon tidak sesuai ketentuan"},{"c":"R34","sb":7,"kat":"Operasional","i":"D4","a":"C3","t":"C4/D3","r":"C3","n":"Layanan Program — JHT - JHT Salah bayar"},{"c":"R35","sb":7,"kat":"Strategis","i":"D3","a":"C3","t":"C4/D3","r":"C3","n":"Pergantian — Arah/Fokus Pemerintah"},{"c":"R36","sb":7,"kat":"Strategis","i":"D3","a":"C3","t":"C4/D3","r":"C3","n":"Penurunan Angka — PBI (Penerima Bantuan Iuran) oleh Pemerintah untuk Segmen"},{"c":"R37","sb":8,"kat":"Strategis","i":"D3","a":"B3","t":"B4/C3","r":"C3","n":"Ketidakefektifan — Outlook Ketenagakerjaan"}],"nAkt":2092,"totAnggaran":6215696938501};
+D.anggaran.full=[{"k":"Pembayaran Gaji dan Tunjangan Tetap Karyawan","s":"Umum & SDM","n":1657683427680,"p":298},{"k":"Pembayaran PPh Pasal 21 Beban Perusahaan","s":"Umum & SDM","n":586434623664,"p":300},{"k":"Pembayaran Tunjangan Prestasi Karyawan","s":"Umum & SDM","n":285879311120,"p":301},{"k":"Pembayaran THR Keagamaan","s":"Umum & SDM","n":277637133048,"p":300},{"k":"Pembayaran Otifa Program Kesehatan Pensiun","s":"Umum & SDM","n":205189207153,"p":300},{"k":"Pembayaran Program JPK Tambahan","s":"Umum & SDM","n":194333511312,"p":298},{"k":"Pembayaran Tunjangan Cuti Tahunan Karyawan","s":"Umum & SDM","n":160236846750,"p":301},{"k":"Pembayaran Imbalan Kerja Karyawan","s":"Umum & SDM","n":120397027379,"p":300},{"k":"Pembayaran Uang Makan Karyawan","s":"Umum & SDM","n":106085700000,"p":301},{"k":"Pembayaran Program BPJS Ketenagakerjaan","s":"Umum & SDM","n":90796312692,"p":298},{"k":"Pembayaran Tunjangan Cuti Besar Karyawan","s":"Umum & SDM","n":84479322373,"p":301},{"k":"Pembayaran Program Kesehatan Pensiun","s":"Umum & SDM","n":82884171384,"p":298},{"k":"Pemberian Insentif/Fee untuk Wadah dan Perisai","s":"Kepesertaan","n":70575450000,"p":249},{"k":"Pembayaran Program THT","s":"Umum & SDM","n":66307337112,"p":298},{"k":"Renewal ATS Database Oracle","s":"Renstra & TI","n":49301070338,"p":274},{"k":"Pembayaran PSL Pensiun","s":"Umum & SDM","n":47673850000,"p":298},{"k":"Biaya Sewa Plaza BPJAMSOSTEK","s":"Umum & SDM","n":45360000000,"p":292},{"k":"Pembayaran Program Pensiun Manfaat Pasti","s":"Umum & SDM","n":42245931768,"p":298},{"k":"Pembayaran Penghargaan Pengabdian","s":"Umum & SDM","n":34670812678,"p":300},{"k":"Pembayaran Program BPJS Kesehatan","s":"Umum & SDM","n":33344640000,"p":298},{"k":"Kelengkapan Kerja Karyawan","s":"Umum & SDM","n":31182766324,"p":300},{"k":"Pembayaran Biaya Mutasi Karyawan","s":"Umum & SDM","n":29212191695,"p":297},{"k":"Pembayaran Program Pensiun Iuran Pasti","s":"Umum & SDM","n":29171746800,"p":298},{"k":"Pembayaran Penggantian Fasilitas Rumah Jabatan","s":"Umum & SDM","n":28077600000,"p":298},{"k":"Pelaksanaan Penyaluran Manfaat Promotif dan","s":"Pelayanan","n":26000000000,"p":259},{"k":"Pemeliharaan Server dan Storage","s":"Renstra & TI","n":25330680615,"p":274},{"k":"Pemenuhan Kebutuhan Sewa Bangunan Kantor","s":"KW Dki Jakarta","n":25175198216,"p":337},{"k":"Pelaksanaan Check Up Kesehatan Karyawan","s":"Umum & SDM","n":24558761285,"p":300},{"k":"Penyediaan Jaringan Sdwan dan Internet Terpusat","s":"Renstra & TI","n":24513168960,"p":273},{"k":"Melakukan Sosialiasi Jaminan Sosial Bersama Tokoh","s":"Dir. Utama","n":24399575000,"p":241},{"k":"Pengelolaan Gedung Kantor Pusat","s":"Umum & SDM","n":21449394302,"p":294},{"k":"Pembayaran Gaji dan Tunjangan Perumahan","s":"Umum & SDM","n":21091200000,"p":299},{"k":"Pembayaran PPh Pasal 21 Manajemen Beban","s":"Umum & SDM","n":19131459840,"p":299},{"k":"Pemenuhan Kebutuhan Jasa Tenaga Bantuan","s":"KW Dki Jakarta","n":19106353880,"p":336},{"k":"Pembayaran Penggantian Fasilitas Langganan","s":"Umum & SDM","n":17050800000,"p":298},{"k":"Penyediaan Layanan Whatsapp","s":"Renstra & TI","n":16534156402,"p":275},{"k":"Pembayaran Gaji Jasa Tenaga Bantuan","s":"Umum & SDM","n":15532724090,"p":293},{"k":"- Promosi pada Promosi pada Stasiun Televisi","s":"Dir. Utama","n":15017909083,"p":237},{"k":"Pemenuhan Kebutuhan Jasa Tenaga Bantuan","s":"KW Jawa Timur","n":14720942820,"p":360},{"k":"Pemenuhan Kebutuhan Jasa Tenaga Bantuan","s":"KW Jawa Barat","n":13878058399,"p":344},{"k":"Pemeliharaan Perangkat dan Lisensi Firewall Dc","s":"Renstra & TI","n":13654520000,"p":275},{"k":"Pengelolaan Gedung Institut","s":"Umum & SDM","n":13420000000,"p":294},{"k":"Pemenuhan Kewajiban Pengelolaan Contact","s":"Pelayanan","n":12692000000,"p":257},{"k":"Penyediaan Layanan Electronic Messaging E-","s":"Renstra & TI","n":12300000000,"p":275},{"k":"Pembayaran Gaji dan Tunjangan Perumahan","s":"Umum & SDM","n":12083520000,"p":299},{"k":"Penyediaan Lisensi Email Corporate dan Teknologi","s":"Renstra & TI","n":11696179289,"p":275},{"k":"Pemenuhan Kebutuhan Jasa Tenaga Bantuan","s":"KW Kalimantan","n":11640302828,"p":368},{"k":"Pemenuhan Kebutuhan Jasa Tenaga Bantuan","s":"KW Sulama","n":11597467719,"p":376},{"k":"Penyediaan Lisensi Pengolahan Data","s":"Renstra & TI","n":11522713129,"p":274},{"k":"Pemenuhan Kebutuhan Jasa Tenaga Bantuan","s":"KW Sumbarriau","n":11125809486,"p":384},{"k":"Pemenuhan Kebutuhan Jasa Tenaga Bantuan","s":"KW Sumbagut","n":10517207310,"p":320},{"k":"Penyediaan Lisensi Endpoint Protection (Epp), Xdr, Security, dan Dlp","s":"Renstra & TI","n":10353147845,"p":276},{"k":"Pemeliharaan Perangkat Router dan Switching","s":"Renstra & TI","n":9652048228,"p":273},{"k":"Pembayaran Asuransi Direksi","s":"Umum & SDM","n":9369600000,"p":299},{"k":"Pemenuhan Kebutuhan Jasa Tenaga Bantuan","s":"KW Jawa Tengah Dan Diy","n":9335831046,"p":352},{"k":"Penyediaan Collocation Dc Drc","s":"Renstra & TI","n":9283031816,"p":274},{"k":"Pemenuhan Kebutuhan Jasa Tenaga Bantuan","s":"KW Banuspa","n":9236988479,"p":401},{"k":"Penyediaan Lisensi Containerization Software dan Redis Dc Drc","s":"Renstra & TI","n":9113120488,"p":274},{"k":"Pemenuhan Kebutuhan Jasa Tenaga Bantuan","s":"KW Banten","n":9040065206,"p":393},{"k":"Laporan Keuangan dan Melaksanakan Audit Laporan Keuangan dan Program Oleh Kantor","s":"Dir. Utama","n":8943020675,"p":245},{"k":"Pemenuhan Kebutuhan Sewa Bangunan Kantor","s":"KW Jawa Timur","n":8928945000,"p":361},{"k":"Eksternal Development Transformasi Sistem Operasional Terintegrasi - dan Teknologi","s":"Renstra & TI","n":8894985000,"p":270},{"k":"Pemenuhan Kebutuhan Jasa Tenaga Bantuan","s":"KW Sumbagsel","n":8727412745,"p":328},{"k":"Penyusunan Master Plan TI untuk Mendukung Badan 2027 -2031","s":"Renstra & TI","n":7968468000,"p":271},{"k":"Penyediaan Asesmen dan Pengujian Keamanan TI","s":"Renstra & TI","n":7596092000,"p":276},{"k":"Penyediaan Lisensi Media Backup Database dan","s":"Renstra & TI","n":7229844000,"p":274},{"k":"Langganan Listrik","s":"Umum & SDM","n":7138189920,"p":292},{"k":"Pemenuhan Kebutuhan Sewa Bangunan Kantor","s":"KW Sulama","n":7094960697,"p":378},{"k":"Penyediaan Lisensi Teknologi Virtualisasi Server","s":"Renstra & TI","n":6730565806,"p":274},{"k":"Penyediaan Secret Management","s":"Renstra & TI","n":6488849536,"p":278},{"k":"Sewa Bus Karyawan","s":"Umum & SDM","n":6388272000,"p":293},{"k":"Lain Karyawan Bantuan Transport Karyawan","s":"Umum & SDM","n":6161490000,"p":300},{"k":"Pengembangan Direksi","s":"Dir. Utama","n":6117467503,"p":242},{"k":"Penyediaan Lisensi Vulnerability Management dan","s":"Renstra & TI","n":6002325000,"p":276},{"k":"Employee Gathering","s":"Umum & SDM","n":6000009050,"p":296},{"k":"Pembayaran Asuransi Dewan Pengawas","s":"Umum & SDM","n":5621760000,"p":299},{"k":"- Promosi pada Promosi pada Media Digital Ads","s":"Dir. Utama","n":5520000000,"p":237},{"k":"Pemenuhan Kebutuhan Sewa Bangunan Kantor","s":"KW Banuspa","n":5429950000,"p":402},{"k":"Penyediaan Api Security","s":"Renstra & TI","n":5172343701,"p":276},{"k":"Penyediaan Lisensi Siem Logrhythm","s":"Renstra & TI","n":5131250796,"p":276},{"k":"Pembayaran Honorarium Anggota Komite Non","s":"Umum & SDM","n":5040000000,"p":299},{"k":"Inisiasi Hybrid Cloud untuk Transformasi","s":"Renstra & TI","n":5000000000,"p":277},{"k":"Pemenuhan Kebutuhan Sewa Bangunan Kantor","s":"KW Banten","n":4754467780,"p":394},{"k":"Penyediaan Administrasi Kepesertaan dan Meningkatkan Literasi","s":"Kepesertaan","n":4690000000,"p":249},{"k":"Biaya Operasional Unit Layanan Kab/Kota","s":"KW Sulama","n":4414232047,"p":380},{"k":"Program Pengembangan Strategis Membership Academy","s":"Umum & SDM","n":4400850000,"p":304},{"k":"Pemenuhan Kebutuhan Sewa Bangunan Kantor","s":"KW Jawa Tengah Dan Diy","n":4333623000,"p":353},{"k":"Rekrutmen dan Seleksi Calon Karyawan Tahap","s":"Umum & SDM","n":4310216250,"p":297},{"k":"Pembinaan Kepesertaan Pk/Bu Aktif","s":"KW Dki Jakarta","n":4301667000,"p":335},{"k":"- Sponsorship Sponsorship","s":"Dir. Utama","n":4300000000,"p":238},{"k":"Pemenuhan Kebutuhan Sewa Bangunan Kantor","s":"KW Sumbarriau","n":4253625000,"p":386},{"k":"Pemenuhan Kebutuhan Langganan Listrik","s":"KW Jawa Timur","n":4251841536,"p":363},{"k":"Penyediaan Lisensi Tools Root Cause Analytics","s":"Renstra & TI","n":4135212000,"p":278},{"k":"Penyediaan Managed Services Security Operation","s":"Renstra & TI","n":4109020517,"p":277},{"k":"Penguatan Inpres & Regulasi untuk Optimalisasi Kementerian/Lembaga Terkait","s":"Kepesertaan","n":4100000000,"p":251},{"k":"Penyelenggaraan Ucj Award untuk Penguatan Rpjmn/Rpjmd 2025 -","s":"Kepesertaan","n":4056350000,"p":247},{"k":"Penyediaan Lisensi Biometrik dan Ekyc","s":"Renstra & TI","n":4015000000,"p":276},{"k":"Penyediaan Lisensi Layanan Remote Access","s":"Renstra & TI","n":4000000000,"p":276},{"k":"Implementasi Inpres dan Regulasi Lainnya untuk","s":"KW Sulama","n":4000000000,"p":374},{"k":"Pembayaran Program Akdhk","s":"Umum & SDM","n":3978440232,"p":297},{"k":"Pemenuhan Kebutuhan Pemeliharaan Bangunan","s":"KW Jawa Timur","n":3965300000,"p":360},{"k":"Beban Representasi Direktur Utama","s":"Dir. Utama","n":3900000000,"p":243},{"k":"Pemenuhan Kebutuhan Langganan Listrik","s":"KW Dki Jakarta","n":3891529968,"p":338},{"k":"Penyusunan Service Standar Blueprint","s":"Pelayanan","n":3802125000,"p":261},{"k":"Biaya Operasional Unit Layanan Kab/Kota","s":"KW Banuspa","n":3795223953,"p":405},{"k":"Pemenuhan Kebutuhan Sewa Bangunan Kantor","s":"KW Sumbagsel","n":3771540000,"p":329},{"k":"Sosialisasi dan Penyusunan Regulasi Daerah Coverage Jamsostek","s":"KW Banuspa","n":3770516426,"p":399},{"k":"Mengadakan Jasa Lawyer Terkait Penanganan","s":"Dir. Utama","n":3750000000,"p":233},{"k":"Penyelenggaraan Jamsostek Award Pemerintah Desa & Badan Usaha","s":"Kepesertaan","n":3712200000,"p":247},{"k":"Pemenuhan Kebutuhan Bahan Bakar","s":"KW Jawa Timur","n":3673909440,"p":362},{"k":"Orientasi Persiapan Kerja (Opk)","s":"Umum & SDM","n":3653070000,"p":306},{"k":"Tali Kasih Purna Tugas","s":"Umum & SDM","n":3638250000,"p":296},{"k":"Penyediaan Lisensi Tools Endpoint Management","s":"Renstra & TI","n":3616713000,"p":275},{"k":"Transformasi & Penyelarasan Internal Turunan Rpp UU P2Sk","s":"Investasi","n":3615618955,"p":263},{"k":"- Produksi Materi Produksi Materi Promosi","s":"Dir. Utama","n":3600000000,"p":237},{"k":"Pemenuhan Kebutuhan Bahan Bakar","s":"KW Dki Jakarta","n":3582835200,"p":338},{"k":"- Promosi pada Promosi pada Media Luar Ruang","s":"Dir. Utama","n":3520000000,"p":237},{"k":"Pembinaan Kepesertaan Pk/Bu Aktif","s":"KW Jawa Timur","n":3517287720,"p":359},{"k":"Operasional Unit Kerja Manage Service Jasa Administrasi","s":"KW Sulama","n":3509092873,"p":376},{"k":"Pemenuhan Kebutuhan Langganan Listrik","s":"KW Jawa Tengah Dan Diy","n":3398177808,"p":354},{"k":"Pemenuhan Kebutuhan Langganan Listrik","s":"KW Jawa Barat","n":3368322577,"p":346},{"k":"Pemenuhan Kebutuhan Bahan Bakar","s":"KW Jawa Barat","n":3314702912,"p":346},{"k":"Implementasi Inpres dan Regulasi Lainnya untuk","s":"KW Sumbagsel","n":3310000000,"p":326},{"k":"Implementasi Inpres dan Regulasi Lainnya untuk","s":"KW Kalimantan","n":3300000000,"p":366},{"k":"Sosialisasi dan Penyusunan Regulasi Daerah Coverage Jamsostek","s":"KW Sulama","n":3294565400,"p":375},{"k":"Pemenuhan Kebutuhan Bahan Bakar","s":"KW Sulama","n":3283269120,"p":379},{"k":"Pemenuhan Kebutuhan Pemeliharaan Bangunan","s":"KW Jawa Barat","n":3264456000,"p":344},{"k":"Pemenuhan Kebutuhan Pemeliharaan Bangunan","s":"KW Dki Jakarta","n":3208075000,"p":336},{"k":"Pemeliharaan Perangkat dan Annual Support System (Ips)","s":"Renstra & TI","n":3192988000,"p":275},{"k":"Program Desa Peduli Jaminan Sosial","s":"KW Sulama","n":3180000000,"p":382},{"k":"Bbm Direksi 7 Personil","s":"Umum & SDM","n":3179520000,"p":294},{"k":"Pemenuhan Kebutuhan Bahan Bakar","s":"KW Jawa Tengah Dan Diy","n":3157357760,"p":354},{"k":"Pengelolaan dan Pembinaan KUR","s":"Kepesertaan","n":3123235000,"p":250},{"k":"Pembayaran Tunjangan Cuti Direksi","s":"Umum & SDM","n":3123200000,"p":300},{"k":"Pemenuhan Kebutuhan Langganan Listrik","s":"KW Kalimantan","n":3116920000,"p":371},{"k":"Universal Coverage Diseminasi, Penilaian & Wawancara Kandidat","s":"Kepesertaan","n":3060000000,"p":246},{"k":"- Publikasi pada Publikasi pada Media Digital","s":"Dir. Utama","n":3040000000,"p":238},{"k":"Kalender dan Produksi dan Pendistribusian Kalender dan","s":"Dir. Utama","n":3002100000,"p":236},{"k":"Penyediaan Lisensi Mobile Apps Ssl Certificate","s":"Renstra & TI","n":3001484297,"p":276},{"k":"Penyediaan ATS Enterprise Logging System","s":"Renstra & TI","n":2979351000,"p":277},{"k":"Pemenuhan Kebutuhan Langganan Listrik","s":"KW Sulama","n":2957184560,"p":379},{"k":"Implementasi Inpres dan Regulasi Lainnya untuk","s":"KW Banuspa","n":2879810386,"p":398},{"k":"Bbm Kendaraan Dinas Depdir","s":"Umum & SDM","n":2808000000,"p":294},{"k":"Dan Seleksi yang Pendampingan Rekrutmen dan Seleksi Calon User","s":"Umum & SDM","n":2805000000,"p":297},{"k":"Pemenuhan Kebutuhan Sewa Bangunan Kantor","s":"KW Sumbagut","n":2798422230,"p":321},{"k":"Pemenuhan Kebutuhan Bahan Bakar","s":"KW Kalimantan","n":2781216000,"p":370},{"k":"Biaya Operasional Unit Layanan Kab/Kota","s":"KW Sumbagsel","n":2757861288,"p":332},{"k":"Operasional Unit Kerja Manage Service Jasa Administrasi","s":"KW Jawa Timur","n":2754675000,"p":360},{"k":"Pemenuhan Kebutuhan Langganan Listrik","s":"KW Sumbagut","n":2750928000,"p":322},{"k":"Pemenuhan Kebutuhan Rumah Tangga","s":"KW Dki Jakarta","n":2730000000,"p":337},{"k":"Meningkatkan Kualitas Kepesertaan & Literasi PMI Bersama","s":"Kepesertaan","n":2713335000,"p":248},{"k":"Pemeliharaan Perangkat Pendukung Layanan","s":"Renstra & TI","n":2712690900,"p":275},{"k":"Pemenuhan Kebutuhan Sewa Bangunan Kantor","s":"KW Kalimantan","n":2659147000,"p":369},{"k":"Biaya Operasional Unit Layanan Kab/Kota","s":"KW Sumbagut","n":2655388520,"p":324},{"k":"Dan Kolaborasi dalam Perluasan dan Meningkatkan Kerjasama Asosiasi, Komunitas, Mitra","s":"Kepesertaan","n":2639360000,"p":249},{"k":"Pemeliharaan Perangkat dan Lisensi Firewall Center","s":"Renstra & TI","n":2619915259,"p":275},{"k":"Pemeliharaan Kendaraan Dinas","s":"Umum & SDM","n":2618980000,"p":293},{"k":"Pemenuhan Kebutuhan Langganan Listrik","s":"KW Sumbarriau","n":2603711964,"p":387},{"k":"Penyediaan Data dan Market Intelligence Infrastruktur Utama","s":"Investasi","n":2600000000,"p":267},{"k":"Penyediaan Lisensi Cyber Threat Intelligence","s":"Renstra & TI","n":2582787757,"p":276},{"k":"Pembinaan Kerjasama Operasional Eksternal","s":"KW Banuspa","n":2533742810,"p":403},{"k":"Pemenuhan Kebutuhan Rumah Tangga","s":"KW Jawa Timur","n":2528400000,"p":361},{"k":"Implementasi Inpres dan Regulasi Lainnya untuk","s":"KW Jawa Timur","n":2525000000,"p":358},{"k":"Biaya Operasional Unit Layanan Kab/Kota","s":"KW Kalimantan","n":2507254296,"p":372},{"k":"- Promosi dan Promosi dan Aktivasi Literasi","s":"Dir. Utama","n":2500000000,"p":237},{"k":"Pengelolaan Managed Service dan Pengembangan PMI di dalam dan Luar","s":"Pelayanan","n":2499998272,"p":260},{"k":"Program Desa Peduli Jaminan Sosial","s":"KW Jawa Timur","n":2499000000,"p":365},{"k":"Pemenuhan Kebutuhan Pemeliharaan Bangunan","s":"KW Sulama","n":2487769000,"p":377},{"k":"Pemenuhan Kebutuhan Bahan Bakar","s":"KW Sumbagsel","n":2468609804,"p":330},{"k":"Pemeliharaan Perangkat Wireless dan Network","s":"Renstra & TI","n":2457402812,"p":273},{"k":"Pemenuhan Kebutuhan Bahan Bakar","s":"KW Sumbagut","n":2456601408,"p":322},{"k":"Pemenuhan Kebutuhan Bahan Bakar","s":"KW Sumbarriau","n":2443331200,"p":387},{"k":"Pemenuhan Kebutuhan Pemeliharaan Bangunan","s":"KW Kalimantan","n":2439882500,"p":369},{"k":"Pemenuhan Kebutuhan Pbb Bangunan Kantor","s":"KW Dki Jakarta","n":2431592050,"p":336},{"k":"Pemenuhan Kebutuhan Rumah Tangga","s":"KW Jawa Barat","n":2431200000,"p":345},{"k":"Pemenuhan Kebutuhan Langganan Listrik","s":"KW Sumbagsel","n":2396673620,"p":330},{"k":"Operasional Unit Kerja Manage Service Jasa Administrasi","s":"KW Dki Jakarta","n":2363458680,"p":335},{"k":"Operasional Unit Kerja Manage Service Jasa Administrasi","s":"KW Kalimantan","n":2357471040,"p":368},{"k":"- Peliputan Khusus Peliputan Khusus pada Stasiun Televisi","s":"Dir. Utama","n":2352000000,"p":237},{"k":"Operasional Unit Kerja Manage Service Jasa Administrasi","s":"KW Sumbagut","n":2337525806,"p":319},{"k":"Pemenuhan Kebutuhan Bahan Bakar","s":"KW Banuspa","n":2330638000,"p":403},{"k":"Implementasi Inpres dan Regulasi Lainnya untuk","s":"KW Sumbagut","n":2330000000,"p":318},{"k":"Pengelolaan Layanan Claim Center ( Full Manage","s":"Pelayanan","n":2304000000,"p":256},{"k":"Operasional Unit Kerja Manage Service Jasa Administrasi","s":"KW Sumbarriau","n":2301482282,"p":384},{"k":"Penyediaan Layanan Internet dan Interkoneksi","s":"Renstra & TI","n":2289285512,"p":273},{"k":"Penyediaan Layanan Internet dan Jaringan Drc","s":"Renstra & TI","n":2289285512,"p":273},{"k":"Pemenuhan Kebutuhan Rumah Tangga","s":"KW Jawa Tengah Dan Diy","n":2247600000,"p":353},{"k":"Penyediaan Domain, Ssl Certificate, dan Ip Publik","s":"Renstra & TI","n":2245238278,"p":276},{"k":"Sosialisasi dan Penyusunan Regulasi Daerah Coverage Jamsostek","s":"KW Sumbarriau","n":2244625616,"p":383},{"k":"Pemenuhan Kebutuhan Langganan Listrik","s":"KW Banten","n":2226600000,"p":395},{"k":"Program Pengembangan Strategis Service","s":"Umum & SDM","n":2225820000,"p":304},{"k":"Penguatan Kebijakan dan Prioritas Penganggaran Coverage Jamsostek","s":"Kepesertaan","n":2224016000,"p":247},{"k":"Penyediaan Lisensi Source Code Management dan Software Pendukung","s":"Renstra & TI","n":2207573357,"p":274},{"k":"Mengoptimalkan Sinergi Asosiasi & Komunitas Sustainability Perlindungan","s":"Kepesertaan","n":2203560000,"p":246},{"k":"Sosialisasi dan Penyusunan Regulasi Daerah Coverage Jamsostek","s":"KW Sumbagsel","n":2168556750,"p":326},{"k":"Program Desa Peduli Jaminan Sosial","s":"KW Kalimantan","n":2151220000,"p":374},{"k":"Pembinaan Kerjasama Operasional Eksternal","s":"KW Sulama","n":2148453375,"p":379},{"k":"Pembinaan Kerjasama Operasional Eksternal","s":"KW Jawa Timur","n":2145380040,"p":363},{"k":"Implementasi Inpres dan Regulasi Lainnya untuk","s":"KW Jawa Tengah Dan Diy","n":2114000000,"p":350},{"k":"Pemenuhan Kebutuhan Pemeliharaan Bangunan","s":"KW Sumbagut","n":2101735000,"p":320},{"k":"Pemenuhan Kebutuhan Pemeliharaan Bangunan","s":"KW Jawa Tengah Dan Diy","n":2101514100,"p":352},{"k":"Program Pengembangan Strategis Finance And","s":"Umum & SDM","n":2085150000,"p":304},{"k":"Operasional Unit Kerja Manage Service Jasa Administrasi","s":"KW Jawa Tengah Dan Diy","n":2084622155,"p":351},{"k":"Implementasi UU Nomor 3 Tahun 2024 untuk Kepesertaan","s":"Kepesertaan","n":2081216000,"p":247},{"k":"Pemenuhan Kebutuhan Rumah Tangga","s":"KW Sulama","n":2070000000,"p":378},{"k":"Penyediaan Konsultan Joint Development Apps untuk JMO Super App","s":"Renstra & TI","n":2066598000,"p":271},{"k":"Operasional Unit Kerja Manage Service Jasa Administrasi","s":"KW Jawa Barat","n":2031840000,"p":343},{"k":"Kegiatan Konsultansi Cabang","s":"KW Sulama","n":2027093556,"p":379},{"k":"Renewal ATS Database Pendukung","s":"Renstra & TI","n":2010000000,"p":274},{"k":"Operasional Unit Kerja Manage Service Jasa Administrasi","s":"KW Sumbagsel","n":2003898828,"p":327},{"k":"Pengembangan Social Media","s":"Dir. Utama","n":2000597400,"p":236},{"k":"Penyediaan Maintenance Manageengine Aplikasi Itsm","s":"Renstra & TI","n":1977678040,"p":278},{"k":"Pemenuhan Kebutuhan Pemeliharaan Bangunan","s":"KW Sumbarriau","n":1963666800,"p":385},{"k":"Pemenuhan Kebutuhan Langganan Listrik","s":"KW Banuspa","n":1957999314,"p":403},{"k":"Kegiatan Konsultansi Cabang","s":"KW Kalimantan","n":1955256200,"p":371},{"k":"Pemenuhan Kebutuhan Pemeliharaan Bangunan","s":"KW Sumbagsel","n":1954872600,"p":328},{"k":"Sinergi Bersama Asosiasi Kementerian/Lembaga, Daerah","s":"KW Jawa Timur","n":1945410240,"p":359},{"k":"Kepesertaan melalui Perluasan Kepesertaan Ukm melalui Kemitraan K/L","s":"Kepesertaan","n":1943150000,"p":250},{"k":"Pemenuhan Kebutuhan Rumah Tangga","s":"KW Kalimantan","n":1941600000,"p":369},{"k":"Penyediaan Konsultan Joint Development Aplikasi","s":"Renstra & TI","n":1901596500,"p":270},{"k":"- Pembuatan Konten Pembuatan Konten Sosial Media dan Internal","s":"Dir. Utama","n":1899040000,"p":237},{"k":"Pemenuhan Kebutuhan Rumah Tangga","s":"KW Sumbarriau","n":1884000000,"p":386},{"k":"Pbb Gedung","s":"Umum & SDM","n":1883418231,"p":293},{"k":"Implementasi Inpres dan Regulasi Lainnya untuk","s":"KW Sumbarriau","n":1880000000,"p":382},{"k":"Pembayaran Tunjangan Cuti Dewan Pengawas","s":"Umum & SDM","n":1873920000,"p":299},{"k":"Pembinaan Kepesertaan Pk/Bu Aktif","s":"KW Jawa Barat","n":1872907800,"p":343},{"k":"Pemenuhan Kebutuhan Rumah Tangga","s":"KW Sumbagut","n":1858800000,"p":321},{"k":"Penyelenggaraan Rapat Rutin Manajemen dan","s":"Dir. Utama","n":1857000000,"p":239},{"k":"Operasional Unit Kerja Manage Service Jasa Administrasi","s":"KW Banuspa","n":1855405664,"p":400},{"k":"Pemenuhan Kebutuhan Pemeliharaan Bangunan","s":"KW Banten","n":1854006000,"p":393},{"k":"Melakukan Pembayaran Iuran Keanggotaan Issa","s":"Dir. Utama","n":1841616000,"p":241},{"k":"Program Desa Peduli Jaminan Sosial","s":"KW Banuspa","n":1841500000,"p":406},{"k":"Pembayaran Tunjangan Apresiasi Mpp","s":"Umum & SDM","n":1825869720,"p":298},{"k":"Penyediaan Tools Active Directory Management","s":"Renstra & TI","n":1825000000,"p":275},{"k":"Kegiatan Sosialisasi Perluasan Peserta BPU","s":"KW Sulama","n":1799294200,"p":378},{"k":"Biaya Operasional Unit Layanan Kab/Kota","s":"KW Jawa Timur","n":1788901196,"p":364},{"k":"Pemenuhan Kebutuhan Pemeliharaan Kendaraan","s":"KW Jawa Timur","n":1767300000,"p":361},{"k":"Program Pengembangan Talenta Pejabat","s":"Umum & SDM","n":1737300000,"p":306},{"k":"Pembayaran Honorarium Penasihat Direksi","s":"Umum & SDM","n":1734000000,"p":299},{"k":"Kolaborasi Kepatuhan Bersama Aparat Penegak","s":"KW Jawa Timur","n":1722610120,"p":358},{"k":"Pemenuhan Kebutuhan Pemeliharaan Bangunan","s":"KW Banuspa","n":1694069000,"p":401},{"k":"Pemenuhan Kebutuhan Bahan Bakar","s":"KW Banten","n":1691712000,"p":395},{"k":"Kegiatan Konsultansi Cabang","s":"KW Jawa Timur","n":1691065280,"p":363},{"k":"Program Persiapan Pensiun (Pre-Retirement","s":"Umum & SDM","n":1688500000,"p":306},{"k":"Pemenuhan Kebutuhan Sewa Bangunan Kantor","s":"KW Jawa Barat","n":1673470000,"p":345},{"k":"Kolaborasi Kepatuhan Bersama Aparat Penegak","s":"KW Dki Jakarta","n":1666104580,"p":334},{"k":"Kegiatan Sosialisasi Perluasan Peserta BPU","s":"KW Jawa Timur","n":1656812600,"p":362},{"k":"Dan CRM Kemitraan Melakukan Perluasan, Pengelolaan dan CRM","s":"Kepesertaan","n":1650520000,"p":250},{"k":"Pemenuhan Kebutuhan Pemeliharaan Kendaraan","s":"KW Jawa Barat","n":1649880000,"p":344},{"k":"Strategi dan Dampak ESG Bbm Dewas 7 Personil","s":"Umum & SDM","n":1636200000,"p":294},{"k":"Pengelolaan Gedung Sentul","s":"Umum & SDM","n":1629448176,"p":294},{"k":"Pemberian Subsidi Pengobatan dan Perawatan","s":"Umum & SDM","n":1621594839,"p":298},{"k":"Pembinaan Kepesertaan Pk/Bu Aktif","s":"KW Sulama","n":1619930584,"p":375},{"k":"Pengelolaan Operasional Badan Direktur Utama","s":"Dir. Utama","n":1619655000,"p":241},{"k":"- Agency Kreatif dan Agency Kreatif dan Strategi Media","s":"Dir. Utama","n":1619385000,"p":236},{"k":"Sosialisasi dan Penyusunan Regulasi Daerah Coverage Jamsostek","s":"KW Jawa Timur","n":1605774960,"p":359},{"k":"Pembinaan Kerjasama Operasional Eksternal","s":"KW Jawa Barat","n":1602970730,"p":346},{"k":"Biaya Operasional Unit Layanan Kab/Kota","s":"KW Jawa Barat","n":1596642134,"p":348},{"k":"Program Desa Peduli Jaminan Sosial","s":"KW Sumbagut","n":1593000000,"p":325},{"k":"Ecosystem Forum Kepatuhan dalam Rangka Meningkatkan Jaminan Sosial","s":"KW Kalimantan","n":1587167166,"p":366},{"k":"Pemeliharaan Tools Monitoring Jaringan","s":"Renstra & TI","n":1579860300,"p":277},{"k":"Ecosystem Forum Kepatuhan dalam Rangka Meningkatkan Jaminan Sosial","s":"KW Sulama","n":1579293400,"p":374},{"k":"- Publikasi pada Publikasi pada Media Cetak","s":"Dir. Utama","n":1567000000,"p":238},{"k":"Kegiatan Publikasi dan Dokumentasi","s":"KW Dki Jakarta","n":1565090000,"p":340},{"k":"Program Desa Peduli Jaminan Sosial","s":"KW Sumbagsel","n":1564500000,"p":333},{"k":"Riset Perluasan Perlindungan Ekosistem Pekerja","s":"Renstra & TI","n":1561988000,"p":269},{"k":"Pembayaran THR Keagamaan Direksi","s":"Umum & SDM","n":1561600000,"p":299},{"k":"Pemenuhan Kebutuhan Pemeliharaan Kendaraan","s":"KW Dki Jakarta","n":1561160000,"p":336},{"k":"Pembinaan Kepesertaan Pk/Bu Aktif","s":"KW Banuspa","n":1548538388,"p":400},{"k":"Pembinaan Kepesertaan Pk/Bu Aktif","s":"KW Jawa Tengah Dan Diy","n":1547759000,"p":351},{"k":"Pemenuhan Kebutuhan Rumah Tangga","s":"KW Sumbagsel","n":1533600000,"p":329},{"k":"Dan Diseminasi Temuan Riset Pemahaman dan Kepuasan Peserta BPJS","s":"Renstra & TI","n":1526002000,"p":270},{"k":"Penyediaan Bug Bounty Aplikasi E-Service","s":"Renstra & TI","n":1509273660,"p":278},{"k":"Kolaborasi Kepatuhan Bersama Aparat Penegak","s":"KW Kalimantan","n":1509126000,"p":366},{"k":"Pemenuhan Kebutuhan Pemeliharaan Kendaraan","s":"KW Sulama","n":1501101000,"p":377},{"k":"Penguatan Pipeline Replikasi Data Real-Time Teknologi Message","s":"Renstra & TI","n":1500000000,"p":280},{"k":"Dan Tata Kelola Organisasi Pengkinian Evaluasi Bobot Jabatan","s":"Umum & SDM","n":1500000000,"p":302},{"k":"Gerakan Peduli Jaminan Sosial Ketenagakerjaan","s":"KW Banuspa","n":1500000000,"p":405},{"k":"Peningkatan Kualitas Kepesertaan Jasa Konstruksi Management & CRM","s":"Kepesertaan","n":1499810000,"p":248},{"k":"Melaksanakan Pemenuhan Kebutuhan Rumah","s":"Umum & SDM","n":1499400000,"p":311},{"k":"Penyediaan Lisensi AI Tools untuk Mendukung","s":"Renstra & TI","n":1481716782,"p":271},{"k":"Kegiatan Publikasi dan Dokumentasi","s":"KW Jawa Timur","n":1475771632,"p":365},{"k":"Penyediaan Lisensi Dynamic Application Security","s":"Renstra & TI","n":1474357500,"p":276},{"k":"Peningkatan Kapasitas, Pengawasan dan Evaluasi Penghargaan atas Kerjasama","s":"Kepesertaan","n":1469452000,"p":249},{"k":"Renewal Lisensi Code Analysis Tools","s":"Renstra & TI","n":1468510575,"p":271},{"k":"Kolaborasi Kepatuhan Bersama Aparat Penegak","s":"KW Sulama","n":1461700512,"p":375},{"k":"Kegiatan Sosialisasi Perluasan Peserta BPU","s":"KW Jawa Barat","n":1453528800,"p":345},{"k":"Penyediaan Lisensi Configuration Management","s":"Renstra & TI","n":1453500000,"p":277},{"k":"Pengadaan Transformasi Strategic Procurement Berbasis","s":"Umum & SDM","n":1449937500,"p":307},{"k":"Pemenuhan Kebutuhan Consumable","s":"Umum & SDM","n":1449008030,"p":295},{"k":"Pelaksanaan Program Transformasi Arsitektur","s":"Renstra & TI","n":1447464000,"p":271},{"k":"Sosialisasi dan Penyusunan Regulasi Daerah Coverage Jamsostek","s":"KW Kalimantan","n":1443039400,"p":367},{"k":"Pengembangan, Penyelarasan, Peningkatan End To End Proses Bisnis Unit","s":"Renstra & TI","n":1436668000,"p":281},{"k":"Sosialisasi dan Penyusunan Regulasi Daerah Coverage Jamsostek","s":"KW Jawa Tengah Dan Diy","n":1436203223,"p":350},{"k":"Pembinaan Kepesertaan Pk/Bu Aktif","s":"KW Sumbarriau","n":1435610400,"p":383},{"k":"Riset Pelayanan Tenaga Kerja Riset Pelayanan Inklusif dan Kesejahteraan","s":"Renstra & TI","n":1435434000,"p":269},{"k":"Kegiatan Konsultansi Cabang","s":"KW Sumbagsel","n":1433241600,"p":330},{"k":"Operasional Unit Kerja Manage Service Jasa Administrasi","s":"KW Banten","n":1432152876,"p":392},{"k":"Pemenuhan Kebutuhan Rumah Tangga","s":"KW Banuspa","n":1431600000,"p":402},{"k":"Kegiatan Pendampingan Direksi","s":"Dir. Utama","n":1431500000,"p":239},{"k":"Gerakan Peduli Jaminan Sosial Ketenagakerjaan","s":"KW Sulama","n":1430000000,"p":381},{"k":"Program Pengembangan Strategis Hr And Ga","s":"Umum & SDM","n":1428020000,"p":304},{"k":"Kegiatan Publikasi dan Dokumentasi","s":"KW Kalimantan","n":1426819970,"p":373},{"k":"Penyediaan ATS Tools Performance Test","s":"Renstra & TI","n":1421910000,"p":277},{"k":"Optimalisasi IT Command Center","s":"Renstra & TI","n":1407728856,"p":272},{"k":"Kegiatan Publikasi dan Dokumentasi","s":"KW Jawa Barat","n":1403650000,"p":349},{"k":"Kegiatan Sosialisasi Perluasan Peserta BPU","s":"KW Jawa Tengah Dan Diy","n":1402401500,"p":354},{"k":"Penerapan Sistem Otomasi Pengelolaan","s":"Renstra & TI","n":1400000000,"p":277},{"k":"Pembinaan Kerjasama Operasional Eksternal","s":"KW Jawa Tengah Dan Diy","n":1393627640,"p":355},{"k":"Penyediaan Maintenance & Support Privilege","s":"Renstra & TI","n":1390252800,"p":277},{"k":"Biaya Operasional bagi Keagenan Korporasi","s":"KW Banuspa","n":1388400000,"p":402},{"k":"Kolaborasi Kepatuhan Bersama Aparat Penegak","s":"KW Jawa Barat","n":1384985800,"p":342},{"k":"Pembinaan Kepesertaan Pk/Bu Aktif","s":"KW Banten","n":1370106400,"p":392},{"k":"Pembinaan Kerjasama Operasional Eksternal","s":"KW Banten","n":1366667310,"p":395},{"k":"Pemeliharaan Bangunan Kantor","s":"Umum & SDM","n":1366589880,"p":294},{"k":"Pengelolaan dan Pemeliharaan Arsip","s":"KW Jawa Timur","n":1363767060,"p":361},{"k":"Pembinaan Kerjasama Operasional Eksternal","s":"KW Sumbagut","n":1349821800,"p":322},{"k":"Bbm Kendaraan Operasional (Pool) Pertamax","s":"Umum & SDM","n":1347840000,"p":294},{"k":"Riset Tata Kelola Unggul dan Keberlanjutan","s":"Renstra & TI","n":1340480000,"p":269},{"k":"Pengelolaan Operasional Badan Direktur","s":"Dir. Utama","n":1340115000,"p":240},{"k":"Pengelolaan Operasional Badan Direktur","s":"Dir. Utama","n":1340115000,"p":240},{"k":"Pemenuhan Kebutuhan Consumables","s":"KW Dki Jakarta","n":1330483727,"p":338},{"k":"Keteladanan Pimpinan - Future Leader Development Program","s":"Umum & SDM","n":1326200000,"p":306},{"k":"Pemenuhan Kebutuhan Pemeliharaan Kendaraan","s":"KW Sumbarriau","n":1326000000,"p":385},{"k":"Pemenuhan Kebutuhan Pemeliharaan Kendaraan","s":"KW Jawa Tengah Dan Diy","n":1321820000,"p":352},{"k":"Pembayaran Tunjangan Khusus Kakanwil","s":"Umum & SDM","n":1320000000,"p":298},{"k":"Pemenuhan Kebutuhan Rapat dan Pertemuan","s":"KW Dki Jakarta","n":1320000000,"p":337},{"k":"Pemenuhan Kebutuhan Rapat dan Pertemuan","s":"KW Jawa Timur","n":1318080000,"p":361},{"k":"Beasiswa Pascasarjana","s":"Umum & SDM","n":1318050000,"p":303},{"k":"Kegiatan Pembinaan Peserta BPU","s":"KW Jawa Timur","n":1312876920,"p":362},{"k":"Langganan Investasi Obligasi Ceic, Emis dan","s":"Investasi","n":1308050640,"p":262},{"k":"Operasional / Tujuan Melaksanakan Audit Operasional dan Audit","s":"Dir. Utama","n":1305280000,"p":245},{"k":"Pemenuhan Kebutuhan Sewa Bangunan Lain","s":"KW Jawa Timur","n":1304760000,"p":361},{"k":"Pembinaan Kerjasama Operasional Eksternal","s":"KW Sumbagsel","n":1303090320,"p":330},{"k":"Penyediaan Lisensi Platform Cyber Security","s":"Renstra & TI","n":1300000000,"p":276},{"k":"Pengkinian Kelengkapan Struktur Organisasi","s":"Umum & SDM","n":1300000000,"p":302},{"k":"Biaya Operasional Unit Layanan Kab/Kota","s":"KW Sumbarriau","n":1291935672,"p":389},{"k":"Pemenuhan Kebutuhan Pemeliharaan Kendaraan","s":"KW Kalimantan","n":1281200000,"p":369},{"k":"Program Desa Peduli Jaminan Sosial","s":"KW Jawa Tengah Dan Diy","n":1273000000,"p":357},{"k":"Pembinaan Kepesertaan Pk/Bu Aktif","s":"KW Kalimantan","n":1266106400,"p":367},{"k":"Pemenuhan Kebutuhan Rumah Tangga","s":"KW Banten","n":1264800000,"p":394},{"k":"Pemenuhan Kebutuhan Pencetakan Kantor","s":"KW Jawa Timur","n":1264482000,"p":363},{"k":"Pemeliharaan Perangkat End User","s":"Renstra & TI","n":1259940000,"p":275},{"k":"Representasi Pejabat Daerah","s":"KW Sulama","n":1251000000,"p":378},{"k":"Pembinaan Kerjasama Operasional Eksternal","s":"KW Kalimantan","n":1237247000,"p":371},{"k":"Penyelenggaraan Business Meeting","s":"Dir. Utama","n":1234302000,"p":244},{"k":"Sosialisasi dan Penyusunan Regulasi Daerah Coverage Jamsostek","s":"KW Banten","n":1231093400,"p":391},{"k":"Kegiatan Pembinaan Peserta BPU","s":"KW Sulama","n":1228102800,"p":378},{"k":"Penyediaan Layanan Email Smtp Relay E-Services","s":"Renstra & TI","n":1216136848,"p":275},{"k":"Pemenuhan Kebutuhan Pencetakan Kantor","s":"KW Jawa Barat","n":1211451187,"p":346},{"k":"Sinergi Bersama Asosiasi Kementerian/Lembaga, Daerah","s":"KW Jawa Barat","n":1211078848,"p":342},{"k":"Pembinaan Kerjasama Operasional Eksternal","s":"KW Sumbarriau","n":1209995000,"p":387},{"k":"Rekrutmen dan Seleksi Tahap Medical Check Up","s":"Umum & SDM","n":1200881250,"p":297},{"k":"Penyelenggaraan Hut BPJS Ketenagakerjaan","s":"Dir. Utama","n":1200000000,"p":244},{"k":"Pemenuhan Kebutuhan Pemeliharaan Kendaraan","s":"KW Sumbagut","n":1198300000,"p":320},{"k":"Penyediaan Layanan Host To Host Vpn dan Metro-E","s":"Renstra & TI","n":1193615460,"p":273},{"k":"Sinergi Institusi Berdaya untuk Perluasan Tenaga Pendukung","s":"Kepesertaan","n":1191600000,"p":248},{"k":"Kegiatan Penyelesaian Kasus Jaminan","s":"KW Sulama","n":1189096400,"p":379},{"k":"Pengembangan Tata Kelola serta","s":"Kepesertaan","n":1177430000,"p":249},{"k":"Representasi Pejabat Daerah","s":"KW Jawa Timur","n":1155000000,"p":362},{"k":"Pembinaan Kepesertaan Pk/Bu Aktif","s":"KW Sumbagsel","n":1154217640,"p":327},{"k":"Modernisasi Infrastruktur Streaming Data","s":"Renstra & TI","n":1148119462,"p":277},{"k":"Pemenuhan Kebutuhan Pemeliharaan Kendaraan","s":"KW Sumbagsel","n":1146660000,"p":328},{"k":"Pengelolaan Operasional Badan Direktur Human","s":"Dir. Utama","n":1145975000,"p":240},{"k":"Pengelolaan Operasional Badan Direktur","s":"Dir. Utama","n":1145975000,"p":240},{"k":"Pengelolaan Operasional Badan Direktur","s":"Dir. Utama","n":1145975000,"p":240},{"k":"Pengelolaan Operasional Badan Direktur & TI","s":"Dir. Utama","n":1145975000,"p":240},{"k":"Pemenuhan Kebutuhan Jaringan dan Internet","s":"KW Sumbagsel","n":1133798519,"p":328},{"k":"Kegiatan Konsultansi Cabang","s":"KW Jawa Barat","n":1127259200,"p":346},{"k":"Pengembangan Chatbot AI Layanan Informasi","s":"Renstra & TI","n":1126959000,"p":274},{"k":"Pembayaran Tunjangan Profesi","s":"Umum & SDM","n":1125000000,"p":301},{"k":"Pemenuhan Kebutuhan Jaringan dan Internet","s":"KW Sulama","n":1119629457,"p":376},{"k":"Kegiatan Sosialisasi Perluasan Peserta BPU","s":"KW Dki Jakarta","n":1119017440,"p":337},{"k":"Pengelolaan Gedung Arsip Narogong","s":"Umum & SDM","n":1110952560,"p":295},{"k":"Representasi Pejabat Daerah","s":"KW Jawa Tengah Dan Diy","n":1104000000,"p":353},{"k":"Kegiatan Sosialisasi Perluasan Peserta BPU","s":"KW Sumbarriau","n":1101844000,"p":386},{"k":"Kegiatan Badan","s":"Dir. Utama","n":1101592000,"p":237},{"k":"Menyediakan Jasa Konsultan Hukum","s":"Dir. Utama","n":1098900000,"p":233},{"k":"Pembinaan dan Pengelolaan Plkk/Plkb","s":"KW Jawa Timur","n":1098030600,"p":364},{"k":"Implementasi Inpres dan Regulasi Lainnya untuk","s":"KW Jawa Barat","n":1098000000,"p":342},{"k":"Riset Perluasan Kepesertaan Riset Brand Equity BPJS Ketenagakerjaan Tahun","s":"Renstra & TI","n":1097995900,"p":269},{"k":"Sosialisasi dan Penyusunan Regulasi Daerah Coverage Jamsostek","s":"KW Sumbagut","n":1096947800,"p":318},{"k":"Pengelolaan Peserta BPU melalui","s":"Kepesertaan","n":1094870000,"p":249},{"k":"Pemenuhan Kebutuhan Consumables","s":"KW Jawa Timur","n":1090303331,"p":362},{"k":"Pembayaran Lembur Karyawan","s":"Umum & SDM","n":1080000000,"p":300},{"k":"Relationship Management Digitalisasi System dengan Automated Reminder & Integrasi Data Payroll SIPP","s":"Kepesertaan","n":1075140000,"p":246},{"k":"Kegiatan Konsultansi Cabang","s":"KW Sumbarriau","n":1067253500,"p":387},{"k":"Kegiatan Publikasi dan Dokumentasi","s":"KW Jawa Tengah Dan Diy","n":1062880000,"p":357},{"k":"Ecosystem Forum Kepatuhan dalam Rangka Meningkatkan Jaminan Sosial","s":"KW Dki Jakarta","n":1061836000,"p":334},{"k":"Pengembangan Kerja Sama, Pembinaan dan Keagenan Korporasi","s":"Kepesertaan","n":1058200000,"p":249},{"k":"Rapat Evaluasi Kinerja dan Monthly Performance Jajaran","s":"KW Banuspa","n":1057581000,"p":398},{"k":"Pemenuhan Kebutuhan Pemeliharaan Kendaraan","s":"KW Banuspa","n":1053020000,"p":401},{"k":"Kolaborasi Kepatuhan Bersama Aparat Penegak","s":"KW Banuspa","n":1050683800,"p":399},{"k":"Kegiatan Publikasi dan Dokumentasi","s":"KW Sumbagsel","n":1050600000,"p":333},{"k":"Ecosystem Forum Kepatuhan dalam Rangka Meningkatkan Jaminan Sosial","s":"KW Jawa Barat","n":1045302200,"p":342},{"k":"Best Practice Social Security And Delegations","s":"Renstra & TI","n":1040620000,"p":283},{"k":"Asuransi Kantor Pusat","s":"Umum & SDM","n":1038409866,"p":292},{"k":"Sinergi Bersama Asosiasi Kementerian/Lembaga, Daerah","s":"KW Sulama","n":1033287800,"p":375},{"k":"& Keberlanjutan Akselerasi Perlindungan Jaminan Sosial UU Nomor 20 Tahun 2023","s":"Kepesertaan","n":1030880000,"p":248},{"k":"Implementasi Pengawasan dan Pemeriksaan untuk","s":"KW Sulama","n":1026000000,"p":374},{"k":"Operasional Terintegrasi - Asesmen Transformasi Infrastruktur dan Capacity 2027-2031","s":"Renstra & TI","n":1020000000,"p":277},{"k":"Pemenuhan Kebutuhan Jaringan dan Internet","s":"KW Jawa Tengah Dan Diy","n":1014113711,"p":352},{"k":"Kegiatan Publikasi dan Dokumentasi","s":"KW Sumbarriau","n":1013150000,"p":390},{"k":"Implementasi Pengawasan dan Pemeriksaan untuk","s":"KW Jawa Timur","n":1012400000,"p":358},{"k":"Luar Negeri Program Shortcourse Luar Negeri","s":"Umum & SDM","n":1006750000,"p":307},{"k":"Kegiatan Publikasi dan Dokumentasi","s":"KW Sumbagut","n":1006550000,"p":324},{"k":"Pemenuhan Kebutuhan Asuransi Kendaraan","s":"KW Dki Jakarta","n":1000580000,"p":335},{"k":"Pemenuhan Kebutuhan Jaringan dan Internet","s":"KW Jawa Timur","n":1000504337,"p":360},{"k":"- Melakukan Melakukan Pembuatan Produksi Video Compro","s":"Dir. Utama","n":1000000000,"p":236},{"k":"Rekrutmen dan Seleksi Calon Karyawan Tahap","s":"Umum & SDM","n":998586750,"p":297},{"k":"Implementasi Automation & AI Assistant Bernilai Proses Analitik Menuju","s":"Renstra & TI","n":993600000,"p":278},{"k":"Pemenuhan Kebutuhan Jaringan dan Internet","s":"KW Dki Jakarta","n":991489601,"p":336},{"k":"Pemenuhan Kebutuhan Jaringan dan Internet","s":"KW Kalimantan","n":990338051,"p":368},{"k":"Kelembagaan & Kemitraan Melaksanakan Koordinasi dan Kunjungan Kerja Dengar Pendapat","s":"Dir. Utama","n":988235000,"p":241},{"k":"Program Desa Peduli Jaminan Sosial","s":"KW Jawa Barat","n":987000000,"p":349},{"k":"Kegiatan Publikasi dan Dokumentasi","s":"KW Banuspa","n":986900000,"p":405},{"k":"Transportasi Online","s":"Umum & SDM","n":984960000,"p":295},{"k":"Kebutuhan Rumah Tangga Direksi","s":"Dir. Utama","n":984000000,"p":243},{"k":"Pemenuhan Kebutuhan Consumables","s":"KW Jawa Barat","n":983586080,"p":346},{"k":"Membahas Peraturan Perundangan Jamsosnaker","s":"Dir. Utama","n":980022000,"p":235},{"k":"Pemenuhan Kebutuhan Pajak Kendaraan","s":"KW Dki Jakarta","n":979405043,"p":336},{"k":"Sinergi Ekosistem Akademik dan Kelembagaan Hasil Riset","s":"Renstra & TI","n":978728000,"p":270},{"k":"Kegiatan Penyelesaian Kasus Jaminan","s":"KW Dki Jakarta","n":972616000,"p":338},{"k":"Representasi Pejabat Daerah","s":"KW Sumbagut","n":966000000,"p":321},{"k":"Pembinaan Kepesertaan Pk/Bu Aktif","s":"KW Sumbagut","n":965273400,"p":319},{"k":"Forum Kepatuhan untuk Meningkatkan Program Jamsostek","s":"Kepesertaan","n":964600000,"p":250},{"k":"Kegiatan Konsultansi Cabang","s":"KW Banuspa","n":963371796,"p":403},{"k":"Program Magang","s":"Umum & SDM","n":961830000,"p":307},{"k":"Sosialisasi dan Penyusunan Regulasi Daerah Coverage Jamsostek","s":"KW Jawa Barat","n":958889200,"p":342},{"k":"Representasi Pejabat Daerah","s":"KW Kalimantan","n":954000000,"p":370},{"k":"Pemenuhan Kebutuhan Asuransi Kendaraan","s":"KW Sulama","n":950383428,"p":376},{"k":"Penyusunan Integrated Report Tahun 2026","s":"Dir. Utama","n":941792629,"p":235},{"k":"Pengembangan Desain dan Kurikulum","s":"Umum & SDM","n":940200000,"p":307},{"k":"Implementasi Inpres dan Regulasi Lainnya untuk","s":"KW Dki Jakarta","n":937500000,"p":334},{"k":"Pembayaran THR Keagamaan Dewan Pengawas","s":"Umum & SDM","n":936960000,"p":299},{"k":"Renewal Lisensi Dynamic Application Security","s":"Renstra & TI","n":935710575,"p":271},{"k":"Kegiatan Sosialisasi Perluasan Peserta BPU","s":"KW Banuspa","n":933635600,"p":402},{"k":"Representasi Pejabat Daerah","s":"KW Sumbarriau","n":927000000,"p":386},{"k":"Ecosystem Forum Kepatuhan dalam Rangka Meningkatkan Jaminan Sosial","s":"KW Jawa Timur","n":926400200,"p":358},{"k":"Optimalisasi Layanan Unit Human Capital","s":"Umum & SDM","n":926235000,"p":302},{"k":"Pemenuhan Kebutuhan Asuransi Kendaraan","s":"KW Jawa Timur","n":925913214,"p":360},{"k":"Pemeliharaan Perangkat Jaringan Host To Host Dc","s":"Renstra & TI","n":922118969,"p":273},{"k":"Implementasi Pengawasan dan Pemeriksaan untuk","s":"KW Kalimantan","n":922000000,"p":366},{"k":"Melaksanakan Program Pengembangan Wawasan Dewas","s":"Umum & SDM","n":913335000,"p":311},{"k":"Pembinaan Kepesertaan Jasa Konstruksi di Apbd, Desa, dan Swasta","s":"KW Sulama","n":911406760,"p":375},{"k":"Pemenuhan Kebutuhan Pencetakan Kantor","s":"KW Kalimantan","n":910251500,"p":371},{"k":"Pembayaran Uang Duka Karyawan","s":"Umum & SDM","n":910000000,"p":301},{"k":"Pembinaan Kepesertaan Jasa Konstruksi di Apbd, Desa, dan Swasta","s":"KW Dki Jakarta","n":907255246,"p":335},{"k":"Pengelolaan Karir Evaluasi dan Penyempurnaan Kebijakan","s":"Umum & SDM","n":906012750,"p":302},{"k":"Anugerah Kinerja Unit Terbaik Tahun 2026","s":"Renstra & TI","n":906000000,"p":282},{"k":"Biaya Operasional Unit Layanan Kab/Kota","s":"KW Jawa Tengah Dan Diy","n":905490468,"p":356},{"k":"Pemenuhan Kebutuhan Meterai","s":"Keu & MR","n":905400000,"p":286},{"k":"Pemenuhan Kebutuhan Pencetakan Kantor","s":"KW Sulama","n":903918800,"p":379},{"k":"Melaksanakan Koordinasi dan Partisipasi Aktif (Ilo, Assa, Issa, Awca)","s":"Dir. Utama","n":903010000,"p":241},{"k":"Pengelolaan Proyek","s":"Umum & SDM","n":900450000,"p":295},{"k":"Penyusunan Culture Roadmap dan Asistensi BPJS Ketenagakerjaan","s":"Umum & SDM","n":898961250,"p":303},{"k":"Penguatan Fondasi Pengetahuan Digital Berbasis & Kualitas Layanan Informasi","s":"Renstra & TI","n":894904200,"p":279},{"k":"Pemenuhan Kebutuhan Rapat dan Pertemuan","s":"KW Sulama","n":894360000,"p":378},{"k":"Representasi Pejabat Daerah","s":"KW Jawa Barat","n":891000000,"p":345},{"k":"Perluasan Kepesertaan Jasa Konstruksi di Apbd, Desa, dan Swasta","s":"KW Sulama","n":890951920,"p":375},{"k":"Kegiatan Pencairan Piutang Iuran","s":"KW Sulama","n":889494200,"p":374},{"k":"Pengembangan Dewas Melaksanakan Program Pengembangan Wawasan Dewas 1","s":"Umum & SDM","n":888825000,"p":310},{"k":"Melaksanakan Program Pengembangan Wawasan Dewas 2","s":"Umum & SDM","n":888825000,"p":310},{"k":"Melaksanakan Program Pengembangan Wawasan Dewas 3","s":"Umum & SDM","n":888825000,"p":310},{"k":"Melaksanakan Program Pengembangan Wawasan Dewas 4","s":"Umum & SDM","n":888825000,"p":310},{"k":"Melaksanakan Program Pengembangan Wawasan Dewas 5","s":"Umum & SDM","n":888825000,"p":311},{"k":"Melaksanakan Program Pengembangan Wawasan Dewas 6","s":"Umum & SDM","n":888825000,"p":311},{"k":"Kegiatan Konsultansi Cabang","s":"KW Jawa Tengah Dan Diy","n":888035200,"p":355},{"k":"Keteladanan Pimpinan Monitoring dan Evaluasi Pengelolaan Talenta","s":"Umum & SDM","n":887600000,"p":302},{"k":"Penguatan Kapabilitas Fungsi Investasi melalui","s":"Umum & SDM","n":887468250,"p":303},{"k":"Pemenuhan Kebutuhan Asuransi Kendaraan","s":"KW Jawa Barat","n":886211197,"p":343},{"k":"Audit Laporan Pengelolaan Program","s":"Dir. Utama","n":885360000,"p":245},{"k":"Pengelolaan dan Pemeliharaan Arsip","s":"KW Dki Jakarta","n":884955000,"p":337},{"k":"Pemenuhan Kebutuhan Asuransi Kendaraan","s":"KW Sumbarriau","n":884579167,"p":384},{"k":"Dukungan Operasional Kepada Melaksanakan Koordinasi dan Sinergi Sekretariat Dewas","s":"Umum & SDM","n":884176000,"p":311},{"k":"Pemenuhan Kebutuhan Pemeliharaan Kendaraan","s":"KW Banten","n":883100000,"p":393},{"k":"Pengembangan Skema Adaptif & Product Gig Worker, Pekerja Rumah","s":"Kepesertaan","n":877375000,"p":249},{"k":"Pembayaran JPK Tambahan Dewan Pengawas","s":"Umum & SDM","n":875145600,"p":299},{"k":"Pembayaran JPK Tambahan Direksi","s":"Umum & SDM","n":875145600,"p":299},{"k":"Pemenuhan Kebutuhan Sewa Bangunan Lain","s":"KW Jawa Barat","n":874497330,"p":345},{"k":"Pemenuhan Kebutuhan Sewa Bangunan Lain","s":"KW Sumbarriau","n":873360000,"p":386},{"k":"Perizinan Utilitas Bangunan dan Lingkungan","s":"Umum & SDM","n":872350000,"p":293}];
 /* ---------- helpers ---------- */
 const $=id=>document.getElementById(id);
 const nf=new Intl.NumberFormat('id-ID');
@@ -873,10 +1024,35 @@ $('tbModal').innerHTML=D.modal.map(r=>`<tr><td>${r.n}</td><td class="num">${mil(
  <td class="num">${mil(r.t27)}</td><td>${chg(r.g)}</td></tr>`).join('')
  +`<tr class="tot"><td>Total belanja modal</td><td class="num">${mil(D.modalTot.p26)}</td>
    <td class="num">${mil(D.modalTot.t27)}</td><td>${chg(D.modalTot.g)}</td></tr>`;
-$('tbTop').innerHTML=A.top.map(t=>`<tr>
- <td style="max-width:440px;font-weight:500">${t.k}</td>
- <td style="text-align:left;font-size:11.5px;color:var(--mute)">${t.s}</td>
- <td class="num">${rp(t.n)}</td></tr>`).join('');
+/* penjelajah anggaran */
+const FULL=A.full;
+$('expTotal').textContent=nf.format(FULL.length);
+$('expSec').innerHTML+=[...new Set(FULL.map(r=>r.s))].sort((a,b)=>a.localeCompare(b,'id'))
+  .map(u=>`<option>${u}</option>`).join('');
+let expShown=150;
+function expData(){
+  const q=$('expSearch').value.trim().toLowerCase(), sec=$('expSec').value, srt=$('expSort').value;
+  const rows=FULL.filter(r=>(!sec||r.s===sec)&&
+    (!q||r.k.toLowerCase().includes(q)||r.s.toLowerCase().includes(q)));
+  return [...rows].sort((a,b)=>srt==='na'?a.n-b.n:srt==='az'?a.k.localeCompare(b.k,'id'):b.n-a.n);
+}
+function expRender(reset){
+  if(reset)expShown=150;
+  const rows=expData(), tot=rows.reduce((s,r)=>s+r.n,0);
+  $('expSum').innerHTML=`<b>${nf.format(rows.length)}</b> kegiatan cocok · total <b>${rp(tot)}</b>${
+    rows.length>expShown?` · menampilkan ${nf.format(expShown)} pertama`:''}`;
+  $('expBody').innerHTML=rows.slice(0,expShown).map(r=>`<tr>
+    <td style="max-width:420px;font-weight:500">${r.k}</td>
+    <td style="text-align:left;font-size:11.5px;color:var(--mute);white-space:nowrap">${r.s}</td>
+    <td class="num" style="color:var(--mute)">${r.p}</td>
+    <td class="num">${rp(r.n)}</td></tr>`).join('');
+  $('expMore').style.display=rows.length>expShown?'':'none';
+}
+$('expSearch').addEventListener('input',()=>expRender(true));
+$('expSec').onchange=()=>expRender(true);
+$('expSort').onchange=()=>expRender(true);
+$('expMore').onclick=()=>{expShown+=150;expRender(false);};
+expRender(true);
 
 /* ---------- 7. Sasaran Badan ---------- */
 $('sbGrid').innerHTML=D.sb.map(s=>`<div class="card"><div class="sbcard">
@@ -1060,6 +1236,182 @@ $('capReset').onclick=()=>{
   $('capDate').value=cap.d; capUpdateAll();
 };
 capUpdateAll();
+
+/* ---------- 12. LK Semester I 2026 ---------- */
+const LK={
+ unrl:[{n:'JHT',v:22.08},{n:'JP',v:8.26},{n:'JKK',v:2.00},{n:'JKM',v:0.34},{n:'JKP',v:0.32},{n:'BPJS',v:0.07}],
+ silang:[
+  ['Pendapatan iuran','Rp60,95 T',1],['Pembayaran jaminan','Rp36,30 T',1],
+  ['Dana investasi','Rp913,88 T',1],['Hasil investasi (realized)','Rp31,74 T',1],
+  ['Beban usaha','Rp2,58 T',1],['Belanja modal','Rp112,75 M',1],
+  ['Kepesertaan aktif (2 angka)','47.182.920',0]],
+ svc:[
+  {n:'Kepuasan layanan',v:'99,06%',d:'memakai survei 2025 — survei 2026 belum tersedia'},
+  {n:'Rekomendasi SPI',v:'1.716',d:'LHA terbit sepanjang Semester I 2026'},
+  {n:'Tuntas ditindaklanjuti',v:'73,07%',d:'24,37% masih dalam proses'},
+  {n:'Belum ditindaklanjuti',v:'2,56%',d:'≈44 rekomendasi menunggu tindak lanjut'}]
+};
+bars($('alokasi'),LK.unrl.map(u=>({n:u.n,v:u.v})),LK.unrl[0].v,
+  v=>'Rp'+d2(v)+' T',LK.unrl.map(u=>PC[u.n]||'var(--ink)'));
+$('tbSilang').innerHTML=LK.silang.map(r=>`<tr><td>${r[0]}</td>
+  <td class="num">${r[1]}</td><td>${r[2]?'<span class="chg up">identik</span>'
+  :'<span class="chg warn">selisih 4</span>'}</td></tr>`).join('');
+$('svcGrid').innerHTML=LK.svc.map(s=>`<div class="card kpi" style="box-shadow:none;border:1px solid var(--line-2)">
+  <div class="lab">${s.n}</div><div class="val" style="font-size:25px">${s.v}</div>
+  <div class="sub" style="margin-top:5px">${s.d}</div></div>`).join('');
+
+/* ---------- 13. Catatan Pengawasan ---------- */
+const CATS={S:'Substansi',R:'Risiko & Indikator',E:'Editorial'};
+const SEVL={1:'Prioritas',2:'Perhatian',3:'Administratif'};
+const FINDINGS=[
+ {id:1,cat:'S',sev:1,t:'Prognosa solvabilitas JHT tidak konsisten dengan realisasi',
+  b:'LK resmi Juni 2026 mencatat solvabilitas JHT 97,64% (aset Rp556,63 T vs liabilitas manfaat peserta Rp570,07 T; kekurangan Rp13,43 T) — di bawah batas minimal 100% PP 55/2015. RKAT menuliskan prognosa 2026 dan 2027 "100,00% — Memenuhi Ketentuan" tanpa menjelaskan jalur pemulihannya.',
+  ref:'LK S1-2026 · RKAT Bab VII',
+  rec:'Minta manajemen menyajikan rencana pemulihan solvabilitas JHT (proyeksi bulanan dan sensitivitas pasar) serta merevisi prognosa Bab VII agar konsisten dengan realisasi.'},
+ {id:2,cat:'S',sev:1,t:'Unrealized loss Rp33,07 triliun tidak dibahas dalam RKAT',
+  b:'Penurunan nilai investasi belum terealisasi per Juni 2026 (JHT Rp22,08 T; JP Rp8,26 T; JKK Rp2,00 T; JKM Rp0,34 T; JKP Rp0,32 T; BPJS Rp0,07 T) hampir setara hasil realized Rp31,74 T, namun RKAT 2027 tidak memuat strategi pemulihan atau mitigasinya.',
+  ref:'LK S1-2026 · RKAT Bab IV.F.4',
+  rec:'Minta strategi penanganan selisih penilaian investasi negatif per program beserta stress test sebagai bagian dari lampiran RKAT.'},
+ {id:3,cat:'S',sev:1,t:'Basis prognosa kepesertaan 2026 sangat optimistis',
+  b:'Kepesertaan aktif turun dari 48,65 juta ke 47,18 juta (−3,01%) pada Semester I, tetapi prognosa akhir 2026 sebesar 54,28 juta berarti penambahan bersih 7,10 juta peserta dalam satu semester. Seluruh angka pertumbuhan target 2027 dihitung dari basis tersebut.',
+  ref:'LK S1-2026 · RKAT Bab IV.F.1',
+  rec:'Minta skenario alternatif dengan basis realisasi rendah beserta dampaknya terhadap target iuran dan kepesertaan 2027.'},
+ {id:4,cat:'S',sev:1,t:'Asumsi lonjakan iuran JKM +44,35% menjadi titik paling sensitif',
+  b:'JKM satu-satunya program dengan pembayaran jaminan melampaui iuran sepanjang 2026 (Rp5,22 T vs Rp5,81 T). Surplus 2027 sebesar Rp0,95 T bergantung sepenuhnya pada target pertumbuhan iuran tertinggi di antara semua program.',
+  ref:'RKAT Bab IV.F.2–3',
+  rec:'Minta rincian pendorong pertumbuhan (basis upah, kolektibilitas, penambahan peserta) dan mitigasi bila target meleset.'},
+ {id:5,cat:'S',sev:2,t:'Beban pertumbuhan tertumpu pada segmen yang paling sulit',
+  b:'Target BPU +24,72% dan PMI +25,00% padahal capaian BPU Semester I 2026 hanya 57,45% dari target. JHT BPU ditargetkan naik 104,28% dan JHT PMI naik 1.461% dari basis 5.831 peserta.',
+  ref:'RKAT Bab IV.F.1 · Bab II.D',
+  rec:'Minta program akuisisi spesifik per segmen dengan milestone kuartalan yang dapat diaudit.'},
+ {id:6,cat:'S',sev:2,t:'Estimasi klaim JP melonjak 92,93%',
+  b:'Semakin banyak peserta memenuhi syarat manfaat pensiun berkala. Lonjakan ini menuntut kesiapan likuiditas dan proses layanan; SLA klaim JP 15 hari adalah yang terpanjang di antara semua program.',
+  ref:'RKAT Bab IV.F.3 · Bab IV.E',
+  rec:'Minta proyeksi arus kas JP bulanan dan kesiapan operasional pembayaran manfaat berkala.'},
+ {id:7,cat:'S',sev:2,t:'Kapasitas eksekusi belanja belum terbukti',
+  b:'SKP dinaikkan +471% padahal penyerapan Semester I hanya 7,06%; belanja modal +95% dengan penyerapan 38,21%. Kapasitas eksekusi menjadi asumsi diam-diam di balik kedua angka tersebut.',
+  ref:'RKAT Bab II.D · Bab V',
+  rec:'Minta rencana penyerapan per kuartal serta prasyarat pengadaan yang harus tuntas sebelum triwulan II 2027.'},
+ {id:8,cat:'S',sev:2,t:'Dua entitas meleset dari target imbal hasil',
+  b:'YOI realized annualized netto JKP 5,11% vs target 6,75% (portofolio 44,4% deposito) dan Dana BPJS 6,18% vs 7,00%. Target 2027 mengasumsikan perbaikan tanpa menjelaskan perubahan strategi alokasi.',
+  ref:'LK S1-2026 · Kep DJSN 06/2026',
+  rec:'Minta rencana rebalancing portofolio JKP dan Dana BPJS termasuk batas alokasi deposito.'},
+ {id:9,cat:'S',sev:3,t:'Bantalan dana JKM paling tipis',
+  b:'Aset neto JKM Rp10,82 T hanya sekitar separuh total asetnya karena liabilitas cadangan teknis Rp9,26 T; ketahanan 19,09 bulan adalah yang terendah di antara program DJS.',
+  ref:'LK S1-2026 · RKAT Bab VII',
+  rec:'Tetapkan pemantauan khusus rasio kesehatan JKM dengan pelaporan bulanan kepada Dewan Pengawas.'},
+ {id:10,cat:'S',sev:3,t:'Yield implisit RKAT berbeda definisi dengan target DJSN',
+  b:'Yield implisit agregat 2027 sebesar 6,40% (hasil investasi dibagi dana kelolaan target) tidak sebanding langsung dengan target DJSN yang memakai rata-rata investasi neto — berisiko salah baca pencapaian.',
+  ref:'RKAT Bab IV.F.4',
+  rec:'Sajikan perhitungan resmi berbasis rata-rata investasi neto berdampingan dengan angka indikatif.'},
+ {id:11,cat:'R',sev:2,t:'Dua basis kepesertaan tanpa jembatan rekonsiliasi',
+  b:'Selisih 11,43 juta antara basis KPJ (62,68 jt) dan NIK (51,25 jt) adalah indikasi kepesertaan ganda lintas segmen/program, namun RKAT tidak memuat peta rekonsiliasi kedua basis tersebut.',
+  ref:'RKAT Bab IV.F.1',
+  rec:'Minta peta rekonsiliasi KPJ–NIK dan target penurunan duplikasi yang terukur.'},
+ {id:12,cat:'R',sev:2,t:'Risiko residual masih jauh di atas risk appetite',
+  b:'R11 (solvabilitas JKM) menargetkan residual D3 padahal appetite A1 — gap terbesar di profil risiko. Empat risiko fraud ber-appetite A1 juga menargetkan residual A2/B1–B2, belum mencapai appetite.',
+  ref:'RKAT Bab III.C',
+  rec:'Minta roadmap multi-tahun menuju appetite beserta milestone yang dapat diuji pada 2027.'},
+ {id:13,cat:'R',sev:2,t:'Tautan anggaran ke mitigasi risiko keamanan data belum eksplisit',
+  b:'R23/R24 (keamanan data, aplikasi JMO/Lapak Asik) inheren E3/E5 dengan target residual C2/C3. Penurunannya bergantung belanja TI yang naik 160%, tetapi lampiran tidak memetakan kegiatan TI ke risiko yang dimitigasi.',
+  ref:'RKAT Bab III.C · Bab V',
+  rec:'Minta mapping kegiatan dan anggaran TI terhadap risiko R23/R24 berikut indikator keberhasilannya.'},
+ {id:14,cat:'R',sev:3,t:'Indikator kepuasan masih memakai survei tahun sebelumnya',
+  b:'Kepuasan layanan 99,06% pada laporan S1-2026 memakai hasil survei 2025 karena survei 2026 belum tersedia — indikator dilaporkan tanpa pengukuran periode berjalan.',
+  ref:'LK S1-2026',
+  rec:'Pastikan survei 2026 terjadwal dan hasilnya menjadi baseline indikator kepuasan 2027.'},
+ {id:15,cat:'R',sev:3,t:'Sisa rekomendasi SPI belum ditindaklanjuti',
+  b:'Dari 1.716 rekomendasi SPI, 2,56% (≈44 rekomendasi) belum ditindaklanjuti dan 24,37% masih proses pada akhir Semester I 2026.',
+  ref:'LK S1-2026',
+  rec:'Tetapkan batas waktu penyelesaian dan mekanisme eskalasi untuk rekomendasi yang melewati tenggat.'},
+ {id:16,cat:'R',sev:3,t:'Dana investasi hampir capai target, hasil investasi tertinggal',
+  b:'Pada Semester I 2026 dana investasi telah mencapai 91,28% dari target setahun, tetapi hasil investasi baru 45,11% — indikasi tekanan yield. Target hasil 2027 tetap dinaikkan 14,98%.',
+  ref:'RKAT Bab II.D · Bab IV.F.4',
+  rec:'Minta justifikasi asumsi yield per kelas instrumen yang mendasari target hasil investasi 2027.'},
+ {id:17,cat:'E',sev:3,t:'Dua angka kepesertaan berbeda 4 peserta antar dokumen',
+  b:'Angka kepesertaan Semester I pada Bab II RKAT berbeda 4 peserta dari laporan keuangan resmi tanpa penjelasan cut-off — indikasi tarikan data pada waktu berbeda.',
+  ref:'RKAT Bab II · LK S1-2026',
+  rec:'Standarkan tanggal tarikan data dan cantumkan cut-off pada setiap penyajian angka kepesertaan.'},
+ {id:18,cat:'E',sev:3,t:'Nama risiko terpotong dan typo pada lampiran profil risiko',
+  b:'Beberapa nama risiko tercetak terpotong/salah ketik, mis. "Penyal ahgunaan", "Rendahnya Pe Pertumbuhan TK", serta tanda hubung ganda yang tidak konsisten.',
+  ref:'RKAT Bab III.C',
+  rec:'Lakukan perbaikan editorial lampiran risiko sebelum dokumen difinalkan.'},
+ {id:19,cat:'E',sev:3,t:'Kebijakan pembulatan lampiran tidak dijelaskan',
+  b:'Grand total lampiran program kerja Rp6.215.696.938.501 selisih Rp61.499 dari pos Beban Usaha 2027 (Rp6.215.697 juta) akibat pembulatan penyajian ke jutaan rupiah, tanpa catatan metode.',
+  ref:'RKAT Bab V & Lampiran',
+  rec:'Tambahkan catatan kebijakan pembulatan agar rekonsiliasi antar tabel dapat diverifikasi.'},
+ {id:20,cat:'E',sev:3,t:'Baris kegiatan duplikat bernilai identik perlu konfirmasi',
+  b:'Beberapa kegiatan muncul berulang dengan nilai persis sama, mis. "Pengelolaan Operasional Badan Direktur" (Rp1.340.115.000 dan Rp1.145.975.000, masing-masing lebih dari satu baris) dan "Penyediaan Layanan Internet" (Rp2.289.285.512 dua kali).',
+  ref:'RKAT Lampiran hlm. 240 · 273',
+  rec:'Konfirmasi bahwa baris-baris tersebut memang kegiatan berbeda, bukan penghitungan ganda.'},
+ {id:21,cat:'E',sev:3,t:'Penyajian solvabilitas JHT tepat di batas minimal',
+  b:'Prognosa solvabilitas JHT ditulis "100,00%" tepat pada batas minimal tanpa margin maupun komponen perhitungan pendukung, padahal realisasi Juni 2026 di bawah batas.',
+  ref:'RKAT Bab VII',
+  rec:'Sajikan komponen perhitungan (aset, liabilitas, asumsi diskonto) agar klaim "memenuhi ketentuan" dapat diuji.'}];
+let activeCat2='ALL';
+const SNPKEY='rkat27_snp';
+let snpSel=new Set(JSON.parse(localStorage.getItem(SNPKEY)||'[]'));
+$('catFilter').innerHTML=`<button class="fbtn on" data-c="ALL">Semua · ${FINDINGS.length}</button>`+
+  Object.entries(CATS).map(([k,v])=>`<button class="fbtn" data-c="${k}">${v} · ${
+    FINDINGS.filter(f=>f.cat===k).length}</button>`).join('');
+function catRender(){
+  $('catList').innerHTML=FINDINGS.map(f=>`<div class="finding${
+    activeCat2!=='ALL'&&f.cat!==activeCat2?' hide':''}">
+    <input type="checkbox" data-fid="${f.id}"${snpSel.has(f.id)?' checked':''}
+      aria-label="Pilih temuan ${f.id}">
+    <div><div class="fhead"><span class="fno">T${String(f.id).padStart(2,'0')}</span>
+      <span class="ftitle">${f.t}</span>
+      <span class="sev sev${f.sev}">${SEVL[f.sev]}</span>
+      <span class="rkat">${CATS[f.cat]}</span></div>
+    <div class="fbody">${f.b}</div>
+    <div class="fref">Ref: ${f.ref}</div>
+    <div class="frec"><b>Rekomendasi</b>${f.rec}</div></div></div>`).join('');
+}
+function fabUpdate(){
+  $('fab').hidden=snpSel.size===0;
+  $('fabCount').textContent=snpSel.size+' temuan dipilih';
+}
+$('catFilter').onclick=e=>{const b=e.target.closest('.fbtn');if(!b)return;
+  activeCat2=b.dataset.c;
+  [...$('catFilter').children].forEach(x=>x.classList.toggle('on',x===b));
+  catRender();};
+$('catList').addEventListener('change',e=>{
+  const cb=e.target.closest('input[data-fid]');if(!cb)return;
+  const id=+cb.dataset.fid;
+  cb.checked?snpSel.add(id):snpSel.delete(id);
+  localStorage.setItem(SNPKEY,JSON.stringify([...snpSel]));
+  fabUpdate();});
+function snpDraft(){
+  const sel=FINDINGS.filter(f=>snpSel.has(f.id));
+  let out='DRAFT SARAN, NASIHAT, DAN PERTIMBANGAN (SNP)\n'
+   +'Atas Rencana Kerja dan Anggaran Tahunan BPJS Ketenagakerjaan Tahun 2027\n'
+   +'Basis telaah: Buku RKAT 2027 (407 hlm) dan Laporan Keuangan & Pengelolaan Program Semester I 2026 (597 hlm)\n';
+  let sec=0;
+  for(const[k,v]of Object.entries(CATS)){
+    const fs=sel.filter(f=>f.cat===k);
+    if(!fs.length)continue;
+    out+='\n'+['I','II','III'][sec++]+'. '+v.toUpperCase()+'\n';
+    fs.forEach((f,i)=>{
+      out+='\n'+(i+1)+'. '+f.t+' ['+SEVL[f.sev]+']\n'
+        +'   Temuan     : '+f.b+'\n'
+        +'   Referensi  : '+f.ref+'\n'
+        +'   Rekomendasi: '+f.rec+'\n';});
+  }
+  return out;
+}
+$('fabBtn').onclick=()=>{
+  $('mText').value=snpDraft();
+  $('mInfo').textContent=snpSel.size+' temuan · '+$('mText').value.length+' karakter';
+  $('modal').hidden=false;};
+$('mClose').onclick=()=>$('modal').hidden=true;
+$('modal').onclick=e=>{if(e.target===$('modal'))$('modal').hidden=true;};
+$('mCopy').onclick=async()=>{
+  try{await navigator.clipboard.writeText($('mText').value);
+    $('mCopy').textContent='Tersalin ✓';}
+  catch(_){$('mText').select();document.execCommand('copy');
+    $('mCopy').textContent='Tersalin ✓';}
+  setTimeout(()=>$('mCopy').textContent='Salin ke clipboard',1600);};
+catRender(); fabUpdate();
 
 /* ---------- animasi & nav ---------- */
 const io=new IntersectionObserver(es=>es.forEach(e=>{
