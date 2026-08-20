@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formularium &amp; Kompendium JKK</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="48x48" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0F1E1B;--ink2:#1C312C;--paper:#F3F5F1;--paper2:#E4E8E1;--card:#FFF;
+--green:#0E7A56;--green-lo:#DDEDE5;--rust:#B8452B;--rust-lo:#F6E3DD;--amber:#C9880F;--amber-lo:#F9EDD3;
+--muted:#6E7C77;--line:#D3DAD5;
+--disp:"Bricolage Grotesque",sans-serif;--body:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",Consolas,monospace}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.app{display:grid;grid-template-columns:216px 1fr;height:100vh}
+aside{background:var(--ink);color:#B9CDC5;display:flex;flex-direction:column;overflow:auto}
+.brand{padding:18px 18px 16px;border-bottom:1px solid #2A423B}
+.brand b{font-family:var(--disp);font-weight:800;font-size:15px;color:#fff;display:block;letter-spacing:-.01em;line-height:1.25}
+.brand span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:#6E9187;text-transform:uppercase}
+.brand a{display:inline-block;margin-top:7px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:#7FB8A0;text-decoration:none;text-transform:uppercase}
+.brand a:hover{color:#fff}
+nav{padding:10px 8px;flex:1}
+nav button{display:block;width:100%;text-align:left;background:none;border:0;color:#B9CDC5;font-family:var(--body);font-size:13.5px;padding:9px 12px;cursor:pointer;border-radius:3px}
+nav button:hover{background:#1C312C;color:#fff}
+nav button.on{background:var(--green);color:#fff;font-weight:500}
+.sidefoot{padding:14px 18px;border-top:1px solid #2A423B;font-family:var(--mono);font-size:10px;color:#5E7F76;line-height:1.6}
+main{overflow:auto}
+.top{background:var(--card);border-bottom:1px solid var(--line);padding:14px 24px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;position:sticky;top:0;z-index:5}
+.top h1{font-family:var(--disp);font-size:19px;font-weight:800;margin:0;letter-spacing:-.02em;flex:1;min-width:150px}
+.btn{font-family:var(--mono);font-size:11.5px;padding:8px 13px;border:1px solid var(--line);background:var(--card);color:var(--ink2);cursor:pointer;letter-spacing:.03em;display:inline-block}
+.btn:hover{background:var(--green-lo);border-color:var(--green);color:var(--green)}
+.btn.pri{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.pri:hover{background:var(--green);border-color:var(--green);color:#fff}
+.body{padding:24px}
+.view{display:none}.view.on{display:block}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kp{background:var(--card);border:1px solid var(--line);padding:16px;border-left:4px solid var(--line)}
+.kp.g{border-left-color:var(--green)}.kp.a{border-left-color:var(--amber)}.kp.r{border-left-color:var(--rust)}
+.kp .v{font-family:var(--disp);font-size:28px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.kp.g .v{color:var(--green)}.kp.a .v{color:var(--amber)}.kp.r .v{color:var(--rust)}
+.kp .l{font-size:12px;color:var(--muted);margin-top:6px}
+.card{background:var(--card);border:1px solid var(--line);padding:20px;margin-bottom:16px}
+.card h2{font-family:var(--disp);font-size:16px;font-weight:800;margin:0 0 4px}
+.card .sub{font-size:12.5px;color:var(--muted);margin-bottom:16px}
+.flt{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.flt input,.flt select{font-family:var(--body);font-size:13px;padding:8px 10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.flt input{flex:1;min-width:180px}
+.flt input:focus,.flt select:focus{outline:2px solid var(--green);outline-offset:-1px}
+.tw{background:var(--card);border:1px solid var(--line);overflow:auto;max-height:calc(100vh - 250px)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{position:sticky;top:0;background:var(--ink);color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;text-align:left;padding:9px 12px;font-weight:500;z-index:2}
+td{padding:8px 12px;border-bottom:1px solid var(--paper2);vertical-align:middle}
+td.kd{font-family:var(--mono);font-size:11.5px;color:var(--muted);white-space:nowrap}
+td.nm{font-weight:500;min-width:180px}
+.pill{font-family:var(--mono);font-size:10px;letter-spacing:.05em;padding:3px 7px;white-space:nowrap;text-transform:uppercase}
+.pill.b{background:var(--rust-lo);color:var(--rust)}
+.pill.s{background:var(--amber-lo);color:var(--amber)}
+.pill.l{background:var(--green-lo);color:var(--green)}
+.cnt{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:10px}
+.note{background:var(--amber-lo);border-left:3px solid var(--amber);padding:11px 14px;font-size:12.5px;margin-bottom:16px}
+td input,td select{width:100%;padding:6px 8px;border:1px solid var(--line);font-family:var(--body);font-size:13px;background:#FFFDF0;color:var(--ink)}
+td input:focus,td select:focus{outline:2px solid var(--green);outline-offset:-1px}
+.del{border:0;background:none;color:var(--rust);cursor:pointer;font-size:15px;line-height:1;padding:2px 6px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.pr{display:grid;grid-template-columns:1fr 200px 90px;gap:14px;align-items:center;padding:8px 0;border-bottom:1px solid var(--paper2)}
+.pr .n{font-size:13px}.pr .n em{font-style:normal;color:var(--muted);font-family:var(--mono);font-size:11px;margin-left:6px}
+.pr .t{height:12px;background:var(--paper2);display:flex}
+.pr .t i{height:100%;background:var(--green)}
+.pr .p{font-family:var(--mono);font-size:12px;text-align:right;color:var(--muted)}
+.empty{padding:36px 20px;text-align:center;color:var(--muted);font-size:13px}
+.empty b{font-family:var(--disp);display:block;font-size:16px;color:var(--ink);margin-bottom:6px}
+@media(max-width:820px){.app{grid-template-columns:1fr;height:auto}aside{position:sticky;top:0;z-index:10}nav{display:flex;overflow:auto;padding:6px}nav button{white-space:nowrap}.sidefoot{display:none}.brand{padding:12px 16px}.pr{grid-template-columns:1fr 90px 70px;gap:8px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<script>if(!sessionStorage.getItem('rkat_auth'))location.replace('index.html')</script>
+<div class="app">
+<aside>
+  <div class="brand"><b>Formularium &amp; Kompendium JKK</b><span>Referensi penjaminan</span><br>
+    <a href="index.html">← Portal</a></div>
+  <nav id="nav"></nav>
+  <div class="sidefoot">Kompendium: Kompendium_BPJSTK.xlsx + usulan ASSA/GS<br>Formularium: menunggu daftar obat resmi<br>Isian tersimpan di peramban ini</div>
+</aside>
+<main>
+  <div class="top"><h1 id="ttl">Ringkasan</h1>
+    <button class="btn" id="expFor">Unduh CSV formularium</button>
+    <label class="btn" style="cursor:pointer">Impor CSV<input id="impFor" type="file" accept=".csv,text/csv" hidden></label>
+  </div>
+  <div class="body">
+
+    <div class="view on" id="v-ring">
+      <div class="kpis" id="kpi"></div>
+      <div class="card">
+        <h2>Dua register penjaminan JKK</h2>
+        <div class="sub">Kompendium untuk alat kesehatan, formularium untuk obat — keduanya rujukan
+        "apa yang dijamin" bagi verifikator dan rumah sakit kerja sama.</div>
+        <div class="pr"><div class="n">Kompendium alkes <em>terdaftar dari Kompendium_BPJSTK.xlsx</em></div><div class="t"><i style="width:100%"></i></div><div class="p" id="rAlkes">—</div></div>
+        <div class="pr"><div class="n">Usulan alkes baru <em>ASSA + GOENMED SUPREME (BHP spuit)</em></div><div class="t"><i style="width:100%;background:var(--amber)"></i></div><div class="p">13</div></div>
+        <div class="pr"><div class="n">Formularium obat <em>diisi/diimpor dari daftar resmi</em></div><div class="t"><i id="rObatBar" style="width:0"></i></div><div class="p" id="rObat">0</div></div>
+      </div>
+      <div class="note">Daftar obat formularium <b>belum tersedia dalam berkas sumber</b>. Tabel
+      Formularium sudah siap diisi manual atau diimpor CSV (format: Nama generik; Sediaan &amp;
+      kekuatan; Kelas terapi; Restriksi; Status) — begitu daftar resmi (mis. subset Fornas untuk
+      trauma/ortopedi atau formularium internal JKK) diterima, tinggal dimasukkan.</div>
+    </div>
+
+    <div class="view" id="v-alkes">
+      <div class="flt">
+        <input id="qa" type="search" placeholder="Cari nama atau kode alkes">
+        <select id="fka"><option value="">Semua wilayah</option></select>
+        <select id="fsta"><option value="">Semua status</option><option>Terdaftar</option><option>Usulan baru</option></select>
+      </div>
+      <div class="tw"><table><thead><tr><th>Kode</th><th>Nama alat</th><th>Wilayah / bagian</th><th>Satuan</th><th>Status</th></tr></thead><tbody id="tba"></tbody></table></div>
+      <div class="cnt" id="cnta"></div>
+    </div>
+
+    <div class="view" id="v-obat">
+      <div class="note">Struktur kolom mengikuti pola formularium: <b>nama generik</b> (bukan merek),
+      sediaan &amp; kekuatan, kelas terapi, restriksi penggunaan yang bisa diverifikasi, dan status
+      penjaminan. Baris diedit langsung; tersimpan otomatis di peramban ini.</div>
+      <div class="flt">
+        <input id="qo" type="search" placeholder="Cari obat atau kelas terapi">
+        <select id="fsto"><option value="">Semua status</option><option>Dijamin</option><option>Dijamin dengan restriksi</option><option>Usulan</option></select>
+      </div>
+      <div class="tw"><table><thead><tr><th>Nama generik</th><th>Sediaan &amp; kekuatan</th><th>Kelas terapi</th><th>Restriksi</th><th>Status</th><th></th></tr></thead><tbody id="tbo"></tbody></table></div>
+      <div class="acts">
+        <button class="btn" id="addObat">+ Tambah obat</button>
+        <button class="btn" id="rstObat">Kosongkan formularium</button>
+        <span class="cnt" id="cnto" style="margin:0"></span>
+      </div>
+    </div>
+
+  </div>
+</main>
+</div>
+
+<script src="alkes-data.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+
+/* ---------- kompendium alkes: terdaftar + usulan ---------- */
+const TERDAFTAR=window.ALKES_DATA.map(r=>({kd:r[0],nm:r[1],kat:r[2],sub:r[3],sat:r[4]||'—',st:'Terdaftar'}));
+const USULAN=[
+ ['USL-001','ASSA Disposable Syringe with Needle Luer Slip 1 ml'],
+ ['USL-002','ASSA Disposable Syringe with Needle Luer Lock 1 ml'],
+ ['USL-003','ASSA Disposable Syringe with Needle Luer Lock 2.5 ml'],
+ ['USL-004','ASSA Disposable Syringe with Needle Luer Lock 3 ml'],
+ ['USL-005','ASSA Disposable Syringe with Needle Luer Lock 5 ml'],
+ ['USL-006','ASSA Disposable Syringe with Needle Luer Lock 10 ml'],
+ ['USL-007','ASSA Disposable Syringe without Needle Luer Lock 20 ml'],
+ ['USL-008','ASSA Disposable Syringe without Needle Eccentric Slip 20 ml'],
+ ['USL-009','ASSA Disposable Syringe without Needle Eccentric Slip 50 ml'],
+ ['USL-010','GOENMED SUPREME Disposable Syringe with Needle Luer Slip 1 ml'],
+ ['USL-011','GOENMED SUPREME Disposable Syringe with Needle Luer Lock 3 ml'],
+ ['USL-012','GOENMED SUPREME Disposable Syringe with Needle Luer Lock 5 ml'],
+ ['USL-013','GOENMED SUPREME Disposable Syringe with Needle Luer Lock 10 ml']
+].map(r=>({kd:r[0],nm:r[1],kat:'BHP Umum',sub:'Spuit sekali pakai',sat:'Pcs',st:'Usulan baru'}));
+const ALKES=TERDAFTAR.concat(USULAN);
+
+/* ---------- formularium obat (localStorage) ---------- */
+const FKEY='jkk_formularium';
+const STATUSES=['Dijamin','Dijamin dengan restriksi','Usulan'];
+let OBAT;
+try{OBAT=JSON.parse(localStorage.getItem(FKEY)||'[]')}catch(_){OBAT=[]}
+if(!Array.isArray(OBAT))OBAT=[];
+const saveObat=()=>localStorage.setItem(FKEY,JSON.stringify(OBAT));
+
+/* ---------- nav ---------- */
+const VIEWS=[['ring','Ringkasan'],['alkes','Kompendium Alkes'],['obat','Formularium Obat']];
+$('nav').innerHTML=VIEWS.map(([v,l],i)=>`<button data-v="${v}"${i?'':' class="on"'}>${l}</button>`).join('');
+function show(v){
+  document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  $('ttl').textContent=VIEWS.find(x=>x[0]===v)[1];
+}
+$('nav').onclick=e=>{const b=e.target.closest('button');if(b)show(b.dataset.v)};
+
+/* ---------- ringkasan ---------- */
+function renderRing(){
+  $('kpi').innerHTML=
+   `<div class="kp g"><div class="v">${TERDAFTAR.length}</div><div class="l">Alkes terdaftar (dari 1.283 — data terpotong)</div></div>
+    <div class="kp a"><div class="v">${USULAN.length}</div><div class="l">Usulan alkes baru menunggu penetapan</div></div>
+    <div class="kp ${OBAT.length?'g':'r'}"><div class="v">${OBAT.length}</div><div class="l">Obat dalam formularium</div></div>
+    <div class="kp"><div class="v">2</div><div class="l">Register: kompendium &amp; formularium</div></div>`;
+  $('rAlkes').textContent=TERDAFTAR.length;
+  $('rObat').textContent=OBAT.length;
+  $('rObatBar').style.width=Math.min(100,OBAT.length)+'%';
+}
+
+/* ---------- kompendium alkes ---------- */
+[...new Set(ALKES.map(d=>d.kat))].forEach(k=>
+  $('fka').insertAdjacentHTML('beforeend',`<option>${k}</option>`));
+function renderAlkes(){
+  const q=$('qa').value.trim().toLowerCase(),k=$('fka').value,st=$('fsta').value;
+  const rows=ALKES.filter(d=>(!k||d.kat===k)&&(!st||d.st===st)&&
+    (!q||d.nm.toLowerCase().includes(q)||d.kd.toLowerCase().includes(q)));
+  $('tba').innerHTML=rows.slice(0,400).map(d=>`<tr>
+    <td class="kd">${d.kd}</td><td class="nm">${d.nm}</td>
+    <td>${d.kat}<span class="kd"> / ${d.sub}</span></td><td class="kd">${d.sat}</td>
+    <td><span class="pill ${d.st==='Terdaftar'?'l':'s'}">${d.st}</span></td></tr>`).join('');
+  $('cnta').textContent=rows.length+' dari '+ALKES.length+' item'+
+    (rows.length>400?' · menampilkan 400 pertama, persempit pencarian':'');
+}
+$('qa').addEventListener('input',renderAlkes);
+$('fka').onchange=renderAlkes;$('fsta').onchange=renderAlkes;
+
+/* ---------- formularium obat ---------- */
+function renderObat(){
+  const q=$('qo').value.trim().toLowerCase(),st=$('fsto').value;
+  const idx=OBAT.map((o,i)=>[o,i]).filter(([o])=>(!st||o.st===st)&&
+    (!q||((o.nm||'')+' '+(o.kel||'')).toLowerCase().includes(q)));
+  if(!OBAT.length){
+    $('tbo').innerHTML=`<tr><td colspan="6"><div class="empty"><b>Formularium masih kosong</b>
+      Tambahkan obat satu per satu, atau impor daftar resmi lewat tombol "Impor CSV" di kanan atas.<br>
+      Format kolom: Nama generik; Sediaan &amp; kekuatan; Kelas terapi; Restriksi; Status.</div></td></tr>`;
+  }else{
+    $('tbo').innerHTML=idx.map(([o,i])=>`<tr>
+     <td><input data-i="${i}" data-k="nm" value="${(o.nm||'').replace(/"/g,'&quot;')}" placeholder="mis. Ceftriaxone"></td>
+     <td><input data-i="${i}" data-k="sed" value="${(o.sed||'').replace(/"/g,'&quot;')}" placeholder="inj 1 g"></td>
+     <td><input data-i="${i}" data-k="kel" value="${(o.kel||'').replace(/"/g,'&quot;')}" placeholder="Antibiotik"></td>
+     <td><input data-i="${i}" data-k="res" value="${(o.res||'').replace(/"/g,'&quot;')}" placeholder="mis. profilaksis operasi"></td>
+     <td><select data-i="${i}" data-k="st">${STATUSES.map(s=>`<option${s===o.st?' selected':''}>${s}</option>`).join('')}</select></td>
+     <td><button class="del" data-del="${i}" title="Hapus">✕</button></td></tr>`).join('');
+  }
+  $('cnto').textContent=OBAT.length?(idx.length+' dari '+OBAT.length+' obat'):'0 obat';
+}
+$('qo').addEventListener('input',renderObat);
+$('fsto').onchange=renderObat;
+$('tbo').addEventListener('input',e=>{
+  const el=e.target.closest('[data-i]');if(!el)return;
+  OBAT[+el.dataset.i][el.dataset.k]=el.value;saveObat();renderRing();
+});
+$('tbo').addEventListener('click',e=>{
+  const d=e.target.closest('[data-del]');if(!d)return;
+  if(!confirm('Hapus obat "'+(OBAT[+d.dataset.del].nm||'(kosong)')+'"?'))return;
+  OBAT.splice(+d.dataset.del,1);saveObat();renderObat();renderRing();
+});
+$('addObat').onclick=()=>{OBAT.push({nm:'',sed:'',kel:'',res:'',st:'Dijamin'});saveObat();
+  renderObat();renderRing();show('obat')};
+$('rstObat').onclick=()=>{
+  if(!confirm('Hapus seluruh isi formularium yang tersimpan di peramban ini?'))return;
+  OBAT=[];saveObat();renderObat();renderRing();
+};
+
+/* ---------- CSV ekspor / impor ---------- */
+$('expFor').onclick=()=>{
+  const esc=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const lines=[['Nama generik','Sediaan & kekuatan','Kelas terapi','Restriksi','Status'].map(esc).join(';')]
+   .concat(OBAT.map(o=>[o.nm,o.sed,o.kel,o.res,o.st].map(esc).join(';')));
+  const blob=new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='formularium-jkk.csv';a.click();URL.revokeObjectURL(a.href);
+};
+function parseCsvLine(line,delim){
+  const out=[];let cur='',inQ=false;
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(inQ){
+      if(c==='"'&&line[i+1]==='"'){cur+='"';i++;}
+      else if(c==='"')inQ=false;
+      else cur+=c;
+    }else if(c==='"')inQ=true;
+    else if(c===delim){out.push(cur);cur='';}
+    else cur+=c;
+  }
+  out.push(cur);return out;
+}
+$('impFor').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  const rd=new FileReader();
+  rd.onload=()=>{
+    const text=String(rd.result).replace(/^﻿/,'');
+    const lines=text.split(/\r?\n/).filter(l=>l.trim());
+    if(!lines.length)return;
+    const delim=(lines[0].split(';').length>=lines[0].split(',').length)?';':',';
+    let rows=lines.map(l=>parseCsvLine(l,delim));
+    if(rows[0][0]&&/nama/i.test(rows[0][0]))rows=rows.slice(1);
+    const add=rows.filter(r=>r[0]&&r[0].trim()).map(r=>({
+      nm:r[0]?.trim()||'',sed:r[1]?.trim()||'',kel:r[2]?.trim()||'',
+      res:r[3]?.trim()||'',st:STATUSES.includes(r[4]?.trim())?r[4].trim():'Dijamin'}));
+    if(!add.length){alert('Tidak ada baris valid pada CSV (kolom pertama = nama generik).');return;}
+    OBAT=OBAT.concat(add);saveObat();renderObat();renderRing();show('obat');
+    alert(add.length+' obat diimpor.');
+  };
+  rd.readAsText(f);e.target.value='';
+});
+
+renderRing();renderAlkes();renderObat();
+</script>
+</body>
+</html>

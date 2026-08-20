@@ -8,6 +8,8 @@ Portal statis (HTML, tanpa backend) berisi **dua aplikasi** di balik satu login:
 | `rkat.html` | Dashboard RKAT 2027 (perencanaan & pengawasan) |
 | `kompendium.html` | Monitoring Kompendium Alkes JKK (pengisian aturan penjaminan) |
 | `operasional.html` | Operasional Alkes JKK (e-purchasing, SPH, vendor, tarif & aktuaria) |
+| `referensi.html` | Formularium & Kompendium JKK (register rujukan penjaminan) |
+| `alkes-data.js` | Data 776 item kompendium (dipakai bersama kompendium.html & referensi.html) |
 
 Membuka `rkat.html` / `kompendium.html` tanpa login akan dialihkan kembali ke portal.
 
@@ -33,6 +35,17 @@ Membuka `rkat.html` / `kompendium.html` tanpa login akan dialihkan kembali ke po
   (tersimpan di localStorage, bisa diekspor CSV). Kalkulator aktuaria menghitung beban skenario
   (kasus × tarif × inflasi medis) dan dampaknya ke ketahanan aset neto dana JKK
   (basis RKAT 2027: iuran Rp10,78 T, klaim Rp6,58 T, ketahanan 174,57 bulan).
+
+## Formularium & Kompendium JKK
+
+Register rujukan "apa yang dijamin JKK", berdiri sendiri sesuai permintaan:
+
+- **Kompendium Alkes** — 776 item terdaftar + 13 usulan baru (ASSA/GOENMED SUPREME) dengan status,
+  pencarian, dan filter wilayah.
+- **Formularium Obat** — register obat generik (sediaan, kelas terapi, restriksi, status penjaminan).
+  Kosong secara bawaan karena daftar obat resmi belum tersedia; bisa diisi manual atau **impor CSV**
+  (format: `Nama generik; Sediaan & kekuatan; Kelas terapi; Restriksi; Status`), tersimpan di
+  localStorage, dan diekspor kembali sebagai CSV.
 
 ## Dashboard RKAT 2027
 
