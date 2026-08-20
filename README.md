@@ -52,7 +52,7 @@ Kredensial bawaan:
 
 | Pengguna | Kata sandi |
 |----------|------------|
-| `admin`  | `bpjs2027` |
+| `admin`  | `bpjslif2027` |
 
 Sesi disimpan di `sessionStorage`, jadi berakhir otomatis saat tab/browser ditutup. Tombol
 **Keluar** ada di pojok kanan atas.
@@ -64,7 +64,7 @@ bagian bawah `index.html`:
 
 ```js
 const USERS={
-  'admin':'b0f2c4ceee7989fe4c01646b64afb500160dc78408a7455af7908298a942c234'
+  'admin':'441bee83dfc9956add76ca02ebde07a083c77e2c5fee7d36b1ff7bacb818b004'
 };
 ```
 
