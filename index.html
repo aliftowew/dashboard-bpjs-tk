@@ -59,8 +59,11 @@ h1,h2{font-family:'Fraunces',Georgia,serif;font-weight:600;margin:0;letter-spaci
 .apps{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
 @media(max-width:720px){.apps{grid-template-columns:1fr}body{align-items:flex-start}}
 .appcard{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line-2);
-  border-radius:16px;padding:26px 26px 22px;box-shadow:var(--shadow);text-decoration:none;
+  border-radius:16px;padding:0;box-shadow:var(--shadow);text-decoration:none;
   color:inherit;transition:.15s;position:relative;overflow:hidden}
+.appcard .foto{display:block;width:100%;height:158px;object-fit:cover}
+.appcard .inner{display:flex;flex-direction:column;flex:1;padding:20px 26px 22px}
+.appcard:hover .foto{filter:saturate(1.08)}
 .appcard:hover{border-color:var(--brand-grn);transform:translateY(-2px);
   box-shadow:0 2px 4px rgba(13,43,54,.06),0 16px 34px -16px rgba(13,43,54,.3)}
 .appcard::before{content:'';position:absolute;inset:0 0 auto 0;height:5px}
@@ -128,6 +131,8 @@ footer{margin-top:26px;font-size:11.5px;color:var(--mute)}
   kompendium, operasional pengadaan &amp; tarif-aktuaria, dan referensi formularium-kompendium JKK.</p>
   <div class="apps">
     <a class="appcard rkat" href="rkat.html">
+      <img class="foto" src="img/rkat.jpg" alt="Plaza BPJAMSOSTEK, Jakarta" loading="lazy">
+      <div class="inner">
       <div class="tag">Perencanaan · Pengawasan</div>
       <h2>RKAT 2027</h2>
       <p>Rangkuman 407 halaman Buku RKAT 2027 diuji silang laporan keuangan Semester I 2026:
@@ -139,8 +144,11 @@ footer{margin-top:26px;font-size:11.5px;color:var(--mute)}
         <div><b>21</b>temuan telaah</div>
       </div>
       <span class="go">Buka dashboard</span>
+      </div>
     </a>
     <a class="appcard komp" href="kompendium.html">
+      <img class="foto" src="img/kompendium.jpg" alt="Instrumen bedah ortopedi" loading="lazy">
+      <div class="inner">
       <div class="tag">Pelayanan · Program JKK</div>
       <h2>Kompendium Alkes JKK</h2>
       <p>Monitoring pengisian aturan penjaminan alat kesehatan JKK: delapan kolom aturan per item
@@ -152,8 +160,11 @@ footer{margin-top:26px;font-size:11.5px;color:var(--mute)}
         <div><b>2</b>wilayah tubuh</div>
       </div>
       <span class="go">Buka monitoring</span>
+      </div>
     </a>
     <a class="appcard ops" href="operasional.html">
+      <img class="foto" src="img/operasional.jpg" alt="Gudang perbekalan medis" loading="lazy">
+      <div class="inner">
       <div class="tag">Pengadaan · e-Purchasing</div>
       <h2>Operasional Alkes JKK</h2>
       <p>Katalog kompendium + tautan e-katalog INAPROC, banding penawaran harga (SPH) vendor,
@@ -165,8 +176,11 @@ footer{margin-top:26px;font-size:11.5px;color:var(--mute)}
         <div><b>18</b>harga SPH</div>
       </div>
       <span class="go">Buka operasional</span>
+      </div>
     </a>
     <a class="appcard ref" href="referensi.html">
+      <img class="foto" src="img/referensi.jpg" alt="Apoteker memeriksa rak farmasi" loading="lazy">
+      <div class="inner">
       <div class="tag">Referensi · Penjaminan</div>
       <h2>Formularium &amp; Kompendium JKK</h2>
       <p>Register rujukan "apa yang dijamin JKK": kompendium alat kesehatan (terdaftar + usulan
@@ -178,6 +192,7 @@ footer{margin-top:26px;font-size:11.5px;color:var(--mute)}
         <div><b>CSV</b>impor obat</div>
       </div>
       <span class="go">Buka referensi</span>
+      </div>
     </a>
   </div>
   <footer>Sumber: Buku RKAT 2027 · LK S1-2026 · Kompendium_BPJSTK.xlsx. Isian tersimpan di peramban masing-masing pengguna.</footer>
