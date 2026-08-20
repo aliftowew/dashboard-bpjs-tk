@@ -7,6 +7,7 @@ Portal statis (HTML, tanpa backend) berisi **dua aplikasi** di balik satu login:
 | `index.html` | Portal: login + dua kartu pilihan dashboard |
 | `rkat.html` | Dashboard RKAT 2027 (perencanaan & pengawasan) |
 | `kompendium.html` | Monitoring Kompendium Alkes JKK (pengisian aturan penjaminan) |
+| `operasional.html` | Operasional Alkes JKK (e-purchasing, SPH, vendor, tarif & aktuaria) |
 
 Membuka `rkat.html` / `kompendium.html` tanpa login akan dialihkan kembali ke portal.
 
@@ -19,6 +20,19 @@ Membuka `rkat.html` / `kompendium.html` tanpa login akan dialihkan kembali ke po
 - Klik item membuka panel isian **8 kolom aturan** (Indikasi, ICD-10, Level RS, Approval,
   Batas Penggunaan, Monitoring, Dampak RTW, Keterangan); isian tersimpan di localStorage
   peramban dan bisa diekspor lengkap lewat **Unduh CSV**.
+
+## Operasional Alkes JKK
+
+- **Katalog & e-Purchasing** — 13 item kompendium (ASSA + GOENMED SUPREME) dengan spesifikasi,
+  kemasan, nomor izin AKD, dan tautan e-katalog INAPROC.
+- **Penawaran Harga** — SPH 026/SPM-P/PLG/08.26 PT Sinergi Persada Medica (18 item BHP); tabel
+  disiapkan untuk banding harga saat SPH vendor lain masuk.
+- **Vendor** — direktori 39 vendor alkes dengan tautan telepon dan WhatsApp.
+- **Tarif & Aktuaria** — tabulasi tarif kelas 1 RS pemerintah tipe A untuk prosedur kecelakaan
+  kerja (ortopedi/trauma/cedera). Kolom tarif **sengaja kosong** — diisi dari sumber resmi
+  (tersimpan di localStorage, bisa diekspor CSV). Kalkulator aktuaria menghitung beban skenario
+  (kasus × tarif × inflasi medis) dan dampaknya ke ketahanan aset neto dana JKK
+  (basis RKAT 2027: iuran Rp10,78 T, klaim Rp6,58 T, ketahanan 174,57 bulan).
 
 ## Dashboard RKAT 2027
 

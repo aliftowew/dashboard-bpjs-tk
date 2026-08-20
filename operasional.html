@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Operasional Alkes JKK</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="48x48" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0F1E1B;--ink2:#1C312C;--paper:#F3F5F1;--paper2:#E4E8E1;--card:#FFF;
+--green:#0E7A56;--green-lo:#DDEDE5;--rust:#B8452B;--rust-lo:#F6E3DD;--amber:#C9880F;--amber-lo:#F9EDD3;
+--muted:#6E7C77;--line:#D3DAD5;
+--disp:"Bricolage Grotesque",sans-serif;--body:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",Consolas,monospace}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.app{display:grid;grid-template-columns:216px 1fr;height:100vh}
+aside{background:var(--ink);color:#B9CDC5;display:flex;flex-direction:column;overflow:auto}
+.brand{padding:18px 18px 16px;border-bottom:1px solid #2A423B}
+.brand b{font-family:var(--disp);font-weight:800;font-size:15px;color:#fff;display:block;letter-spacing:-.01em;line-height:1.25}
+.brand span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:#6E9187;text-transform:uppercase}
+.brand a{display:inline-block;margin-top:7px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:#7FB8A0;text-decoration:none;text-transform:uppercase}
+.brand a:hover{color:#fff}
+nav{padding:10px 8px;flex:1}
+nav button{display:block;width:100%;text-align:left;background:none;border:0;color:#B9CDC5;font-family:var(--body);font-size:13.5px;padding:9px 12px;cursor:pointer;border-radius:3px}
+nav button:hover{background:#1C312C;color:#fff}
+nav button.on{background:var(--green);color:#fff;font-weight:500}
+.sidefoot{padding:14px 18px;border-top:1px solid #2A423B;font-family:var(--mono);font-size:10px;color:#5E7F76;line-height:1.6}
+main{overflow:auto}
+.top{background:var(--card);border-bottom:1px solid var(--line);padding:14px 24px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;position:sticky;top:0;z-index:5}
+.top h1{font-family:var(--disp);font-size:19px;font-weight:800;margin:0;letter-spacing:-.02em;flex:1;min-width:150px}
+.btn{font-family:var(--mono);font-size:11.5px;padding:8px 13px;border:1px solid var(--line);background:var(--card);color:var(--ink2);cursor:pointer;letter-spacing:.03em;text-decoration:none;display:inline-block}
+.btn:hover{background:var(--green-lo);border-color:var(--green);color:var(--green)}
+.btn.pri{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.pri:hover{background:var(--green);border-color:var(--green);color:#fff}
+.body{padding:24px}
+.view{display:none}.view.on{display:block}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kp{background:var(--card);border:1px solid var(--line);padding:16px;border-left:4px solid var(--line)}
+.kp.g{border-left-color:var(--green)}.kp.a{border-left-color:var(--amber)}.kp.r{border-left-color:var(--rust)}
+.kp .v{font-family:var(--disp);font-size:28px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.kp.g .v{color:var(--green)}.kp.a .v{color:var(--amber)}.kp.r .v{color:var(--rust)}
+.kp .l{font-size:12px;color:var(--muted);margin-top:6px}
+.card{background:var(--card);border:1px solid var(--line);padding:20px;margin-bottom:16px}
+.card h2{font-family:var(--disp);font-size:16px;font-weight:800;margin:0 0 4px}
+.card .sub{font-size:12.5px;color:var(--muted);margin-bottom:16px}
+.flt{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.flt input,.flt select{font-family:var(--body);font-size:13px;padding:8px 10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.flt input{flex:1;min-width:180px}
+.flt input:focus,.flt select:focus{outline:2px solid var(--green);outline-offset:-1px}
+.tw{background:var(--card);border:1px solid var(--line);overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{position:sticky;top:0;background:var(--ink);color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;text-align:left;padding:9px 12px;font-weight:500;z-index:2}
+td{padding:8px 12px;border-bottom:1px solid var(--paper2);vertical-align:middle}
+td.kd{font-family:var(--mono);font-size:11.5px;color:var(--muted);white-space:nowrap}
+td.nm{font-weight:500;min-width:180px}
+td.num{font-family:var(--mono);font-size:12px;text-align:right;white-space:nowrap}
+th.num{text-align:right}
+.pill{font-family:var(--mono);font-size:10px;letter-spacing:.05em;padding:3px 7px;white-space:nowrap;text-transform:uppercase}
+.pill.l{background:var(--green-lo);color:var(--green)}
+.pill.s{background:var(--amber-lo);color:var(--amber)}
+.cnt{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:10px}
+.note{background:var(--amber-lo);border-left:3px solid var(--amber);padding:11px 14px;font-size:12.5px;margin-bottom:16px}
+.note.g{background:var(--green-lo);border-left-color:var(--green)}
+td input{width:100%;min-width:80px;padding:6px 8px;border:1px solid var(--line);font-family:var(--mono);font-size:12px;background:#FFFDF0;color:var(--ink);text-align:right}
+td input.txt{text-align:left;font-family:var(--body);font-size:13px;min-width:170px}
+td input:focus{outline:2px solid var(--green);outline-offset:-1px}
+.del{border:0;background:none;color:var(--rust);cursor:pointer;font-size:15px;line-height:1;padding:2px 6px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.calc{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+@media(max-width:820px){.calc{grid-template-columns:1fr}}
+.calc label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.calc input,.calc select{width:100%;padding:8px 10px;border:1px solid var(--line);font-family:var(--mono);font-size:13px;background:#FFFDF0;color:var(--ink)}
+.res{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.res{grid-template-columns:repeat(2,1fr)}}
+.pr{display:grid;grid-template-columns:1fr 200px 90px;gap:14px;align-items:center;padding:8px 0;border-bottom:1px solid var(--paper2)}
+.pr .n{font-size:13px}.pr .n em{font-style:normal;color:var(--muted);font-family:var(--mono);font-size:11px;margin-left:6px}
+.pr .t{height:12px;background:var(--paper2);display:flex}
+.pr .t i{height:100%;background:var(--green)}
+.pr .p{font-family:var(--mono);font-size:12px;text-align:right;color:var(--muted)}
+@media(max-width:820px){.app{grid-template-columns:1fr;height:auto}aside{position:sticky;top:0;z-index:10}nav{display:flex;overflow:auto;padding:6px}nav button{white-space:nowrap}.sidefoot{display:none}.brand{padding:12px 16px}.pr{grid-template-columns:1fr 90px 70px;gap:8px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<script>if(!sessionStorage.getItem('rkat_auth'))location.replace('index.html')</script>
+<div class="app">
+<aside>
+  <div class="brand"><b>Operasional Alkes JKK</b><span>e-Purchasing &amp; Tarif</span><br>
+    <a href="index.html">← Portal</a></div>
+  <nav id="nav"></nav>
+  <div class="sidefoot">Sumber: Kompendium_BPJSTK_ASSA_GS.xlsx · SPH 026/SPM-P/PLG/08.26 · DATA_PERUSAHAAN_UPD_2026<br>Isian tarif tersimpan di peramban ini</div>
+</aside>
+<main>
+  <div class="top"><h1 id="ttl">Ringkasan</h1>
+    <button class="btn" id="expTar">Unduh CSV tarif</button>
+    <button class="btn" id="rstTar">Kosongkan tarif</button>
+  </div>
+  <div class="body">
+
+    <div class="view on" id="v-ring">
+      <div class="kpis" id="kpi"></div>
+      <div class="card">
+        <h2>Alur kerja operasional</h2>
+        <div class="sub">Dari katalog ke perhitungan dampak dana — semuanya di satu tempat.</div>
+        <div class="pr"><div class="n">1 · Katalog &amp; e-Purchasing <em>item kompendium + tautan e-katalog INAPROC</em></div><div class="t"><i style="width:100%"></i></div><div class="p">siap</div></div>
+        <div class="pr"><div class="n">2 · Penawaran harga (SPH) <em>banding harga antar vendor per item</em></div><div class="t"><i style="width:100%"></i></div><div class="p">1 SPH</div></div>
+        <div class="pr"><div class="n">3 · Direktori vendor <em>kontak langsung telepon / WhatsApp</em></div><div class="t"><i style="width:100%"></i></div><div class="p">39</div></div>
+        <div class="pr"><div class="n">4 · Tarif RS kelas 1 tipe A <em>tabulasi prosedur KK — menunggu tarif resmi</em></div><div class="t"><i id="ringTarBar" style="width:0"></i></div><div class="p" id="ringTarPct">0%</div></div>
+      </div>
+      <div class="note">Tabel tarif sengaja <b>tidak diisi angka</b> — tarif prosedur harus bersumber dari
+      standar resmi (mis. tarif INA-CBGs kelas 1 regional atau tarif RSUP tipe A acuan). Isi pada tampilan
+      <b>Tarif &amp; Aktuaria</b>; kalkulator dampak dana JKK menghitung otomatis begitu tarif dan estimasi
+      kasus terisi.</div>
+    </div>
+
+    <div class="view" id="v-kat">
+      <div class="flt">
+        <input id="qkat" type="search" placeholder="Cari produk atau spesifikasi">
+        <select id="fbrand"><option value="">Semua merek</option><option>ASSA</option><option>GOENMED SUPREME</option></select>
+      </div>
+      <div class="tw"><table><thead><tr><th>No</th><th>Produk</th><th>Spesifikasi</th><th>Kemasan</th><th>Izin AKD</th><th>e-Katalog</th></tr></thead><tbody id="tbkat"></tbody></table></div>
+      <div class="cnt" id="cntkat"></div>
+      <p class="cnt">Kategori: Peralatan Rumah Sakit Umum dan Perlengkapannya · satuan Pcs · produsen PT Adventa Biotech International (distributor PT Arra Medsains Indonesia).</p>
+    </div>
+
+    <div class="view" id="v-sph">
+      <div class="card">
+        <h2>SPH 026/SPM-P/PLG/08.26 · PT Sinergi Persada Medica</h2>
+        <div class="sub">Palembang, 11 Agustus 2026 · ditujukan kepada Direktur BPJSTK Jakarta · harga sudah termasuk pajak ·
+        penawaran dapat berubah sewaktu-waktu. Saat SPH vendor lain masuk, tabel ini menjadi pembanding harga per item.</div>
+        <div class="flt"><input id="qsph" type="search" placeholder="Cari item BHP"></div>
+        <div class="tw"><table><thead><tr><th>No</th><th>Nama sediaan / BHP</th><th class="num">Harga satuan</th><th>Satuan</th></tr></thead><tbody id="tbsph"></tbody></table></div>
+        <div class="cnt" id="cntsph"></div>
+      </div>
+    </div>
+
+    <div class="view" id="v-ven">
+      <div class="flt"><input id="qven" type="search" placeholder="Cari perusahaan atau nama kontak"></div>
+      <div class="tw"><table><thead><tr><th>No</th><th>Perusahaan</th><th>Kontak</th><th>Telepon</th><th>WhatsApp</th></tr></thead><tbody id="tbven"></tbody></table></div>
+      <div class="cnt" id="cntven"></div>
+    </div>
+
+    <div class="view" id="v-tar">
+      <div class="note">Tarif di bawah adalah <b>tabulasi kerja</b>: baris prosedur kecelakaan kerja
+      (ortopedi, trauma, cedera) sudah disiapkan, kolom tarif <b>kelas 1 RS pemerintah tipe A</b> dan
+      estimasi kasus per tahun diisi dari sumber resmi. Semua isian tersimpan di peramban ini dan bisa
+      diunduh sebagai CSV.</div>
+      <div class="tw"><table><thead><tr><th>Prosedur / layanan</th><th>Kelompok</th>
+        <th class="num">Tarif kelas 1 (Rp)</th><th class="num">Estimasi kasus/thn</th>
+        <th class="num">Subtotal (Rp)</th><th></th></tr></thead><tbody id="tbtar"></tbody></table></div>
+      <div class="acts">
+        <button class="btn" id="addTar">+ Tambah baris</button>
+        <span class="cnt" id="cnttar" style="margin:auto 0"></span>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <h2>Kalkulator aktuaria dana JKK</h2>
+        <div class="sub">Menghitung dampak beban tabulasi terhadap ketahanan dan kesehatan dana JKK.
+        Basis: RKAT 2027 — iuran JKK Rp10,78 T, estimasi klaim Rp6,58 T, rasio ketahanan aset neto
+        174,57 bulan (aset neto diturunkan dari rasio tersebut ≈ Rp95,7 T).</div>
+        <div class="calc">
+          <div><label>Inflasi biaya medis / tahun (%)</label><input id="cInf" type="number" step="0.5" value="0"></div>
+          <div><label>Horizon proyeksi (tahun ke-)</label><input id="cThn" type="number" min="1" max="10" step="1" value="1"></div>
+          <div><label>Perlakuan beban tabulasi</label>
+            <select id="cMode">
+              <option value="add">Beban tambahan di atas estimasi klaim RKAT</option>
+              <option value="part">Bagian dari estimasi klaim RKAT (uji porsi)</option>
+            </select></div>
+        </div>
+        <div class="res" id="cRes"></div>
+        <p class="cnt" style="margin-top:12px">Rumus: beban = Σ (kasus × tarif) × (1+inflasi)^(tahun−1).
+        Ketahanan (bulan) = aset neto ÷ beban klaim bulanan. Mode "tambahan" menghitung ketahanan bila
+        beban tabulasi menambah klaim RKAT; mode "bagian" hanya menunjukkan porsinya terhadap estimasi
+        yang sudah ada. Simulasi indikatif — bukan valuasi aktuaria resmi.</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const fmt=n=>new Intl.NumberFormat('id-ID').format(Math.round(n));
+const fT=n=>n>=1e12?'Rp'+(n/1e12).toLocaleString('id-ID',{maximumFractionDigits:2})+' T'
+  :n>=1e9?'Rp'+(n/1e9).toLocaleString('id-ID',{maximumFractionDigits:2})+' M'
+  :'Rp'+fmt(n);
+
+/* ---------- data: katalog kompendium (ASSA & GOENMED SUPREME) ---------- */
+const KAT=[
+ {n:1,brand:'ASSA',nm:'Disposable Syringe with Needle Luer Slip 1 ml',sp:'1 ml luer slip with needle, gasket LDV (low dead volume), needle 26G x ½"',kms:'100/box · 24 box/karton',akd:'AKD 20902421405'},
+ {n:2,brand:'ASSA',nm:'Disposable Syringe with Needle Luer Lock 1 ml',sp:'1 ml luer lock with needle, gasket LDV',kms:'100/box · 24 box/karton',akd:'AKD 20902421388'},
+ {n:3,brand:'ASSA',nm:'Disposable Syringe with Needle Luer Lock 2.5 ml',sp:'2.5 ml luer lock with needle, piston berwarna, needle 23G x 1¼"',kms:'100/box · 24 box/karton',akd:'AKD 20902421388'},
+ {n:4,brand:'ASSA',nm:'Disposable Syringe with Needle Luer Lock 3 ml',sp:'3 ml luer lock with needle, piston berwarna, needle 23G x 1¼" / 18G x 1½"',kms:'100/box · 24 box/karton',akd:'AKD 20902421388'},
+ {n:5,brand:'ASSA',nm:'Disposable Syringe with Needle Luer Lock 5 ml',sp:'5 ml luer lock with needle, piston berwarna, needle 22G x 1½" / 18G x 1½"',kms:'100/box · 18 box/karton',akd:'AKD 20902421388'},
+ {n:6,brand:'ASSA',nm:'Disposable Syringe with Needle Luer Lock 10 ml',sp:'10 ml luer lock with needle, piston berwarna, needle 21G x 1½" / 18G x 1½"',kms:'100/box · 12 box/karton',akd:'AKD 20902421387'},
+ {n:7,brand:'ASSA',nm:'Disposable Syringe without Needle Luer Lock 20 ml',sp:'20 ml luer lock without needle, double scale barrel',kms:'50/box · 6 box/karton',akd:'AKD 20902520217'},
+ {n:8,brand:'ASSA',nm:'Disposable Syringe without Needle Eccentric Slip 20 ml',sp:'20 ml eccentric slip without needle',kms:'50/box · 6 box/karton',akd:'AKD 20902520223'},
+ {n:9,brand:'ASSA',nm:'Disposable Syringe without Needle Eccentric Slip 50 ml',sp:'50 ml eccentric slip without needle',kms:'50/box · 6 box/karton',akd:'AKD 20902520157'},
+ {n:10,brand:'GOENMED SUPREME',nm:'Disposable Syringe with Needle Luer Slip 1 ml',sp:'1 ml luer slip with needle, gasket LDV',kms:'—',akd:'—'},
+ {n:11,brand:'GOENMED SUPREME',nm:'Disposable Syringe with Needle Luer Lock 3 ml',sp:'3 ml luer lock with needle, gasket LDV',kms:'—',akd:'—'},
+ {n:12,brand:'GOENMED SUPREME',nm:'Disposable Syringe with Needle Luer Lock 5 ml',sp:'5 ml luer lock with needle, gasket LDV',kms:'—',akd:'—'},
+ {n:13,brand:'GOENMED SUPREME',nm:'Disposable Syringe with Needle Luer Lock 10 ml',sp:'10 ml luer lock with needle, double scale',kms:'—',akd:'—'}];
+const INAPROC='https://katalog.inaproc.id/arra-medsains-indonesia';
+
+/* ---------- data: SPH ---------- */
+const SPH={vendor:'PT Sinergi Persada Medica',no:'026/SPM-P/PLG/08.26',tgl:'11 Agustus 2026',items:[
+ ['Infus Set Air Vent Luer Slip Type Y Port Injection',7326,'Pcs'],
+ ['Blood Transfusion Air Vent Luer Slip Type Y Port Injection',13000,'Pcs'],
+ ['Nasal Oxygen Bayi',10325,'Pcs'],
+ ['Nasal Oxygen Anak',10325,'Pcs'],
+ ['Nasal Oxygen Dewasa',10325,'Pcs'],
+ ['Suction Connecting Tube Non Yankeur',36650,'Pcs'],
+ ['Suction Connecting Tube Yankeur',29970,'Pcs'],
+ ['Non Rebreathing Mask Bayi',19425,'Pcs'],
+ ['Non Rebreathing Mask Anak',19425,'Pcs'],
+ ['Non Rebreathing Mask Dewasa',19425,'Box'],
+ ['Masker Oxygen infant',14985,'Box'],
+ ['Masker Oxygen Pediatric',14985,'Box'],
+ ['Masker Oxygen Adult',14985,'Pcs'],
+ ['Masker Nebulizer Bayi',23310,'Pcs'],
+ ['Masker Nebulizer Anak',23310,'Pcs'],
+ ['Masker Nebulizer Dewasa',23310,'Pcs'],
+ ['Kasa Hydrofil Roll 40x80 Green',175000,'Pcs'],
+ ['Kasa Hydrofil Roll 40x80 PREMIUM',255293,'Pcs']]};
+
+/* ---------- data: vendor ---------- */
+const VEN=[["Regenic","Adel","081905997800"],["Transmedic","Luvi","08111068323"],["Ormed","Erna","0817594036"],
+["Alta/Mindray","Rynaldi","0811163875"],["DMS","Hargono","08113450529"],["Medika Sejahtera 8","Juliansah","081295952263"],
+["Zuellig","Refa","081511444073"],["Martha Inti Persada","Deswandri","0817802781"],["Endo Indonesia","Jualita","08116493636"],
+["Mitra Fajar Selaras","Bambang","081291617779"],["Essity","Rossy","0818664453"],["Pyridam","Rudy","08176700745"],
+["Asa Prima Niaga","Alifvia","089688462877"],["Biotek","Jalal","081315665583"],["SKBIO","Kim","081316508582"],
+["KHM","Satyo","081586545707"],["Mapson","Zay","081283929968"],["Beijing Chunlizhengda","Jacob","+8615901605548"],
+["MJ Surgical","dr Romy","082121700071"],["Allvacon","Ana","083857841732"],["Zimmer","Dadang","081383080341"],
+["Petan Daya","Jenifer","081212285895"],["Karunia Abadi","Rere","081289887014"],["Rinjani Medika Bersama","Ayu","082133083854"],
+["Bina Artha","Fhadzryan","081289035983"],["AMPI","Aldi","087788793295"],["Falcon","Tuti","08119825319"],
+["Daewoong","Marcel","085211220987"],["CGBIO","Yulia","08179880739"],["Itama Ranoraya","Kayila","087885873917"],
+["Orthocare","Irfan","08119910367"],["Fadzkuruni","Ullie","089611990847"],["Fixamet","Berta","081219109697"],
+["WUND+","Suven","081776811702"],["Pro Health International","Gita","081291810522"],["AKM","Lukky","08161410489"],
+["Sapta Mandiri","Multi","08569009644"],["Normmed","Leny","085173241510"],["Orthosis","Dodi","081297937469"]];
+
+/* ---------- data: tabulasi tarif (seed prosedur, tarif diisi pengguna) ---------- */
+const TAR_SEED=[
+ ['ORIF fraktur femur','Ortopedi — operasi'],
+ ['ORIF fraktur tibia/fibula','Ortopedi — operasi'],
+ ['ORIF fraktur radius/ulna','Ortopedi — operasi'],
+ ['ORIF fraktur clavicula','Ortopedi — operasi'],
+ ['Hemiarthroplasty panggul (Austin Moore/bipolar)','Ortopedi — operasi'],
+ ['Total Hip/Knee Replacement','Ortopedi — operasi'],
+ ['Pemasangan fiksasi eksternal','Ortopedi — operasi'],
+ ['Pelepasan implan (removal of implant)','Ortopedi — operasi'],
+ ['Amputasi mayor (ekstremitas)','Trauma'],
+ ['Amputasi minor (jari)','Trauma'],
+ ['Craniotomy cedera kepala','Trauma'],
+ ['Laparotomi trauma','Trauma'],
+ ['Debridement luka + skin graft','Trauma'],
+ ['Rawat inap kelas 1 per hari','Cedera — perawatan'],
+ ['Rehabilitasi / fisioterapi per sesi','Cedera — perawatan']];
+const TKEY='jkk_tarif';
+let TAR;
+try{TAR=JSON.parse(localStorage.getItem(TKEY)||'null')}catch(_){TAR=null}
+if(!Array.isArray(TAR))TAR=TAR_SEED.map(t=>({nm:t[0],kel:t[1],trf:'',kss:''}));
+const saveTar=()=>localStorage.setItem(TKEY,JSON.stringify(TAR));
+
+/* ---------- konstanta dana JKK (RKAT 2027 & Bab VII) ---------- */
+const JKK={iuran:10775782e6, klaim:6578527e6, ketahananBln:174.57};
+JKK.asetNeto=JKK.ketahananBln*(JKK.klaim/12);   // ≈ Rp95,7 T (turunan rasio RKAT)
+
+/* ---------- nav ---------- */
+const VIEWS=[['ring','Ringkasan'],['kat','Katalog & e-Purchasing'],['sph','Penawaran Harga'],
+ ['ven','Vendor'],['tar','Tarif & Aktuaria']];
+$('nav').innerHTML=VIEWS.map(([v,l],i)=>`<button data-v="${v}"${i?'':' class="on"'}>${l}</button>`).join('');
+function show(v){
+  document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  $('ttl').textContent=VIEWS.find(x=>x[0]===v)[1];
+}
+$('nav').onclick=e=>{const b=e.target.closest('button');if(b)show(b.dataset.v)};
+
+/* ---------- ringkasan ---------- */
+function renderRing(){
+  const nTrf=TAR.filter(t=>+t.trf>0).length;
+  const beban=calcBeban(1,0);
+  $('kpi').innerHTML=
+   `<div class="kp g"><div class="v">${KAT.length}</div><div class="l">Item katalog kompendium (ASSA + GS)</div></div>
+    <div class="kp g"><div class="v">${SPH.items.length}</div><div class="l">Harga penawaran · 1 SPH masuk</div></div>
+    <div class="kp g"><div class="v">${VEN.length}</div><div class="l">Vendor alkes terdata</div></div>
+    <div class="kp ${beban>0?'a':'r'}"><div class="v" style="font-size:${beban>0?'20':'28'}px">${beban>0?fT(beban):nTrf+'/'+TAR.length}</div>
+      <div class="l">${beban>0?'Beban tabulasi tarif / tahun':'Baris tarif terisi — menunggu tarif resmi'}</div></div>`;
+  $('ringTarBar').style.width=(nTrf/TAR.length*100)+'%';
+  $('ringTarPct').textContent=Math.round(nTrf/TAR.length*100)+'%';
+}
+
+/* ---------- katalog ---------- */
+function renderKat(){
+  const q=$('qkat').value.trim().toLowerCase(), b=$('fbrand').value;
+  const rows=KAT.filter(k=>(!b||k.brand===b)&&(!q||(k.nm+' '+k.sp).toLowerCase().includes(q)));
+  $('tbkat').innerHTML=rows.map(k=>`<tr>
+    <td class="kd">${k.n}</td>
+    <td class="nm"><span class="pill ${k.brand==='ASSA'?'l':'s'}">${k.brand}</span><br>${k.nm}</td>
+    <td style="font-size:12.5px;color:var(--ink2)">${k.sp}</td>
+    <td class="kd">${k.kms}</td><td class="kd">${k.akd}</td>
+    <td><a class="btn" target="_blank" rel="noopener" href="${INAPROC}">INAPROC ↗</a></td></tr>`).join('');
+  $('cntkat').textContent=rows.length+' dari '+KAT.length+' item';
+}
+$('qkat').addEventListener('input',renderKat);
+$('fbrand').onchange=renderKat;
+
+/* ---------- SPH ---------- */
+function renderSph(){
+  const q=$('qsph').value.trim().toLowerCase();
+  const rows=SPH.items.map((r,i)=>[i+1,...r]).filter(r=>!q||r[1].toLowerCase().includes(q));
+  $('tbsph').innerHTML=rows.map(r=>`<tr><td class="kd">${r[0]}</td><td class="nm">${r[1]}</td>
+    <td class="num">Rp${fmt(r[2])}</td><td class="kd">${r[3]}</td></tr>`).join('');
+  $('cntsph').textContent=rows.length+' dari '+SPH.items.length+' item · '+SPH.vendor;
+}
+$('qsph').addEventListener('input',renderSph);
+
+/* ---------- vendor ---------- */
+const waNum=t=>{let d=t.replace(/\D/g,'');if(d.startsWith('0'))d='62'+d.slice(1);return d};
+function renderVen(){
+  const q=$('qven').value.trim().toLowerCase();
+  const rows=VEN.map((v,i)=>[i+1,...v]).filter(r=>!q||(r[1]+' '+r[2]).toLowerCase().includes(q));
+  $('tbven').innerHTML=rows.map(r=>`<tr><td class="kd">${r[0]}</td><td class="nm">${r[1]}</td>
+    <td>${r[2]}</td><td class="kd"><a href="tel:${r[3]}" style="color:var(--green)">${r[3]}</a></td>
+    <td><a class="btn" target="_blank" rel="noopener" href="https://wa.me/${waNum(r[3])}">WhatsApp ↗</a></td></tr>`).join('');
+  $('cntven').textContent=rows.length+' dari '+VEN.length+' vendor';
+}
+$('qven').addEventListener('input',renderVen);
+
+/* ---------- tarif ---------- */
+function renderTar(){
+  $('tbtar').innerHTML=TAR.map((t,i)=>{
+    const sub=(+t.trf||0)*(+t.kss||0);
+    return `<tr>
+     <td><input class="txt" data-i="${i}" data-k="nm" value="${(t.nm||'').replace(/"/g,'&quot;')}"></td>
+     <td><input class="txt" data-i="${i}" data-k="kel" value="${(t.kel||'').replace(/"/g,'&quot;')}" style="min-width:120px"></td>
+     <td><input data-i="${i}" data-k="trf" type="number" min="0" value="${t.trf}" placeholder="0"></td>
+     <td><input data-i="${i}" data-k="kss" type="number" min="0" value="${t.kss}" placeholder="0"></td>
+     <td class="num">${sub>0?'Rp'+fmt(sub):'—'}</td>
+     <td><button class="del" data-del="${i}" title="Hapus baris">✕</button></td></tr>`;
+  }).join('');
+  const nTrf=TAR.filter(t=>+t.trf>0).length;
+  $('cnttar').textContent=TAR.length+' baris · '+nTrf+' terisi tarif';
+}
+$('tbtar').addEventListener('input',e=>{
+  const el=e.target.closest('[data-i]');if(!el)return;
+  TAR[+el.dataset.i][el.dataset.k]=el.value;saveTar();
+  renderCalc();renderRing();
+  const tr=el.closest('tr'),t=TAR[+el.dataset.i];
+  const sub=(+t.trf||0)*(+t.kss||0);
+  tr.children[4].textContent=sub>0?'Rp'+fmt(sub):'—';
+  $('cnttar').textContent=TAR.length+' baris · '+TAR.filter(x=>+x.trf>0).length+' terisi tarif';
+});
+$('tbtar').addEventListener('click',e=>{
+  const d=e.target.closest('[data-del]');if(!d)return;
+  if(!confirm('Hapus baris "'+(TAR[+d.dataset.del].nm||'(kosong)')+'"?'))return;
+  TAR.splice(+d.dataset.del,1);saveTar();renderTar();renderCalc();renderRing();
+});
+$('addTar').onclick=()=>{TAR.push({nm:'',kel:'',trf:'',kss:''});saveTar();renderTar()};
+$('rstTar').onclick=()=>{
+  if(!confirm('Kembalikan tabel tarif ke daftar prosedur awal (semua isian dihapus)?'))return;
+  TAR=TAR_SEED.map(t=>({nm:t[0],kel:t[1],trf:'',kss:''}));saveTar();
+  renderTar();renderCalc();renderRing();
+};
+$('expTar').onclick=()=>{
+  const esc=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const lines=[['Prosedur','Kelompok','Tarif kelas 1 (Rp)','Estimasi kasus/thn','Subtotal (Rp)'].map(esc).join(';')]
+   .concat(TAR.map(t=>[t.nm,t.kel,t.trf,t.kss,(+t.trf||0)*(+t.kss||0)].map(esc).join(';')));
+  const blob=new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='tarif-kk-kelas1.csv';a.click();URL.revokeObjectURL(a.href);
+};
+
+/* ---------- kalkulator aktuaria ---------- */
+function calcBeban(thn,inf){
+  const base=TAR.reduce((s,t)=>s+(+t.trf||0)*(+t.kss||0),0);
+  return base*Math.pow(1+inf/100,Math.max(0,thn-1));
+}
+function renderCalc(){
+  const inf=+$('cInf').value||0, thn=Math.max(1,+$('cThn').value||1), mode=$('cMode').value;
+  const beban=calcBeban(thn,inf);
+  const klaimBulanBase=JKK.klaim/12;
+  let html;
+  if(beban<=0){
+    html=`<div class="kp r" style="grid-column:1/-1"><div class="v" style="font-size:16px">Belum ada tarif terisi</div>
+     <div class="l">Isi kolom tarif dan estimasi kasus pada tabel di atas — hasil aktuaria muncul otomatis di sini.</div></div>`;
+  }else if(mode==='add'){
+    const klaimBaru=JKK.klaim+beban;
+    const ket=JKK.asetNeto/(klaimBaru/12);
+    const surplus=JKK.iuran-klaimBaru;
+    html=
+     `<div class="kp a"><div class="v" style="font-size:20px">${fT(beban)}</div><div class="l">Beban tabulasi tahun ke-${thn}${inf?` (inflasi ${inf}%/thn)`:''}</div></div>
+      <div class="kp"><div class="v" style="font-size:20px">${(beban/JKK.klaim*100).toLocaleString('id-ID',{maximumFractionDigits:1})}%</div><div class="l">Terhadap estimasi klaim JKK 2027 (Rp6,58 T)</div></div>
+      <div class="kp ${ket>=1?'g':'r'}"><div class="v" style="font-size:20px">${JKK.ketahananBln.toLocaleString('id-ID',{maximumFractionDigits:1})} → ${ket.toLocaleString('id-ID',{maximumFractionDigits:1})} bln</div><div class="l">Ketahanan aset neto (min 1 bulan · PP 55/2015)</div></div>
+      <div class="kp ${surplus>=0?'g':'r'}"><div class="v" style="font-size:20px">${surplus>=0?'+':'−'}${fT(Math.abs(surplus))}</div><div class="l">Surplus iuran − (klaim RKAT + beban tabulasi)</div></div>`;
+  }else{
+    html=
+     `<div class="kp a"><div class="v" style="font-size:20px">${fT(beban)}</div><div class="l">Beban tabulasi tahun ke-${thn}${inf?` (inflasi ${inf}%/thn)`:''}</div></div>
+      <div class="kp"><div class="v" style="font-size:20px">${(beban/JKK.klaim*100).toLocaleString('id-ID',{maximumFractionDigits:1})}%</div><div class="l">Porsi terhadap estimasi klaim JKK 2027</div></div>
+      <div class="kp"><div class="v" style="font-size:20px">${(beban/JKK.iuran*100).toLocaleString('id-ID',{maximumFractionDigits:1})}%</div><div class="l">Porsi terhadap target iuran JKK 2027 (Rp10,78 T)</div></div>
+      <div class="kp"><div class="v" style="font-size:20px">${(beban/(klaimBulanBase)).toLocaleString('id-ID',{maximumFractionDigits:1})} bln</div><div class="l">Setara berapa bulan beban klaim JKK</div></div>`;
+  }
+  $('cRes').innerHTML=html;
+}
+['cInf','cThn'].forEach(id=>$(id).addEventListener('input',renderCalc));
+$('cMode').onchange=renderCalc;
+
+renderRing();renderKat();renderSph();renderVen();renderTar();renderCalc();
+</script>
+</body>
+</html>
