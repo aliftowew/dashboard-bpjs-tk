@@ -1,8 +1,29 @@
-# Dashboard RKAT 2027 — BPJS Ketenagakerjaan
+# Portal Dashboard — BPJS Ketenagakerjaan
 
-Dashboard satu-halaman (HTML statis, tanpa backend) yang merangkum Buku RKAT 2027, dilengkapi:
+Portal statis (HTML, tanpa backend) berisi **dua aplikasi** di balik satu login:
 
-- **Halaman login** — dashboard hanya terbuka setelah masuk.
+| Berkas | Aplikasi |
+|--------|----------|
+| `index.html` | Portal: login + dua kartu pilihan dashboard |
+| `rkat.html` | Dashboard RKAT 2027 (perencanaan & pengawasan) |
+| `kompendium.html` | Monitoring Kompendium Alkes JKK (pengisian aturan penjaminan) |
+
+Membuka `rkat.html` / `kompendium.html` tanpa login akan dialihkan kembali ke portal.
+
+## Monitoring Kompendium Alkes JKK
+
+- Memuat **776 dari 1.283 item** kompendium (kiriman data terpotong; sisanya tinggal
+  ditambahkan ke blok `<script id="DATA">` di `kompendium.html`).
+- Empat tampilan: Ringkasan (KPI + progres per wilayah tubuh), Daftar item (cari/filter/status),
+  Per bagian tubuh, dan Struktur isian (usulan kamus nilai).
+- Klik item membuka panel isian **8 kolom aturan** (Indikasi, ICD-10, Level RS, Approval,
+  Batas Penggunaan, Monitoring, Dampak RTW, Keterangan); isian tersimpan di localStorage
+  peramban dan bisa diekspor lengkap lewat **Unduh CSV**.
+
+## Dashboard RKAT 2027
+
+Rangkuman Buku RKAT 2027 diuji silang laporan keuangan Semester I 2026, dilengkapi:
+
 - **Seksi "Capaian Target"** — input realisasi terkini untuk menghitung berapa persen target 2027
   sudah tercapai, dibandingkan dengan laju tahun berjalan. Data tersimpan di browser (localStorage).
 - **Identitas visual BPJS Ketenagakerjaan** — logo digambar ulang sebagai SVG inline (tanpa file
